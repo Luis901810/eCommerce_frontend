@@ -9,6 +9,7 @@ import ShoppingCart from './components/ShoppingCart/ShoppingCart';
 function App() {
   return (
     <div className="App">
+
       <Routes>
         <Route path='/'element={<Landing/>}/>
         <Route path='/Catalogue' element={<Catalogue/>}/>
@@ -16,6 +17,7 @@ function App() {
         <Route path='/Detail/:id'element={<ShoeDetail/>}/>
         <Route path='/ShoppingCart' element={<ShoppingCart/>} >CREATEACTIVITY</Route>
       </Routes>
+
     </div>
   );
 }
