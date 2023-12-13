@@ -5,11 +5,12 @@ import Catalogue from './components/Catalogue/Catalogue';
 import Login from './components/Login/Login';
 import ShoeDetail from './components/ShoeDetail/ShoeDetail';
 import ShoppingCart from './components/ShoppingCart/ShoppingCart';
+import NavBar from './components/NavBar/NavBar';
 
 function App() {
   return (
     <div className="App">
-
+      <NavBar/>
       <Routes>
         <Route path='/'element={<Landing/>}/>
         <Route path='/Catalogue' element={<Catalogue/>}/>
