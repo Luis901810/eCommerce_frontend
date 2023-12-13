@@ -16,6 +16,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import Search from "./Search";
 import Pages from "./Pages";
+import { useNavigate } from "react-router-dom";
 
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -23,6 +24,8 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const navigate = useNavigate()
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -150,11 +153,9 @@ const NavBar = () => {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            {settings.map((setting) => (
-              <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">{setting}</Typography>
+              <MenuItem onClick={() => navigate('/Login')}>
+                <Typography textAlign="center">Iniciar Sesion</Typography>
               </MenuItem>
-            ))}
           </Menu>
         </Box>
       </Toolbar>
