@@ -11,7 +11,7 @@ const ShoppingCart = () => {
                 <h4>*Botón de Pago</h4>
             <h3>Productos: </h3>
                 <h4>* botones para modificar el stock[-]/[+]</h4>
-                <h4>* botón para eliminar el producto</h4>
+                <h4>* boton para eliminar el producto</h4>
         </div>
         );
     };

@@ -1,6 +1,7 @@
 
 const initialState = {
     Shoes: [],
+    copyShoes: [],
     error: false
 }
 

@@ -3,6 +3,7 @@ import NavBar from "../NavBar/NavBar";
 const Login = () => {
 
         return (
+            
         <div>
             <NavBar/>
             <h1>Login</h1>
