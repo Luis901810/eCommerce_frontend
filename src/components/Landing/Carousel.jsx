@@ -30,7 +30,7 @@ function ImageCarousel() {
       sx={{
         height: "60vh",
         width: "80vw",
-        marginTop: 10,
+        marginTop: 10
       }}
     >
       <Carousel>

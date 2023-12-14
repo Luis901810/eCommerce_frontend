@@ -1,4 +1,5 @@
 import { Box } from "@mui/system";
+
 import Carousel from "./Carousel";
 
 const Landing = () => {
@@ -8,5 +9,6 @@ const Landing = () => {
     </Box>
   );
 };
+
 
 export default Landing;
