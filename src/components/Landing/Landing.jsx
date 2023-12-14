@@ -1,17 +1,14 @@
 import { Box } from "@mui/system";
-import Carousel from './Carousel'
-import CardShoe from "../Card/Card";
+
+import Carousel from "./Carousel";
 
 const Landing = () => {
-        return (
-            <Box sx={{display: 'flex', flexDirection:"column", justifyContent: 'center'}} >
-                <Carousel/>
-                <CardShoe/>
-            </Box>
-            
+  return (
+    <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <Carousel />
+    </Box>
+  );
+};
 
-            
-        );
-    };
 
 export default Landing;
