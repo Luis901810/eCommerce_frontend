@@ -7,6 +7,8 @@ import Loading from "../../components/Loading/loading";
 import ShoeList from "./ShoeList";
 import theme from "../../theme";
 import { filter } from "../../redux/actions";
+import { Box } from "@mui/material";
+import Filters from "./Filters";
 
 function Catalogue() {
   const [products, setProducts] = useState([]);
@@ -17,18 +19,19 @@ function Catalogue() {
   const shoes = useSelector((state) => state.Shoes);
 
   useEffect(() => {
-        if(shoes.length){
-        setProducts(shoes);
-        setLoading(false)}
-      console.log(shoes)
+    if (shoes.length) {
+      setProducts(shoes);
+      setLoading(false);
+    }
+    console.log(shoes);
   }, [shoes]);
 
   useEffect(() => {
-    if(!shoes.length){
-        dispatch(filter({}))
+    if (!shoes.length) {
+      dispatch(filter({}));
     }
-  console.log(shoes)
-}, []);
+    console.log(shoes);
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -36,11 +39,19 @@ function Catalogue() {
       {loading ? (
         <Loading loading={loading} />
       ) : (
-        <>
-          <ShoeList
-            products={products}
-          />
-        </>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            marginTop: 10,
+            padding: 2,
+          }}
+        >
+          <Box>
+            <Filters />
+          </Box>
+          <ShoeList products={products} />
+        </Box>
       )}
     </ThemeProvider>
   );
