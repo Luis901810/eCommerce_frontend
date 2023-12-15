@@ -17,14 +17,16 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import Search from "./Search";
 import Pages from "./Pages";
 import { useNavigate } from "react-router-dom";
-
+import { useAuth } from "../AuthContext/AuthContext"
+import { useState } from "react"
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
+  const [error, setError ] = useState("")
+  const { user, logaut, loading } = useAuth()
   const navigate = useNavigate()
 
   const handleOpenNavMenu = (event) => {
@@ -42,7 +44,21 @@ const NavBar = () => {
     setAnchorElUser(null);
   };
 
+  const handleLogaut = async() =>{
+    try {
+        await logaut()
+    } catch (error) {
+      setError(error.message)
+    }
+  }
+  if(loading){
+    return <h1>Cerrando seccion....</h1>
+  }
+
   return (
+    <>
+    {error && <p>{error}</p>}
+  
     <AppBar
       position="fixed"
       color="primary"
@@ -132,34 +148,50 @@ const NavBar = () => {
         </Box>
 
         <Box sx={{ flexGrow: 0 }}>
-          <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-            </IconButton>
-          </Tooltip>
-          <Menu
-            sx={{ mt: "45px" }}
-            id="menu-appbar"
-            anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
-          >
-              <MenuItem onClick={() => navigate('/Login')}>
-                <Typography textAlign="center">Iniciar Sesion</Typography>
-              </MenuItem>
+  <Tooltip title="Open settings">
+    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+      {user ? (
+        <Avatar alt="User Avatar" src={user.photoURL} />
+      ) : (
+        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+      )}
+    </IconButton>
+  </Tooltip>
+  <Menu
+    sx={{ mt: "45px" }}
+    id="menu-appbar"
+    anchorEl={anchorElUser}
+    anchorOrigin={{
+      vertical: "top",
+      horizontal: "right",
+    }}
+    keepMounted
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "right",
+    }}
+    open={Boolean(anchorElUser)}
+    onClose={handleCloseUserMenu}
+  >
+    {user ? (
+      <>
+        <MenuItem onClick={() => navigate('/Profile')}>
+          <Typography textAlign="center">Perfil</Typography>
+        </MenuItem>
+        <MenuItem onClick={handleLogaut}>
+          <Typography textAlign="center">Cerrar Sesión</Typography>
+        </MenuItem>
+      </>
+    ) : (
+      <MenuItem onClick={() => navigate('/Login')}>
+        <Typography textAlign="center">Iniciar Sesión</Typography>
+      </MenuItem>
+    )}
           </Menu>
         </Box>
       </Toolbar>
     </AppBar>
+    </>
   );
 
   //  return (

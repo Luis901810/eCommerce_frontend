@@ -1,5 +1,5 @@
 import {FILTER} from './actions-type'
-import { API_URL } from '../utils/constants'
+import { API_URL } from './actions-type'
 import axios from 'axios'
 const initialState = {
     Shoes: [],
