@@ -5,19 +5,8 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useSelector, useDispatch } from "react-redux";
 import { filter } from "../../redux/actions";
 export default function Pages() {
-  const pages = ["Mujeres", "Hombres", "Niños", "Nuevo"];
-  const genders = [
-    'Todos',
-    'Botines',
-    'Zapatos',
-    'Sandalias',
-    'Pantuflas',
-    'Zapatillas',
-    'Especiales',
-    'Nuevo',
-    'Oferta',
-    'Mas Gustado'
-  ]
+  const genders = useSelector((state) =>state.genders)
+  const categories = useSelector((state) =>state.categories)
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [filters, setFilters] = useLocalStorage("filters",{})
@@ -27,25 +16,26 @@ export default function Pages() {
 
   const handleMenuOpen = (event, page) => {
     setAnchorEl(event.currentTarget);
-    setSelectedPage(page)
+    console.log(page.id)
+    setSelectedPage(page.id)
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
 
-  const selectFilers = (gender) => {
-    console.log(selectedPage, gender)
-    setFilters({gender:selectedPage,category:gender})
-    dispatch(filter({gender:selectedPage,category:gender}))
+  const selectFilers = (category) => {
+    console.log(selectedPage, category)
+    setFilters({gender:selectedPage,category:category.category})
+    dispatch(filter({gender:selectedPage,category:category.category}))
     console.log(filters)
   }
   return (
     <Box sx={{display: 'flex', flexDirection: 'row'}} >
-      {pages.map((page, i) => (
+      {genders.map((page, i) => (
         <Box key={i} >
           <MenuItem onClick={(event)=>handleMenuOpen(event,page)}>
-            {page}
+            {page.gender}
           </MenuItem>
           <Menu
             id={`menuPage-${i}`}
@@ -53,7 +43,7 @@ export default function Pages() {
             keepMounted
             open={Boolean(anchorEl)}
             onClose={handleMenuClose}
-          >{genders.map((gender, j)=><MenuItem key={j} onClick={()=>selectFilers(gender)}>{gender}</MenuItem>)}
+          >{categories.map((category, j)=><MenuItem key={j} onClick={()=>selectFilers(category)}>{category.category}</MenuItem>)}
           </Menu>
         </Box>
       ))}
