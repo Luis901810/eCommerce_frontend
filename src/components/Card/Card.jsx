@@ -1,6 +1,7 @@
 import { Card, Box, CardMedia, Typography } from "@mui/material";
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import IconButton from "@mui/material/IconButton";
+import { useSelector } from "react-redux";
 
 const CardShoe = ({product}) => {
   const cardShoeStyle = {
@@ -12,6 +13,12 @@ const CardShoe = ({product}) => {
     width:"140",
   };
 
+  const genders = useSelector((state) =>state.genders)
+  const colors = useSelector((state) =>state.colors)
+
+  const gender = genders.find(item => item.id === product.genderId)
+  const color = colors.find(item => item.id === product.colorId)
+  console.log(color)
   return (
     <Box >
         <p>product.name</p>
@@ -37,13 +44,13 @@ const CardShoe = ({product}) => {
         
         sx={{ color: '#fff', textAlign: 'center',
         padding: 2}}>
-            Genero
+            {gender.gender}
         </Typography>
         <Typography
         
         sx={{ color: '#fff', textAlign: 'center',
         padding: 2}}>
-            Color
+            {color.color}
         </Typography>
 
         </Box>
