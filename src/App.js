@@ -19,7 +19,7 @@ function App() {
         
         <Route path='/Catalogue' element={<Catalogue/>}/>
         <Route path='/Login' element={<Login/>}></Route> 
-        <Route path='/Detail/:id'element={<ShoeDetail/>}/>
+        <Route path='/Detail/:idShoe'element={<ShoeDetail/>}/>
         <Route path='/ShoppingCart' element={<ShoppingCart/>} >CREATEACTIVITY</Route>
 
       </Routes>
