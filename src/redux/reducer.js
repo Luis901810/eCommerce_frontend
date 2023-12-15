@@ -1,7 +1,9 @@
-import {FILTER} from './actions-type'
-import { API_URL } from '../utils/constants'
+import {FILTER, GET_SHOE_BY_ID} from './actions-type'
+import { API_URL } from './actions-type'
+
 import axios from 'axios'
 const initialState = {
+    Shoe : {},
     Shoes: [],
     error: false,
     brands: await axios(API_URL + "/shoe/brand").then(({data}) =>data).catch((error)=>[]),
@@ -17,6 +19,11 @@ const reducer = (state = initialState, action) => {
         case FILTER:
             return{
                 ...state, Shoes: action.payload
+            }
+        case GET_SHOE_BY_ID:
+            return {
+                ...state,
+                Shoe: action.payload
             }
         default:
             return {...state}
