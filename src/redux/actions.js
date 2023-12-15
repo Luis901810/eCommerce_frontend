@@ -1,4 +1,4 @@
-import {FILTER} from './actions-type'
+import {FILTER , GET_SHOE_BY_ID} from './actions-type'
 import axios from 'axios'
 import { API_URL } from '../utils/constants'
  
@@ -23,6 +23,21 @@ export const filter = (filters) => {
             })
         })
     } 
+}
+
+export const getShoeById = (idShoe) => {
+    return async function (dispatch) {
+        try {
+            const response = await axios.get(`${API_URL}/shoe/${idShoe}`);
+            const { data } = response;
+            dispatch({
+                type: GET_SHOE_BY_ID,
+                payload: data,
+            });
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
 }
 
 

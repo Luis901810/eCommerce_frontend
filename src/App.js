@@ -11,14 +11,15 @@ import { AuthProvider } from './components/AuthContext/AuthContext';
 function App() {
   return (
     <div className="App">
-      <NavBar/>
-      <AuthProvider>
+       <AuthProvider>
+          <NavBar/>
+  
       <Routes>
         <Route path='/'element={<Landing/>}/>
         
         <Route path='/Catalogue' element={<Catalogue/>}/>
         <Route path='/Login' element={<Login/>}></Route> 
-        <Route path='/Detail/:id'element={<ShoeDetail/>}/>
+        <Route path='/Detail/:idShoe'element={<ShoeDetail/>}/>
         <Route path='/ShoppingCart' element={<ShoppingCart/>} >CREATEACTIVITY</Route>
 
       </Routes>
