@@ -1,10 +1,9 @@
-import NavBar from "../NavBar/NavBar";
 
 const ShoppingCart = () => {
 
         return (
         <div>
-            <NavBar/>
+
             <h1>ShoppingCart</h1>
             <h3>Resumen de Compra: </h3>
                 <h4>*Total de la compra</h4>

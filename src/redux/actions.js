@@ -53,6 +53,18 @@ export const getShoeById = (idShoe) => {
         }
     }
 }
+export const updateUser = async (idUser, updatedUserData) => {
+        try {
+                const response = await axios.put(`${API_URL}/user/${idUser}`, updatedUserData);
+                console.log('Respuesta del servidor:', response.data);
+                //alert('Carga del usuario:');
+                return response.data;
+            } catch (error) {
+                console.log(error.response.data.error);
+                alert(error.message);
+                throw error;
+            }
+}
 
 
 

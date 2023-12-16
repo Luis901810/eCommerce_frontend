@@ -1,40 +1,65 @@
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import NavBar from "../NavBar/NavBar";
+import { updateUser } from "../../redux/actions";
 
 const UserProfile = () => {
-  // Información del usuario
-  const usuario = {
-    nombre: "Juan Pérez",
-    email: "juan.perez@example.com",
-    password: "contraseña123",
-    fotoPerfil: "https://cdn.icon-icons.com/icons2/2840/PNG/512/emoji_face_happy_icon_180979.png",
-    ciudad: "Ciudad de Ejemplo",
-    fechaNacimiento: "01/01/1990",
-    genero: "Masculino",
-    telefono: "123456789",
-    direccionEnvio: "Calle Ejemplo #123",
+  const { idUser } = useParams();
+  const [usuario, setUsuario] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    const loadUserProfile = async () => {
+      try {
+        console.log("Info User");
+        const userInfo = await updateUser(idUser, {});
+        setUsuario(userInfo);
+      } catch (error) {
+        console.error("Error al cargar el perfil del usuario:", error);
+      }
+    };
+    loadUserProfile();
+  }, [idUser]);
+
+  const handleEditarPerfil = () => {
+    // Cambia el estado de edición al hacer clic en "Editar Perfil"
+    setIsEditing(true);
   };
 
-  // Manejar la edición del perfil
-  const handleEditarPerfil = () => {
-    // Implementa lógica para editar el perfil
-    console.log("Editar perfil");
+  const handleGuardarCambios = () => {
+    // Lógica para guardar cambios y actualizar el perfil del usuario
+    console.log('Nuevos datos del usuario',usuario);
+    console.log("Guardar cambios");
+    updateUser(idUser, usuario);
+    setIsEditing(false);
   };
 
   return (
     <div>
       <NavBar />
       <h1>User Profile:</h1>
-      <h3>Imagen de Perfil:</h3>
-      <img src={usuario.fotoPerfil} alt="Foto de perfil" style={{ maxWidth: '100px', maxHeight: '100px' }} />
-      <h3>Name: {usuario.nombre}</h3>
+      <h3>Name: {isEditing ? 
+      <input type="text" value={usuario.name} onChange={(event) => 
+        setUsuario({ ...usuario, name: event.target.value })} />
+        : usuario.name}</h3>
+
       <h3>Email: {usuario.email}</h3>
-      <h3>Password: {usuario.password}</h3>
-      {/* <h3>Ciudad: {usuario.ciudad}</h3>
-      <h3>Fecha de Nacimiento: {usuario.fechaNacimiento}</h3>
-      <h3>Género: {usuario.genero}</h3>
-      <h3>Teléfono: {usuario.telefono}</h3>
-      <h3>Dirección de Envío: {usuario.direccionEnvio}</h3> */}
-      <button onClick={handleEditarPerfil}>Editar Perfil</button>
+
+      <h3>Password: 
+        {isEditing ? 
+        <input type="password" value={usuario.password} onChange={(event) => 
+          setUsuario({ ...usuario, password: event.target.value })} /> 
+          : usuario.password}</h3>
+
+      {isEditing ? (
+        <button onClick={handleGuardarCambios}>Guardar Cambios</button>
+      ) : (
+        <button onClick={handleEditarPerfil}>Editar Perfil</button>
+      )}
     </div>
   );
 };
