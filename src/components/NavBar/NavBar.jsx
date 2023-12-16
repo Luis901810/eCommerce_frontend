@@ -175,7 +175,7 @@ const NavBar = () => {
   >
     {user ? (
       <>
-        <MenuItem onClick={() => navigate('/Profile')}>
+        <MenuItem onClick={() => navigate('/UserProfile')}>
           <Typography textAlign="center">Perfil</Typography>
         </MenuItem>
         <MenuItem onClick={handleLogaut}>
