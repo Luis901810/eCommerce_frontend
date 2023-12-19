@@ -12,18 +12,18 @@ const Login = () => {
 
   const [user, setUser] = useState({
     email: '',
-    password: ''
+    password: '',
   })
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     const { name, value } = event.target
-    setUser((prevUser) => ({
+    setUser(prevUser => ({
       ...prevUser,
-      [name]: value
+      [name]: value,
     }))
   }
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault()
 
     try {
@@ -34,7 +34,9 @@ const Login = () => {
       if (error.code === 'auth/invalid-credential') {
         setError('Usuario o Contraseña invalido')
       } else {
-        setError('Ocurrió un error al iniciar sesión. Por favor, inténtalo de nuevo.')
+        setError(
+          'Ocurrió un error al iniciar sesión. Por favor, inténtalo de nuevo.',
+        )
       }
     }
   }
@@ -49,26 +51,45 @@ const Login = () => {
   }
 
   return (
-        <div>
+    <div>
+      {error && <Alert message={error} />}
 
-            {error && <Alert message={error}/>}
+      <div>
+        <img
+          className={styles.imgLogos}
+          src={logoGoogle2}
+          alt='google'
+          onClick={handleGoogleSignin}
+        />
+      </div>
 
-            <div>
-                <img className={styles.imgLogos} src={logoGoogle2} alt="google" onClick={handleGoogleSignin}/>
-            </div>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor='email'>Correo</label>
+        <input
+          type='email'
+          name='email'
+          id='email'
+          placeholder='Ingrese su correo'
+          onChange={handleChange}
+          value={user.email || ''}
+        />
 
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="email">Correo</label>
-                <input type="email" name="email" id="email" placeholder="Ingrese su correo" onChange={handleChange} value={user.email || ''}/>
+        <label htmlFor='password'>Contraseña</label>
+        <input
+          type='password'
+          name='password'
+          id='password'
+          placeholder='***********'
+          onChange={handleChange}
+          value={user.password || ''}
+        />
 
-                <label htmlFor="password">Contraseña</label>
-                <input type="password" name="password" id="password" placeholder="***********" onChange={handleChange} value={user.password || ''} />
-
-                <button>Ingresar</button>
-                <Link to ='/Login/Register' ><button>Registrarse</button></Link>
-            </form>
-
-        </div>
+        <button>Ingresar</button>
+        <Link to='/Login/Register'>
+          <button>Registrarse</button>
+        </Link>
+      </form>
+    </div>
   )
 }
 
