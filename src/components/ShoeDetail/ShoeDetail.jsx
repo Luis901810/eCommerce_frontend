@@ -1,24 +1,24 @@
-import React from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { getShoeById } from "../../redux/actions";
-import { Card, CardContent, Typography, Chip, ThemeProvider, createTheme, Box } from '@mui/material';
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import { getShoeById } from '../../redux/actions'
+import { Card, CardContent, Typography, Chip, ThemeProvider, createTheme, Box } from '@mui/material'
 
 const theme = createTheme({
   palette: {
-    mode: 'dark',
-  },
-});
+    mode: 'dark'
+  }
+})
 
 const ShoeDetail = () => {
-  const {idShoe} = useParams();
-  
-  const dispatch = useDispatch();
-  const shoe = useSelector((state)=>state.Shoe);
+  const { idShoe } = useParams()
+
+  const dispatch = useDispatch()
+  const shoe = useSelector((state) => state.Shoe)
 
   React.useEffect(() => {
-    dispatch(getShoeById(idShoe));
-  }, []);
+    dispatch(getShoeById(idShoe))
+  }, [])
 
   return (
     <ThemeProvider theme={theme}>
@@ -33,11 +33,12 @@ const ShoeDetail = () => {
           top: 0,
           left: 0,
           zIndex: 9999,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)'
         }}
       >
         <Card sx={{ maxWidth: 345 }}>
-          <img src={shoe.image} alt={shoe.name} sx={{ height: 140 }} />
+          {/* <img src={shoe.image} alt={shoe.name} sx={{ height: 140 }} /> */}
+          <img src={shoe.image} alt={shoe.name} />
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
               {shoe.name}
@@ -70,7 +71,7 @@ const ShoeDetail = () => {
         </Card>
       </Box>
     </ThemeProvider>
-  );
-};
+  )
+}
 
-export default ShoeDetail;
+export default ShoeDetail

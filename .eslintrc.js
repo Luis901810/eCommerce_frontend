@@ -28,6 +28,12 @@ module.exports = {
   plugins: [
     'react'
   ],
+  settings: {
+    react: {
+      version: 'detect'
+    }
+  },
   rules: {
+    'react/prop-types': 'off'
   }
 }

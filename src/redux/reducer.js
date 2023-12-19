@@ -1,33 +1,20 @@
-import {FILTER, GET_SHOE_BY_ID} from './actions-type'
-import { API_URL } from './actions-type'
-
-import axios from 'axios'
-const initialState = {
-    Shoe : {},
-    Shoes: [],
-    error: false,
-    brands: await axios(API_URL + "/shoe/brand").then(({data}) =>data).catch((error)=>[]),
-    categories: await axios(API_URL + "/shoe/category").then(({data}) =>data).catch((error)=>[]),
-    colors: await axios(API_URL + "/shoe/color").then(({data}) =>data).catch((error)=>[]),
-    genders: await axios(API_URL + "/shoe/gender").then(({data}) =>data).catch((error)=>[]),
-    materials: await axios(API_URL + "/shoe/material").then(({data}) =>data).catch((error)=>[]),
-    sizes: await axios(API_URL + "/shoe/size").then(({data}) =>data).catch((error)=>[]),
-}
+import { FILTER, GET_SHOE_BY_ID } from './actions-type'
+import initialState from './initialState'
 
 const reducer = (state = initialState, action) => {
-    switch(action.type){
-        case FILTER:
-            return{
-                ...state, Shoes: action.payload
-            }
-        case GET_SHOE_BY_ID:
-            return {
-                ...state,
-                Shoe: action.payload
-            }
-        default:
-            return {...state}
-    }
+  switch (action.type) {
+    case FILTER:
+      return {
+        ...state, Shoes: action.payload
+      }
+    case GET_SHOE_BY_ID:
+      return {
+        ...state,
+        Shoe: action.payload
+      }
+    default:
+      return { ...state }
+  }
 }
 
-export default reducer;
+export default reducer
