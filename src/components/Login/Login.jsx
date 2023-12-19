@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../AuthContext/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Alert } from "../Alert/Alert"
 import  styles  from "./Login.module.css"
 import  logo_google2  from "../../Fhoto/logo_google2.jpg"
@@ -73,7 +73,7 @@ const Login = () => {
                 <input type="password" name="password" id="password" placeholder="***********" onChange={handleChange} value={user.password || ""} />
             
                 <button>Ingresar</button>
-
+                <Link to ='/Login/Register' ><button>Registrarse</button></Link>
             </form>
             
            
