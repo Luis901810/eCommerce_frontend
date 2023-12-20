@@ -1,16 +1,16 @@
-import { API_URL, FILTER, GET_SHOE_BY_ID} from './actions-type'
+import { API_URL, FILTER, GET_SHOE_BY_ID } from './actions-type'
 import axios from 'axios'
 
 export const filter = (filters) => {
     console.log(filters)
     let endpoint = API_URL + "/shoe?"
-    for(let filter in filters) {
-        endpoint = endpoint + filter +"="+ filters[filter] + "&" 
+    for (let filter in filters) {
+        endpoint = endpoint + filter + "=" + filters[filter] + "&"
     }
-    endpoint = endpoint.slice(0,-1)
+    endpoint = endpoint.slice(0, -1)
     console.log(endpoint)
     return (dispatch) => {
-        axios.get(endpoint).then(({data}) => {
+        axios.get(endpoint).then(({ data }) => {
             return dispatch({
                 type: FILTER,
                 payload: data
@@ -21,18 +21,19 @@ export const filter = (filters) => {
                 payload: []
             })
         })
-    } 
+    }
 }
+
 export const createUser = (user) => {
-    console.log('El usuario a crear: ',user)
+    console.log('El usuario a crear: ', user)
     return async (dispatch) => {
-        try{
+        try {
             const response = await axios.post(`${API_URL}/user`, user);
             console.log('Respuesta del servidor:', response.data);
             alert('Registro exitoso')
-            window.location.href = 'http://localhost:3000';//! al Landing
+            window.location.href = 'http://localhost:3000'; // al Landing
             return response.data;
-        }catch(error){
+        } catch (error) {
             console.log(error.response.data.error);
             alert(error.message)
         }
@@ -53,17 +54,16 @@ export const getShoeById = (idShoe) => {
         }
     }
 }
+
 export const updateUser = async (idUser, updatedUserData) => {
-        try {
-                const response = await axios.put(`${API_URL}/user/${idUser}`, updatedUserData);
-                console.log('Respuesta del servidor:', response.data);
-                //alert('Carga del usuario:');
-                return response.data;
-            } catch (error) {
-                console.log(error.response.data.error);
-                alert(error.message);
-                throw error;
-            }
+    try {
+        const response = await axios.put(`${API_URL}/user/${idUser}`, updatedUserData);
+        console.log('Respuesta del servidor:', response.data);
+        // alert('Carga del usuario:');
+        return response.data;
+    } catch (error) {
+        console.log(error.response.data.error);
+        alert(error.message);
+        throw error;
+    }
 }
-
-
