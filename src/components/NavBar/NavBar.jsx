@@ -173,22 +173,20 @@ const NavBar = () => {
     open={Boolean(anchorElUser)}
     onClose={handleCloseUserMenu}
   >
-    {user
-      ? (
+    {user ? (
       <>
         <MenuItem onClick={() => navigate('/UserProfile')}>
           <Typography textAlign="center">Perfil</Typography>
-        </MenuItem>
-        <MenuItem onClick={handleLogaut}>
+        </MenuItem>,
+        <MenuItem key="logout" onClick={handleLogaut}>
           <Typography textAlign="center">Cerrar Sesión</Typography>
         </MenuItem>
       </>
-        )
-      : (
+    ) : (
       <MenuItem onClick={() => navigate('/Login')}>
         <Typography textAlign="center">Iniciar Sesión</Typography>
       </MenuItem>
-        )}
+    )}
           </Menu>
         </Box>
       </Toolbar>
