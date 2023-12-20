@@ -29,6 +29,11 @@ const reducer = (state = initialState, action) => {
         materials: action.payload.materials,
         sizes: action.payload.sizes,
       };
+    case GET_SHOE_BY_ID:
+      return {
+        ...state,
+        Shoe: action.payload,
+      };
     default:
       return { ...state };
   }

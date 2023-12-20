@@ -20,6 +20,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getAtributes } from "../../redux/actions";
 import { useEffect } from "react";
+import { useAuth } from "../AuthContext/AuthContext";
+import { useState } from "react";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
@@ -29,6 +31,8 @@ const NavBar = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const { user, logaut, loading } = useAuth();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -48,6 +52,17 @@ const NavBar = () => {
   useEffect(() => {
     dispatch(getAtributes());
   });
+
+  const handleLogaut = async () => {
+    try {
+      await logaut();
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+  if (loading) {
+    return <h1>Cerrando seccion....</h1>;
+  }
 
   return (
     <AppBar
@@ -147,7 +162,11 @@ const NavBar = () => {
         <Box sx={{ flexGrow: 0 }}>
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              {user ? (
+                <Avatar alt="User Avatar" src={user.photoURL} />
+              ) : (
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              )}
             </IconButton>
           </Tooltip>
           <Menu
@@ -166,9 +185,20 @@ const NavBar = () => {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            <MenuItem onClick={() => navigate("/Login")}>
-              <Typography textAlign="center">Iniciar Sesion</Typography>
-            </MenuItem>
+            {user ? (
+              <>
+                <MenuItem onClick={() => navigate("/UserProfile")}>
+                  <Typography textAlign="center">Perfil</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleLogaut}>
+                  <Typography textAlign="center">Cerrar Sesión</Typography>
+                </MenuItem>
+              </>
+            ) : (
+              <MenuItem onClick={() => navigate("/Login")}>
+                <Typography textAlign="center">Iniciar Sesión</Typography>
+              </MenuItem>
+            )}
           </Menu>
         </Box>
       </Toolbar>
