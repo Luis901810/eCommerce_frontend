@@ -1,4 +1,4 @@
-import { API_URL, FILTER, GET_SHOE_BY_ID } from './actions-type'
+import { API_URL, FILTER, GET_SHOE_BY_ID} from './actions-type'
 import axios from 'axios'
 
 export const filter = (filters) => {
