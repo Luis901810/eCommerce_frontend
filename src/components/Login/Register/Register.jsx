@@ -1,41 +1,39 @@
-import { useState } from "react";
-import NavBar from "../../NavBar/NavBar";
-import { useDispatch } from "react-redux";
-import { createUser } from "../../../redux/actions";
-
+import { useState } from 'react'
+import NavBar from '../../NavBar/NavBar'
+import { useDispatch } from 'react-redux'
+import { createUser } from '../../../redux/actions'
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const dispatch = useDispatch();
+    name: '',
+    email: '',
+    password: ''
+  })
+  const dispatch = useDispatch()
   // Manejar cambios en los campos del formulario
   const handleChange = (event) => {
     console.log(event)
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    const { name, value } = event.target
+    setFormData({ ...formData, [name]: value })
+  }
 
   // Manejar el envío del formulario
   const handleSubmit = (event) => {
-    event.preventDefault();
+    event.preventDefault()
     // enviarla al back
-    console.log("Información del usuario registrada:", formData);  
+    console.log('Información del usuario registrada:', formData)
     dispatch(createUser(formData))
-    
-  };
+  }
   const isFormEmpty = () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
     // Verificar que todos los campos estén presentes y en el formato correcto
     return (
-      formData.name.trim() !== "" &&
+      formData.name.trim() !== '' &&
       emailRegex.test(formData.email) &&
-      formData.password.trim() !== ""
-    );
-  };
+      formData.password.trim() !== ''
+    )
+  }
 
   return (
     <div>
@@ -60,7 +58,7 @@ const Register = () => {
         <button type="submit" disabled={!isFormEmpty()} >Registrarse</button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register
