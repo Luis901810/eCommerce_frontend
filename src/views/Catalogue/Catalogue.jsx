@@ -23,14 +23,12 @@ function Catalogue() {
       setProducts(shoes);
       setLoading(false);
     }
-    console.log(shoes);
   }, [shoes]);
 
   useEffect(() => {
     if (!shoes.length) {
       dispatch(filter({}));
     }
-    console.log(shoes);
   }, []);
 
   return (

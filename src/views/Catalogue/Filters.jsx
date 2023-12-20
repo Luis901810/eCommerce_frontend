@@ -1,6 +1,5 @@
 import { Box } from "@mui/system";
 import { Menu, MenuItem } from "@mui/material";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
 import {
   List,
   ListSubheader,
@@ -16,13 +15,21 @@ import StarBorder from "@mui/icons-material/StarBorder";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getAtributes } from "../../redux/actions";
 
 export default function Filters() {
-  const [filters, setFilters] = useLocalStorage("filters", {});
-
-  const dispatch = useDispatch()
+  const localStorageKey = "filters";
+  const [filters, setFilters] = useState(() => {
+    try {
+      const storedData =
+        JSON.parse(localStorage.getItem(localStorageKey)) || {};
+      return storedData;
+    } catch (error) {
+      console.error("Error retrieving data from localStorage:", error);
+      return {};
+    }
+  });
 
   const brands = useSelector((state) => state.brands);
   const categories = useSelector((state) => state.categories);
@@ -42,14 +49,50 @@ export default function Filters() {
     reviews: false,
   });
 
+  const [checkedFilters, setCheckedFilters] = useState(filters);
+
   const handleClick = (name) => {
-    console.log("boolean: ", open[name]);
     setOpen((prevData) => ({ ...prevData, [name]: !prevData[name] }));
   };
 
+  const handleAddFilter = (key, value) => {
+    setCheckedFilters((prevFilters) => ({
+      ...prevFilters,
+      [key]: [...(prevFilters[key] || []), value],
+    }));
+  };
+
+  const handleCheckboxChange = (key, id) => {
+    setCheckedFilters((prevFilters) => {
+      const currentFilters = prevFilters[key] || [];
+      return {
+        ...prevFilters,
+        [key]: currentFilters.includes(id)
+          ? currentFilters.filter((value) => value !== id)
+          : [...currentFilters, id],
+      };
+    });
+  };
+  
+  
+  const handleRemoveFilter = (key, valueToRemove) => {
+    setCheckedFilters((prevFilters) => {
+      const currentFilters = prevFilters[key] || [];
+      return {
+        ...prevFilters,
+        [key]: currentFilters.filter((value) => value !== valueToRemove),
+      };
+    });
+  };
+  
+
   useEffect(() => {
-    dispatch(getAtributes())
-  }, [])
+    try {
+      localStorage.setItem(localStorageKey, JSON.stringify(checkedFilters));
+    } catch (error) {
+      console.error("Error storing data in localStorage:", error);
+    }
+  }, [checkedFilters, localStorageKey]);
 
   return (
     <List
@@ -66,46 +109,110 @@ export default function Filters() {
         </ListSubheader>
       }
     >
+      {/* Genders */}
+      <ListItemButton onClick={() => handleClick("genders")}>
+        <ListItemText primary="Géneros" />
+        {open.genders ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+      <Collapse in={open.genders} timeout="auto" unmountOnExit>
+        <FormGroup>
+          {genders.map((gender, i) => (
+            <FormControlLabel
+              key={i}
+              control={
+                <Checkbox
+                  checked={
+                    checkedFilters["genders"]?.includes(gender.id) || false
+                  }
+                  onChange={() => handleCheckboxChange("genders", gender.id)}
+                />
+              }
+              label={gender.gender}
+              id={gender.id}
+            />
+          ))}
+        </FormGroup>
+      </Collapse>
+
+      {/* Brands */}
       <ListItemButton onClick={() => handleClick("brands")}>
         <ListItemText primary="Marcas" />
         {open.brands ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open.brands} timeout="auto" unmountOnExit>
         <FormGroup>
-          {/* {brands.map((brand, i) => 
+          {brands.map((brand, i) => (
             <FormControlLabel
-              control={<Checkbox defaultChecked />}
-              label={brand}
+              key={i}
+              control={
+                <Checkbox
+                  checked={
+                    checkedFilters["brands"]?.includes(brand.id) || false
+                  }
+                  onChange={() => handleCheckboxChange("brands", brand.id)}
+                />
+              }
+              label={brand.brand}
+              id={brand.id}
             />
-          )} */}
+          ))}
         </FormGroup>
       </Collapse>
+
+      {/* Categories */}
       <ListItemButton onClick={() => handleClick("categories")}>
         <ListItemText primary="Categorías" />
         {open.categories ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open.categories} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding></List>
+        <FormGroup>
+          {categories.map((category, i) => (
+            <FormControlLabel
+              key={i}
+              control={
+                <Checkbox
+                  checked={
+                    checkedFilters["categories"]?.includes(category.id) || false
+                  }
+                  onChange={() =>
+                    handleCheckboxChange("categories", category.id)
+                  }
+                />
+              }
+              label={category.category}
+              id={category.id}
+            />
+          ))}
+        </FormGroup>
       </Collapse>
+
+      {/* Sizes */}
       <ListItemButton onClick={() => handleClick("sizes")}>
         <ListItemText primary="Tallas" />
         {open.sizes ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open.sizes} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding></List>
+        <FormGroup>
+          {sizes.map((size, i) => (
+            <FormControlLabel
+              key={i}
+              control={
+                <Checkbox
+                  checked={checkedFilters["sizes"]?.includes(size.id) || false}
+                  onChange={() => handleCheckboxChange("sizes", size.id)}
+                />
+              }
+              label={size.size}
+              id={size.id}
+            />
+          ))}
+        </FormGroup>
       </Collapse>
       <ListItemButton onClick={() => handleClick("range")}>
         <ListItemText primary="Rango de precio" />
         {open.range ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={open.range} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding></List>
-      </Collapse>
-      <ListItemButton onClick={() => handleClick("genders")}>
-        <ListItemText primary="Géneros" />
-        {open.genders ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open.genders} timeout="auto" unmountOnExit>
         <List component="div" disablePadding></List>
       </Collapse>
     </List>

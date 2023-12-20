@@ -13,11 +13,13 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import Search from "./Search";
 import Pages from "./Pages";
 import { useNavigate } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { getAtributes } from "../../redux/actions";
+import { useEffect } from "react";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
@@ -25,7 +27,8 @@ const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -41,6 +44,10 @@ const NavBar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  useEffect(() => {
+    dispatch(getAtributes());
+  });
 
   return (
     <AppBar
@@ -101,7 +108,7 @@ const NavBar = () => {
               display: { xs: "block", md: "none" },
             }}
           >
-            <Pages/>
+            <Pages />
           </Menu>
         </Box>
         <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
@@ -123,11 +130,17 @@ const NavBar = () => {
         >
           LOGO
         </Typography>
-        <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, justifyContent:'space-evenly' }}>
+        <Box
+          sx={{
+            flexGrow: 1,
+            display: { xs: "none", md: "flex" },
+            justifyContent: "space-evenly",
+          }}
+        >
           <Pages />
-          <Search/>
-          <IconButton aria-label="cart" >
-            <ShoppingCartOutlinedIcon sx={{color: 'white'}} />
+          <Search />
+          <IconButton aria-label="cart">
+            <ShoppingCartOutlinedIcon sx={{ color: "white" }} />
           </IconButton>
         </Box>
 
@@ -153,9 +166,9 @@ const NavBar = () => {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-              <MenuItem onClick={() => navigate('/Login')}>
-                <Typography textAlign="center">Iniciar Sesion</Typography>
-              </MenuItem>
+            <MenuItem onClick={() => navigate("/Login")}>
+              <Typography textAlign="center">Iniciar Sesion</Typography>
+            </MenuItem>
           </Menu>
         </Box>
       </Toolbar>

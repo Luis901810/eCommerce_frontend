@@ -29,7 +29,6 @@ const CardShoe = ({ product }) => {
 
   return (
     <Box>
-      <p>{product.name}</p>
       <Card style={cardShoeStyle}>
         <CardMedia
           component="img"
@@ -48,10 +47,10 @@ const CardShoe = ({ product }) => {
           }}
         >
           <Typography sx={{ color: "#fff", textAlign: "center", padding: 2 }}>
-            {gender?.gender}
+            {gender?.gender} 
           </Typography>
           <Typography sx={{ color: "#fff", textAlign: "center", padding: 2 }}>
-            {color?.color}
+            {color?.color} 
           </Typography>
         </Box>
         <Box
