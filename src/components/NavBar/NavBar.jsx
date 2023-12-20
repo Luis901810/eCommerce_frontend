@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
+//import Button from "@mui/material/Button";
+//import Container from "@mui/material/Container";
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -7,9 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../AuthContext/AuthContext"
 import { useState } from "react"
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+//const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -174,22 +174,24 @@ const NavBar = () => {
     onClose={handleCloseUserMenu}
   >
     {user ? (
-      <>
-        <MenuItem onClick={() => navigate('/UserProfile')}>
+      [
+        <MenuItem key="profile" onClick={() => navigate('/Profile')}>
           <Typography textAlign="center">Perfil</Typography>
-        </MenuItem>
-        <MenuItem onClick={handleLogaut}>
+        </MenuItem>,
+        <MenuItem key="logout" onClick={handleLogaut}>
           <Typography textAlign="center">Cerrar Sesión</Typography>
         </MenuItem>
-      </>
+     
+      ]
     ) : (
       <MenuItem onClick={() => navigate('/Login')}>
         <Typography textAlign="center">Iniciar Sesión</Typography>
       </MenuItem>
     )}
-          </Menu>
-        </Box>
-      </Toolbar>
+  </Menu>
+</Box>
+
+    </Toolbar>
     </AppBar>
     </>
   );

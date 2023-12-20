@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 // import { setShoppingCart } from "../../redux/actions";//!Crear el setShopping cart, 
 //!Preguntar como se van a llevar los productos al ShoppingCart
 //import axios from "axios";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 import styles from "./ShoppingCart.module.css"; 
 
 const ShoppingCart = () => {
