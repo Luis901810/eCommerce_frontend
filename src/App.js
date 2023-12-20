@@ -9,6 +9,7 @@ import NavBar from './components/NavBar/NavBar'
 import Register from './components/Login/Register/Register'
 import UserProfile from './components/UserProfile/UserProfile'
 import { AuthProvider } from './components/AuthContext/AuthContext'
+import React from 'react'
 
 function App () {
   return (

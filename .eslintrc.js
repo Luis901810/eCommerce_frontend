@@ -3,18 +3,15 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: [
-    'standard',
-    'plugin:react/recommended',
-    'plugin:react/jsx-runtime',
-    'eslint-config-prettier',
-  ],
+  extends: 'plugin:react/recommended',
   overrides: [
     {
       env: {
         node: true,
       },
-      files: ['.eslintrc.{js,cjs}'],
+      files: [
+        '.eslintrc.js',
+      ],
       parserOptions: {
         sourceType: 'script',
       },
@@ -27,10 +24,11 @@ module.exports = {
   plugins: ['react'],
   settings: {
     react: {
-      version: 'detect',
+      version: 'detect', 
     },
   },
   rules: {
-    'react/prop-types': 'off',
+    'no-unused-vars': 'off',
+    'dot-notation': 'off',
   },
-}
+};

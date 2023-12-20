@@ -8,6 +8,7 @@ import store from './redux/store'
 import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
 import theme from './theme'
+import React from 'react'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
