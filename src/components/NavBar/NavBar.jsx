@@ -13,26 +13,21 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import Search from "./Search";
 import Pages from "./Pages";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { getAtributes } from "../../redux/actions";
-import { useEffect } from "react";
-import { useAuth } from "../AuthContext/AuthContext";
-import { useState } from "react";
+import { useAuth } from "../AuthContext/AuthContext"
+import { useState } from "react"
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [error, setError] = useState("");
-  const { user, logaut, loading } = useAuth();
+  const [error, setError ] = useState("")
+  const { user, logaut, loading } = useAuth()
+  const navigate = useNavigate()
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -49,22 +44,21 @@ const NavBar = () => {
     setAnchorElUser(null);
   };
 
-  useEffect(() => {
-    dispatch(getAtributes());
-  });
-
-  const handleLogaut = async () => {
+  const handleLogaut = async() =>{
     try {
-      await logaut();
+        await logaut()
     } catch (error) {
-      setError(error.message);
+      setError(error.message)
     }
-  };
-  if (loading) {
-    return <h1>Cerrando seccion....</h1>;
+  }
+  if(loading){
+    return <h1>Cerrando seccion....</h1>
   }
 
   return (
+    <>
+    {error && <p>{error}</p>}
+  
     <AppBar
       position="fixed"
       color="primary"
@@ -123,7 +117,7 @@ const NavBar = () => {
               display: { xs: "block", md: "none" },
             }}
           >
-            <Pages />
+            <Pages/>
           </Menu>
         </Box>
         <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
@@ -145,64 +139,59 @@ const NavBar = () => {
         >
           LOGO
         </Typography>
-        <Box
-          sx={{
-            flexGrow: 1,
-            display: { xs: "none", md: "flex" },
-            justifyContent: "space-evenly",
-          }}
-        >
+        <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" }, justifyContent:'space-evenly' }}>
           <Pages />
-          <Search />
-          <IconButton aria-label="cart">
-            <ShoppingCartOutlinedIcon sx={{ color: "white" }} />
+          <Search/>
+          <IconButton aria-label="cart" >
+            <ShoppingCartOutlinedIcon sx={{color: 'white'}} />
           </IconButton>
         </Box>
 
         <Box sx={{ flexGrow: 0 }}>
-          <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              {user ? (
-                <Avatar alt="User Avatar" src={user.photoURL} />
-              ) : (
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              )}
-            </IconButton>
-          </Tooltip>
-          <Menu
-            sx={{ mt: "45px" }}
-            id="menu-appbar"
-            anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
-          >
-            {user ? (
-              <>
-                <MenuItem onClick={() => navigate("/UserProfile")}>
-                  <Typography textAlign="center">Perfil</Typography>
-                </MenuItem>
-                <MenuItem onClick={handleLogaut}>
-                  <Typography textAlign="center">Cerrar Sesión</Typography>
-                </MenuItem>
-              </>
-            ) : (
-              <MenuItem onClick={() => navigate("/Login")}>
-                <Typography textAlign="center">Iniciar Sesión</Typography>
-              </MenuItem>
-            )}
+  <Tooltip title="Open settings">
+    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+      {user ? (
+        <Avatar alt="User Avatar" src={user.photoURL} />
+      ) : (
+        <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+      )}
+    </IconButton>
+  </Tooltip>
+  <Menu
+    sx={{ mt: "45px" }}
+    id="menu-appbar"
+    anchorEl={anchorElUser}
+    anchorOrigin={{
+      vertical: "top",
+      horizontal: "right",
+    }}
+    keepMounted
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "right",
+    }}
+    open={Boolean(anchorElUser)}
+    onClose={handleCloseUserMenu}
+  >
+    {user ? (
+      <>
+        <MenuItem onClick={() => navigate('/UserProfile')}>
+          <Typography textAlign="center">Perfil</Typography>
+        </MenuItem>
+        <MenuItem onClick={handleLogaut}>
+          <Typography textAlign="center">Cerrar Sesión</Typography>
+        </MenuItem>
+      </>
+    ) : (
+      <MenuItem onClick={() => navigate('/Login')}>
+        <Typography textAlign="center">Iniciar Sesión</Typography>
+      </MenuItem>
+    )}
           </Menu>
         </Box>
       </Toolbar>
     </AppBar>
+    </>
   );
 
   //  return (
