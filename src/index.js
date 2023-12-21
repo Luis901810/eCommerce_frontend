@@ -9,7 +9,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
 import theme from './theme'
 import React from 'react'
-import { AuthProvider } from './components/AuthContext/AuthContext'
+import { AuthProvider } from './contexts/AuthContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
@@ -22,7 +22,7 @@ root.render(
         </AuthProvider>
       </BrowserRouter>
     </Provider>
-  </ThemeProvider>,
+  </ThemeProvider>
 )
 
 // If you want to start measuring performance in your app, pass a function
