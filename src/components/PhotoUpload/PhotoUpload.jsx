@@ -6,11 +6,11 @@ export default function PhotoUpload ({ photo, setPhoto }) {
   const cloudinaryRef = useRef()
   const widgetRef = useRef()
 
-  const cloudName = process.env.REACT_APP_CLOUD_NAME
-  const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET
+  const cloudName = process.env.REACT_APP_FIREBASE_CLOUD_NAME
+  const uploadPreset = process.env.REACT_APP_FIREBASE_UPLOAD_PRESET
 
-  console.log('Cloud Name:', process.env.REACT_APP_CLOUD_NAME)
-  console.log('Upload Preset:', process.env.REACT_APP_UPLOAD_PRESET)
+  console.log('Cloud Name:', process.env.REACT_APP_FIREBASE_CLOUD_NAME)
+  console.log('Upload Preset:', process.env.REACT_APP_FIREBASE_UPLOAD_PRESET)
 
   const [image, setImage] = useState(null)
 
