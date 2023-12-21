@@ -1,6 +1,13 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
-import { auth } from '../../confgFireBase.js'
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from 'firebase/auth'
+import { auth } from '../../configFirebase.js'
 
 export const authContext = createContext()
 
@@ -10,12 +17,14 @@ export const useAuth = () => {
   if (!context) throw new Error('no hay Provider')
   return context
 }
-export function AuthProvider ({ children }) {
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  const signup = async (email, password) => await createUserWithEmailAndPassword(auth, email, password)
-  const login = async (email, password) => await signInWithEmailAndPassword(auth, email, password)
+  const signup = async (email, password) =>
+    await createUserWithEmailAndPassword(auth, email, password)
+  const login = async (email, password) =>
+    await signInWithEmailAndPassword(auth, email, password)
   const logaut = async () => signOut(auth)
   const loginWithGoogle = () => {
     const googleProvider = new GoogleAuthProvider()
@@ -29,8 +38,10 @@ export function AuthProvider ({ children }) {
     })
   }, [])
   return (
-    <authContext.Provider value={{ user, loading, signup, login, logaut, loginWithGoogle }}>
-        {!loading && children}
+    <authContext.Provider
+      value={{ user, loading, signup, login, logaut, loginWithGoogle }}
+    >
+      {!loading && children}
     </authContext.Provider>
   )
 }
