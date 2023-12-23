@@ -2,15 +2,15 @@ import { useState, useEffect, useRef } from 'react'
 import { Box } from '@mui/system'
 import { Button } from '@mui/material'
 
-export default function PhotoUpload ({ photo, setPhoto }) {
+export default function PhotoUpload({ photo, setPhoto }) {
   const cloudinaryRef = useRef()
   const widgetRef = useRef()
 
-  const cloudName = process.env.REACT_APP_FIREBASE_CLOUD_NAME
-  const uploadPreset = process.env.REACT_APP_FIREBASE_UPLOAD_PRESET
+  const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME
+  const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET
 
-  console.log('Cloud Name:', process.env.REACT_APP_FIREBASE_CLOUD_NAME)
-  console.log('Upload Preset:', process.env.REACT_APP_FIREBASE_UPLOAD_PRESET)
+  console.log('Cloud Name:', cloudName)
+  console.log('Upload Preset:', uploadPreset)
 
   const [image, setImage] = useState(null)
 
@@ -19,7 +19,7 @@ export default function PhotoUpload ({ photo, setPhoto }) {
     widgetRef.current = cloudinaryRef.current.createUploadWidget(
       {
         cloudName,
-        uploadPreset
+        uploadPreset,
       },
       function (error, result) {
         if (!error) {
@@ -37,7 +37,7 @@ export default function PhotoUpload ({ photo, setPhoto }) {
 
   const ImageStyle = {
     height: '300px',
-    objectFit: 'cover'
+    objectFit: 'cover',
   }
 
   if (image) {
@@ -50,7 +50,7 @@ export default function PhotoUpload ({ photo, setPhoto }) {
           flexDirection: 'column',
           justifyContent: 'center',
           marginTop: 2,
-          position: 'relative'
+          position: 'relative',
         }}
       >
         <Button
@@ -60,7 +60,7 @@ export default function PhotoUpload ({ photo, setPhoto }) {
             backgroundColor: '#414141',
             position: 'absolute',
             top: 2,
-            right: 2
+            right: 2,
           }}
           onClick={() => setImage(null)}
         >
@@ -71,7 +71,7 @@ export default function PhotoUpload ({ photo, setPhoto }) {
           sx={{
             color: '#42e268',
             border: '1px solid #42e268',
-            backgroundColor: '#414141'
+            backgroundColor: '#414141',
           }}
           onClick={() => widgetRef.current.open()}
         >
@@ -89,7 +89,7 @@ export default function PhotoUpload ({ photo, setPhoto }) {
         width: 300,
         height: 350,
         marginTop: 3,
-        backgroundColor: '#414141'
+        backgroundColor: '#414141',
       }}
       onClick={() => widgetRef.current.open()}
     >

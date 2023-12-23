@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAuth } from '../AuthContext/AuthContext'
+import { useAuth } from '../../contexts/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import { Alert } from '../Alert/Alert'
 import styles from './Login.module.css'
@@ -35,7 +35,7 @@ const Login = () => {
         setError('Usuario o Contraseña invalido')
       } else {
         setError(
-          'Ocurrió un error al iniciar sesión. Por favor, inténtalo de nuevo.',
+          'Ocurrió un error al iniciar sesión. Por favor, inténtalo de nuevo.'
         )
       }
     }
