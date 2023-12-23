@@ -5,8 +5,9 @@ export const filter = (filters) => {
   console.log(filters)
   let endpoint = API_URL + '/shoe?'
   for (const filter in filters) {
+    if(filters[filter].length){
     endpoint = endpoint + filter + '=' + filters[filter] + '&'
-  }
+  }}
   endpoint = endpoint.slice(0, -1)
   console.log(endpoint)
   return (dispatch) => {
