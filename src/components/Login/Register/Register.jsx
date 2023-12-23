@@ -7,18 +7,17 @@ const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
   })
   const dispatch = useDispatch()
   // Manejar cambios en los campos del formulario
-  const handleChange = (event) => {
-    console.log(event)
+  const handleChange = event => {
     const { name, value } = event.target
     setFormData({ ...formData, [name]: value })
   }
 
   // Manejar el envío del formulario
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     event.preventDefault()
     // enviarla al back
     console.log('Información del usuario registrada:', formData)
@@ -37,25 +36,34 @@ const Register = () => {
 
   return (
     <div>
-      <NavBar />
       <h1>Register:</h1>
       <form onSubmit={handleSubmit}>
-        <label>
-          Nombre:
-          <input type="text" name="name" value={formData.name} onChange={handleChange} />
-        </label>
-        <br />
-        <label>
-          Email:
-          <input type="email" name="email" value={formData.email} onChange={handleChange} />
-        </label>
-        <br />
+        <label>Nombre:</label>
+        <input
+          type='text'
+          name='name'
+          value={formData.name}
+          onChange={handleChange}
+        />
+        <label>Email:</label>
+        <input
+          type='email'
+          name='email'
+          value={formData.email}
+          onChange={handleChange}
+        />
         <label>
           Contraseña:
-          <input type="password" name="password" value={formData.password} onChange={handleChange} />
+          <input
+            type='password'
+            name='password'
+            value={formData.password}
+            onChange={handleChange}
+          />
         </label>
-        <br />
-        <button type="submit" disabled={!isFormEmpty()} >Registrarse</button>
+        <button type='submit' disabled={!isFormEmpty()}>
+          Registrarse
+        </button>
       </form>
     </div>
   )
