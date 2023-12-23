@@ -101,7 +101,10 @@ export default function Filters() {
       min: newValue[0],
       max: newValue[1],
     })
+    
   }
+
+
 
   const handleTextFieldChange = event => {
     const { id, value } = event.target
@@ -160,7 +163,8 @@ export default function Filters() {
   useEffect(() => {
     try {
       localStorage.setItem(localStorageKey, JSON.stringify(checkedFilters))
-      dispatch(filter(filters))
+      const storedData = JSON.parse(localStorage.getItem(localStorageKey)) || {}
+      dispatch(filter(storedData))
     } catch (error) {
       console.error('Error storing data in localStorage:', error)
     }

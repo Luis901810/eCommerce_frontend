@@ -15,10 +15,12 @@ const CardShoe = ({ product }) => {
 
   const genders = useSelector((state) => state.genders)
   const colors = useSelector((state) => state.colors)
+  const sizes = useSelector((state) => state.sizes)
 
   const gender = genders.find(item => item.id === product.genderId)
   const color = colors.find(item => item.id === product.colorId)
-  console.log(color)
+  const size = sizes.find(item => item.id === product.sizeId)
+
   return (
     <Box >
         <p>product.name</p>
@@ -30,6 +32,7 @@ const CardShoe = ({ product }) => {
           image="https://www.dtlr.com/cdn/shop/articles/DZ5485-400-A_905x.jpg?v=1689610057"
           alt="Hay que cambiar"
         />
+        
         <Typography
         variant="h5"
         sx={{ color: '#fff', textAlign: 'center' }}>
