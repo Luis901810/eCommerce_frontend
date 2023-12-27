@@ -19,6 +19,7 @@ import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import PropTypes from 'prop-types'
 import Slider, { SliderThumb } from '@mui/material/Slider'
+import { filterRange } from '../../redux/actions'
 
 const AirbnbSlider = styled(Slider)(({ theme }) => ({
   color: '#42e268',
@@ -82,6 +83,8 @@ export default function Filters() {
 
   const dispatch = useDispatch()
 
+  const shoes = useSelector(state => state.filteredShoes)
+
   const brands = useSelector(state => state.brands)
   const categories = useSelector(state => state.categories)
   const colors = useSelector(state => state.colors)
@@ -89,22 +92,30 @@ export default function Filters() {
   const materials = useSelector(state => state.materials)
   const sizes = useSelector(state => state.sizes)
 
+  const maxValue = () => {
+    let max = 0
+    shoes.forEach(shoe => {
+      const price = parseFloat(shoe.price)
+      if (price > max) {
+        max = price
+      }
+    })
+    return max
+  }
+
   const [range, setRange] = useState({
-    min: 2000,
-    max: 8000,
+    min: 0,
+    max: 1000,
   })
 
-  const maxValue = 10000
+  const [changed, setChanged] = useState(false)
 
   const handleRangeChange = (event, newValue) => {
     setRange({
       min: newValue[0],
       max: newValue[1],
     })
-    
   }
-
-
 
   const handleTextFieldChange = event => {
     const { id, value } = event.target
@@ -169,6 +180,22 @@ export default function Filters() {
       console.error('Error storing data in localStorage:', error)
     }
   }, [checkedFilters, localStorageKey])
+
+  useEffect(() => {
+    setChanged(true)
+  }, [range])
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (changed) {
+        dispatch(filterRange(range.min, range.max))
+        setChanged(false)
+        return
+      }
+      console.log('back to false')
+      return
+    }, 100)
+  }, [changed])
 
   return (
     <List
@@ -472,7 +499,7 @@ export default function Filters() {
           getAriaLabel={index => (index === 0 ? 0 : 100000)}
           value={[range.min, range.max]}
           onChange={handleRangeChange}
-          max={maxValue}
+          max={maxValue()}
         />
       </Collapse>
     </List>
