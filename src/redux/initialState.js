@@ -4,6 +4,7 @@ import { API_URL } from './actions-type'
 const initialState = {
   Shoe: {},
   Shoes: [],
+  filteredShoes: [],
   error: false,
   brands: await axios(API_URL + '/shoe/brand')
     .then(({ data }) => data)
