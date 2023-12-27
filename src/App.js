@@ -6,7 +6,7 @@ import Login from './components/Login/Login'
 import ShoeDetail from './components/ShoeDetail/ShoeDetail'
 import ShoppingCart from './components/ShoppingCart/ShoppingCart'
 import NavBar from './components/NavBar/NavBar'
-import Register from './components/Login/Register/Register'
+import Register from './components/Login/Register'
 import UserProfile from './components/UserProfile/UserProfile'
 
 function App() {
