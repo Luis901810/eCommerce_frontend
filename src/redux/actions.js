@@ -1,16 +1,16 @@
-import { API_URL, FILTER, GET_SHOE_BY_ID, FILTER_RANGE } from './actions-type'
+import { API_URL, FILTER, GET_SHOE_BY_ID, FILTER_RANGE, FILTER_LOCAL } from './actions-type'
 import axios from 'axios'
 
 export const filter = filters => {
-  console.log(filters)
-  let endpoint = API_URL + '/shoe?'
-  for (const filter in filters) {
-    if (filters[filter].length) {
-      endpoint = endpoint + filter + '=' + filters[filter] + '&'
-    }
-  }
-  endpoint = endpoint.slice(0, -1)
-  console.log(endpoint)
+  // console.log(filters)
+  let endpoint = API_URL + '/shoe'
+  // for (const filter in filters) {
+  //   if (filters[filter].length) {
+  //     endpoint = endpoint + filter + '=' + filters[filter] + '&'
+  //   }
+  // }
+  // endpoint = endpoint.slice(0, -1)
+  // console.log(endpoint)
   return dispatch => {
     axios
       .get(endpoint)
@@ -29,6 +29,14 @@ export const filter = filters => {
       })
   }
 }
+
+export const filterLocal = (filters) => {
+  return {
+    type: FILTER_LOCAL,
+    payload: filters,
+  }
+}
+
 export const createUser = user => {
   console.log('El usuario a crear: ', user)
   return async dispatch => {

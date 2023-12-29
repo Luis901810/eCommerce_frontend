@@ -14,12 +14,11 @@ import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { useDispatch, useSelector } from 'react-redux'
-import { filter } from '../../redux/actions'
+import { filter, filterLocal, filterRange } from '../../redux/actions'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import PropTypes from 'prop-types'
 import Slider, { SliderThumb } from '@mui/material/Slider'
-import { filterRange } from '../../redux/actions'
 
 const AirbnbSlider = styled(Slider)(({ theme }) => ({
   color: '#42e268',
@@ -175,7 +174,7 @@ export default function Filters() {
     try {
       localStorage.setItem(localStorageKey, JSON.stringify(checkedFilters))
       const storedData = JSON.parse(localStorage.getItem(localStorageKey)) || {}
-      dispatch(filter(storedData))
+      dispatch(filterLocal(storedData))
     } catch (error) {
       console.error('Error storing data in localStorage:', error)
     }
@@ -233,9 +232,9 @@ export default function Filters() {
                 <Checkbox
                   sx={{ marginLeft: 2, color: '#42e268' }}
                   checked={
-                    checkedFilters['genders']?.includes(gender.id) || false
+                    checkedFilters['gender']?.includes(gender.id) || false
                   }
-                  onChange={() => handleCheckboxChange('genders', gender.id)}
+                  onChange={() => handleCheckboxChange('gender', gender.id)}
                 />
               }
               label={gender.gender}
@@ -272,56 +271,12 @@ export default function Filters() {
               control={
                 <Checkbox
                   sx={{ marginLeft: 2, color: '#42e268' }}
-                  checked={
-                    checkedFilters['brands']?.includes(brand.id) || false
-                  }
-                  onChange={() => handleCheckboxChange('brands', brand.id)}
+                  checked={checkedFilters['brand']?.includes(brand.id) || false}
+                  onChange={() => handleCheckboxChange('brand', brand.id)}
                 />
               }
               label={brand.brand}
               id={brand.id}
-              style={{ color: 'white' }}
-              sx={{
-                backgroundColor: '#303030',
-                width: '275px',
-                alignSelf: 'center',
-                marginLeft: 2,
-              }}
-            />
-          ))}
-        </FormGroup>
-      </Collapse>
-
-      {/* Categories */}
-      <ListItemButton onClick={() => handleClick('categories')}>
-        <ListItemText
-          primary='Categorías'
-          sx={{ color: open.categories ? 'white' : '#42e268' }}
-        />
-        {open.categories ? (
-          <ExpandLess sx={{ color: 'white' }} />
-        ) : (
-          <ExpandMore sx={{ color: '#42e268' }} />
-        )}
-      </ListItemButton>
-      <Collapse in={open.categories} timeout='auto' unmountOnExit>
-        <FormGroup>
-          {categories.map((category, i) => (
-            <FormControlLabel
-              key={i}
-              control={
-                <Checkbox
-                  sx={{ marginLeft: 2, color: '#42e268' }}
-                  checked={
-                    checkedFilters['categories']?.includes(category.id) || false
-                  }
-                  onChange={() =>
-                    handleCheckboxChange('categories', category.id)
-                  }
-                />
-              }
-              label={category.category}
-              id={category.id}
               style={{ color: 'white' }}
               sx={{
                 backgroundColor: '#303030',
@@ -354,8 +309,8 @@ export default function Filters() {
               control={
                 <Checkbox
                   sx={{ marginLeft: 2, color: '#42e268' }}
-                  checked={checkedFilters['sizes']?.includes(size.id) || false}
-                  onChange={() => handleCheckboxChange('sizes', size.id)}
+                  checked={checkedFilters['size']?.includes(size.id) || false}
+                  onChange={() => handleCheckboxChange('size', size.id)}
                 />
               }
               label={size.size}
@@ -391,10 +346,8 @@ export default function Filters() {
               control={
                 <Checkbox
                   sx={{ marginLeft: 2, color: '#42e268' }}
-                  checked={
-                    checkedFilters['colors']?.includes(color.id) || false
-                  }
-                  onChange={() => handleCheckboxChange('colors', color.id)}
+                  checked={checkedFilters['color']?.includes(color.id) || false}
+                  onChange={() => handleCheckboxChange('color', color.id)}
                 />
               }
               label={color.color}
@@ -431,11 +384,9 @@ export default function Filters() {
                 <Checkbox
                   sx={{ marginLeft: 2, color: '#42e268' }}
                   checked={
-                    checkedFilters['materials']?.includes(material.id) || false
+                    checkedFilters['material']?.includes(material.id) || false
                   }
-                  onChange={() =>
-                    handleCheckboxChange('materials', material.id)
-                  }
+                  onChange={() => handleCheckboxChange('material', material.id)}
                 />
               }
               label={material.material}
