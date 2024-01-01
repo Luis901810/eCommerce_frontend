@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { ThemeProvider, Box } from '@mui/material'
+import { ThemeProvider, Box, Typography } from '@mui/material'
 import Loading from '../../components/Loading/loading'
 import ShoeList from './ShoeList'
 import theme from '../../theme'
@@ -11,22 +11,18 @@ import Filters from './Filters'
 function Catalogue() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(false)
-  // const [noProducts, setNoProducts] = useState(false)
-  const [noProducts] = useState(false)
 
   const dispatch = useDispatch()
-  const shoes = useSelector(state => state.Shoes)
+  const shoes = useSelector(state => state.filteredShoes)
 
   useEffect(() => {
-    if (shoes.length) {
       setProducts(shoes)
       setLoading(false)
-    }
-    console.log(shoes)
   }, [shoes])
 
   useEffect(() => {
     if (!shoes.length) {
+      setLoading(true)
       dispatch(filter({}))
     }
     console.log(shoes)
@@ -34,7 +30,6 @@ function Catalogue() {
 
   return (
     <ThemeProvider theme={theme}>
-      {noProducts && !loading ? <h1>Productos no encontrados</h1> : null}
       {loading ? (
         <Loading loading={loading} />
       ) : (
@@ -51,6 +46,7 @@ function Catalogue() {
               <Filters />
             </Box>
             <ShoeList products={products} />
+            {shoes.length === 0 && !loading ? <Typography variant="h1" color="white">Productos no encontrados</Typography> : null}
           </Box>
         </>
       )}

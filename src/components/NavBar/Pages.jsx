@@ -32,6 +32,7 @@ export default function Pages() {
     );
 
     dispatch(filter({ gender: genderId }));
+    navigate('/Catalogue')
   };
 
   return (
