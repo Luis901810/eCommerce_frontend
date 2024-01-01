@@ -203,6 +203,7 @@ export default function Filters() {
         flexDirection: 'column',
         width: '300px',
         backgroundColor: '#414141',
+        marginTop: '15px'
       }}
       component='nav'
       subheader={
