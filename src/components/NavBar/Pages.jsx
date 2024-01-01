@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { filter } from '../../redux/actions';
 import { useNavigate } from 'react-router';
 
+
 export default function Pages() {
   const genders = useSelector((state) => state.genders);
   const navigate = useNavigate();
