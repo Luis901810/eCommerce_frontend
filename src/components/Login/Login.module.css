@@ -1,0 +1,11 @@
+.imgLogos{
+    
+        width: 220px;
+        height: 350px;
+        height: 40%;
+        transition: 0.3s;
+        border-radius: 100%;
+        position: relative;
+        top: 15px;
+
+}

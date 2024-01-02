@@ -1,8 +1,7 @@
-import NavBar from "../NavBar/NavBar";
+import NavBar from '../NavBar/NavBar'
 
 const Catalogue = () => {
-
-        return (
+  return (
         <div>
             <NavBar/>
             <h1>Catalogue</h1>
@@ -16,7 +15,7 @@ const Catalogue = () => {
             <h3>Paginado</h3>
 
         </div>
-        );
-    };
+  )
+}
 
-export default Catalogue;
+export default Catalogue

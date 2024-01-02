@@ -1,0 +1,33 @@
+
+
+.contenedor-productos {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    padding: 10px;
+    width: 100%; 
+  }
+  
+  .tarjeta-producto {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px;
+    width: 300px;
+    text-align: center;
+  }
+  
+  .tarjeta-producto img {
+    width: 100%;
+    height: auto;
+  }
+  .pago-container {
+    margin-bottom: 10px; /* Agrega un margen inferior para separar la tarjeta de pago del contenedor de productos */
+    align-self: flex-end; /* Alinea la tarjeta de pago a la derecha dentro del contenedor */
+  }
+  
+  .tarjeta-pago {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px;
+    text-align: right;
+  }
