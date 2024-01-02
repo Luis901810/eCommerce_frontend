@@ -57,7 +57,7 @@ export default function Order() {
     <Box
       sx={{
         height: '40px',
-        justifyContent: 'center'
+        justifyContent: 'center',
       }}
     >
       <FormControl
@@ -65,31 +65,31 @@ export default function Order() {
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          justifyContent: 'space-between',
-          width: 3/4
+          justifyContent: 'flex-end',
         }}
       >
-        <InputLabel id='labelInput' sx={{ color: 'white' }}>
-          Orden
-        </InputLabel>
-        <Select
-          labelId='labelInput'
-          id='order'
-          value={orderType}
-          label='Orden'
-          sx={{ color: 'white', border: '1px solid white' }}
-          onChange={handleChange}
-        >
-          <MenuItem value='none'>Ninguno</MenuItem>
-          <MenuItem value='price'>Precio</MenuItem>
-          <MenuItem value='size'>Talla</MenuItem>
-        </Select>
         {orderType !== 'none' ? (
           <Button variant='outlined' onClick={handleButtonClick}>
             <SortIcon sx={{ color: 'white' }} />
             {direction.icon}
           </Button>
         ) : null}
+        <Select
+          id='order'
+          value={orderType}
+          label='Orden'
+          sx={{
+            color: 'white',
+            border: '1px solid white',
+            width: 1 / 3,
+            marginLeft: 3,
+          }}
+          onChange={handleChange}
+        >
+          <MenuItem value='none'>Ningun orden</MenuItem>
+          <MenuItem value='price'>Precio</MenuItem>
+          <MenuItem value='size'>Talla </MenuItem>
+        </Select>
       </FormControl>
     </Box>
   )
