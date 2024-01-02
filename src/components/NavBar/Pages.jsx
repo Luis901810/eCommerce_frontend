@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { filter } from '../../redux/actions';
 import { useNavigate } from 'react-router';
 
+
 export default function Pages() {
   const genders = useSelector((state) => state.genders);
   const navigate = useNavigate();
@@ -23,26 +24,30 @@ export default function Pages() {
     console.error('Error parsing filters from local storage:', error);
   }
 
-  const handleClick = (gender) => {
-    const genderId = gender.id;
+  const handleClick = () => {
+    // const genderId = gender.id;
 
-    localStorage.setItem(
-      'filters',
-      JSON.stringify({ ...filters, genders: [...(filters.genders || []), genderId.toString()] })
-    );
-
-    dispatch(filter({ gender: genderId }));
+    // localStorage.setItem(
+    //   'filters',
+    //   JSON.stringify({ ...filters, genders: [...(filters.genders || []), genderId.toString()] })
+    // );
+    // dispatch(filter({ gender: genderId }));
+    dispatch(filter())
+    navigate('/Catalogue')
   };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-      {genders.map((page, i) => (
+      <MenuItem onClick={() => handleClick()} >
+      Catalogo
+      </MenuItem>
+      {/* {genders.map((page, i) => (
         <Box key={i}>
           <MenuItem onClick={() => handleClick(page)}>
             {page.gender}
           </MenuItem>
         </Box>
-      ))}
+      ))} */}
     </Box>
   );
 }
