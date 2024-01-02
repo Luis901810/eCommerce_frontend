@@ -3,6 +3,7 @@ import {
   GET_SHOE_BY_ID,
   FILTER_RANGE,
   FILTER_LOCAL,
+  ORDER,
 } from './actions-type'
 
 import initialState from './initialState'
@@ -13,9 +14,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         Shoes: action.payload,
-        filteredShoes: state.filteredShoes.length === 0 ? action.payload : state.filteredShoes,
+        filteredShoes:
+          state.filteredShoes.length === 0
+            ? action.payload
+            : state.filteredShoes,
       }
-
 
     case GET_SHOE_BY_ID:
       return {
@@ -51,12 +54,55 @@ const reducer = (state = initialState, action) => {
           return match
         })
       })
-
       return {
         ...state,
         filteredShoes: filteredShoes,
       }
+    case ORDER:
+      const { orderType, direction } = action.payload
+      console.log(orderType, direction)
 
+      if (orderType === 'none') {
+        return {
+          ...state,
+          filteredShoes:
+            state.orderBackup.length === 0 ? state.Shoes : state.orderBackup,
+        }
+      }
+
+      let orderedShoes = []
+
+      if (orderType === 'price') {
+        if (direction === 'dec') {
+          orderedShoes = [...state.filteredShoes].sort((a, b) => {
+            return a.price.localeCompare(b.price)
+          })
+        } else if (direction === 'asc') {
+          orderedShoes = [...state.filteredShoes].sort((a, b) => {
+            return b.price.localeCompare(a.price)
+          })
+        }
+        return {
+          ...state,
+          orderBackup: state.filteredShoes,
+          filteredShoes: orderedShoes,
+        }
+      } else if (orderType === 'size') {
+        if (direction === 'dec') {
+          orderedShoes = [...state.filteredShoes].sort((a, b) => {
+            return a.price.localeCompare(b.price)
+          })
+        } else if (direction === 'asc') {
+          orderedShoes = [...state.filteredShoes].sort((a, b) => {
+            return b.price.localeCompare(a.price)
+          })
+        }
+        return {
+          ...state,
+          orderBackup: state.filteredShoes,
+          filteredShoes: orderedShoes,
+        }
+      }
     default:
       return state
   }

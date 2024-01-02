@@ -1,6 +1,6 @@
 import { Box } from '@mui/system'
 import Select from '@mui/material/Select'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -16,8 +16,8 @@ export default function Order() {
   const [orderType, setOrderType] = useState('none')
 
   const [direction, setDirection] = useState({
-    icon: <VerticalAlignCenterIcon sx={{ color: 'white' }} />,
-    type: 'default',
+    icon: <VerticalAlignBottomIcon sx={{ color: 'white' }} />,
+    type: 'dec',
   })
 
   const dispatch = useDispatch()
@@ -28,7 +28,7 @@ export default function Order() {
 
   const handleButtonClick = () => {
     switch (direction.type) {
-      case 'default':
+      case 'dec':
         setDirection({
           icon: <VerticalAlignTopIcon sx={{ color: 'white' }} />,
           type: 'asc',
@@ -40,24 +40,18 @@ export default function Order() {
           type: 'dec',
         })
         break
-      case 'dec':
-        setDirection({
-          icon: <VerticalAlignCenterIcon sx={{ color: 'white' }} />,
-          type: 'default',
-        })
-        break
       default:
         setDirection({
           icon: <VerticalAlignCenterIcon sx={{ color: 'white' }} />,
-          type: 'default',
+          type: 'dec',
         })
         break
     }
   }
 
-  const handleOrder = () => {
+  useEffect(() => {
     dispatch(order(orderType, direction.type))
-  }
+  }, [orderType, direction])
 
   return (
     <Box
@@ -96,9 +90,6 @@ export default function Order() {
             {direction.icon}
           </Button>
         ) : null}
-        <Button variant="outlined" onClick={() => handleOrder()} >
-          Aplicar
-        </Button>
       </FormControl>
     </Box>
   )

@@ -82,7 +82,7 @@ export default function Filters() {
 
   const dispatch = useDispatch()
 
-  const shoes = useSelector(state => state.filteredShoes)
+  const shoes = useSelector(state => state.Shoes)
 
   const brands = useSelector(state => state.brands)
   const categories = useSelector(state => state.categories)
@@ -91,16 +91,7 @@ export default function Filters() {
   const materials = useSelector(state => state.materials)
   const sizes = useSelector(state => state.sizes)
 
-  const maxValue = () => {
-    let max = 0
-    shoes.forEach(shoe => {
-      const price = parseFloat(shoe.price)
-      if (price > max) {
-        max = price
-      }
-    })
-    return max
-  }
+  const [maxValue, setMaxValue] = useState(1000)
 
   const [range, setRange] = useState({
     min: 0,
@@ -108,6 +99,19 @@ export default function Filters() {
   })
 
   const [changed, setChanged] = useState(false)
+
+  useEffect(() => {
+    let max = 0;
+    shoes.forEach(shoe => {
+      const price = parseFloat(shoe.price.replace(",", ""));
+      if (!isNaN(price) && price > max) {
+        max = price;
+      }
+    });
+    setMaxValue(max);
+    console.log(shoes);
+    console.log('max is ', max);
+  }, [shoes]);  
 
   const handleRangeChange = (event, newValue) => {
     setRange({
@@ -451,7 +455,7 @@ export default function Filters() {
           getAriaLabel={index => (index === 0 ? 0 : 100000)}
           value={[range.min, range.max]}
           onChange={handleRangeChange}
-          max={maxValue()}
+          max={maxValue}
         />
       </Collapse>
     </List>
