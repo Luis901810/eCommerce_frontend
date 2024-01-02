@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   TextField,
   Button,
@@ -15,13 +14,17 @@ import {
 } from '@mui/material'
 import { useEmail } from '../../../hooks/Auth/Register/useEmail'
 import { usePassword } from '../../../hooks/Auth/Register/usePassword'
-import createUserAPI from '../../../services/User/createUser'
 import { Google } from '@mui/icons-material'
+import createUser from '../../../services/User/createUser'
+import { useAuth } from '../../../contexts/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
   const { email, setEmail, emailError, setEmailError } = useEmail()
   const { password, setPassword, passwordError, setPasswordError } =
     usePassword()
+  const navigate = useNavigate()
+  const { createUserWithEmailAndPassword } = useAuth()
 
   const handleEmailChange = ({ target: { value } }) => {
     setEmail(value)
@@ -35,22 +38,26 @@ const Register = () => {
 
   const isValidForm = () => emailError || passwordError
 
-  const createUser = async event => {
+  const handleSubmit = async event => {
     event.preventDefault()
-    const formData = {
+    const userData = {
       email,
       password,
       requiredUserName: false,
       requiredPhoneNumber: false,
     }
-    const data = await createUserAPI(formData)
+    const data = await createUser(userData)
     if (data.error) {
       alert(data.error)
     } else {
       console.log(data)
       alert('El usuario ha sido creado con éxito!')
+      await createUserWithEmailAndPassword(email, password)
+      navigate('/')
     }
   }
+
+  const onGoogleClick = () => {}
 
   return (
     <Container
@@ -85,8 +92,7 @@ const Register = () => {
               width: 300,
             }}
             startIcon={<Google />}
-            // onClick={createUser}
-            // disabled={isValidForm()}
+            onClick={onGoogleClick}
           >
             Google
           </Button>
@@ -142,7 +148,7 @@ const Register = () => {
               backgroundColor: '#42e268',
               width: 300,
             }}
-            onClick={createUser}
+            onClick={handleSubmit}
             disabled={isValidForm()}
           >
             Completar registro

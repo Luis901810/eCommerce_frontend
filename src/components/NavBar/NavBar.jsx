@@ -182,7 +182,6 @@ const NavBar = () => {
                   <MenuItem onClick={() => navigate('/UserProfile')}>
                     <Typography textAlign='center'>Perfil</Typography>
                   </MenuItem>
-                  ,
                   <MenuItem key='logout' onClick={handleLogaut}>
                     <Typography textAlign='center'>Cerrar Sesión</Typography>
                   </MenuItem>

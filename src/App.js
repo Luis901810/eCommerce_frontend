@@ -20,7 +20,7 @@ function App() {
         <Route path='/Login/Register' element={<Register />}></Route>
         <Route path='/Detail/:idShoe' element={<ShoeDetail />} />
         <Route path='/ShoppingCart' element={<ShoppingCart />}></Route>
-        <Route path='/UserProfile/:idUser' element={<UserProfile />}></Route>
+        <Route path='/UserProfile/' element={<UserProfile />}></Route>
       </Routes>
     </div>
   )

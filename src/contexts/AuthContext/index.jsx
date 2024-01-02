@@ -31,13 +31,24 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  const signup = async (email, password) =>
-    await createUserWithEmailAndPassword(auth, email, password)
+  const _createUserWithEmailAndPassword = async (email, password) => {
+    try {
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      )
+      return response
+    } catch (error) {
+      console.log(error)
+      return { error: error.message }
+    }
+  }
 
   const login = async (email, password) =>
     await signInWithEmailAndPassword(auth, email, password)
 
-  const logaut = async () => signOut(auth)
+  const logout = async () => signOut(auth)
 
   const loginWithGoogle = () => {
     const googleProvider = new GoogleAuthProvider()
@@ -53,7 +64,14 @@ export function AuthProvider({ children }) {
 
   return (
     <authContext.Provider
-      value={{ user, loading, signup, login, logaut, loginWithGoogle }}
+      value={{
+        user,
+        loading,
+        createUserWithEmailAndPassword: _createUserWithEmailAndPassword,
+        login,
+        logout,
+        loginWithGoogle,
+      }}
     >
       {!loading && children}
     </authContext.Provider>
