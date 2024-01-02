@@ -66,7 +66,7 @@ const reducer = (state = initialState, action) => {
         return {
           ...state,
           filteredShoes:
-            state.orderBackup.length === 0 ? state.Shoes : state.orderBackup,
+            state.orderBackup.length !== 0 ? state.Shoes : state.orderBackup,
         }
       }
 
