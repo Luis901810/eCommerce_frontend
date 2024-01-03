@@ -8,6 +8,7 @@ import ShoppingCart from './components/ShoppingCart/ShoppingCart'
 import NavBar from './components/NavBar/NavBar'
 import Register from './components/Login/Register'
 import UserProfile from './components/UserProfile/UserProfile'
+import FormShoe from './components/Form/FormShoe/FormShoe'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path='/Detail/:idShoe' element={<ShoeDetail />} />
         <Route path='/ShoppingCart' element={<ShoppingCart />}></Route>
         <Route path='/UserProfile/:idUser' element={<UserProfile />}></Route>
+        <Route path='/FormShoe' element={<FormShoe />}></Route>
       </Routes>
     </div>
   )

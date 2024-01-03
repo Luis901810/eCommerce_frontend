@@ -1,4 +1,13 @@
-import { API_URL, FILTER, GET_SHOE_BY_ID, FILTER_RANGE, FILTER_LOCAL, CHANGE_PAGE, ORDER } from './actions-type'
+import {
+  API_URL,
+  FILTER,
+  GET_SHOE_BY_ID,
+  FILTER_RANGE,
+  FILTER_LOCAL,
+  CHANGE_PAGE,
+  ORDER,
+  POST_SHOE,
+} from './actions-type'
 import axios from 'axios'
 
 export const filter = filters => {
@@ -30,7 +39,7 @@ export const filter = filters => {
   }
 }
 
-export const filterLocal = (filters) => {
+export const filterLocal = filters => {
   return {
     type: FILTER_LOCAL,
     payload: filters,
@@ -86,19 +95,47 @@ export const updateUser = async (idUser, updatedUserData) => {
 export const filterRange = (min, max) => {
   return {
     type: FILTER_RANGE,
-    payload: {min, max},
+    payload: { min, max },
   }
 }
 
-export const changePage = (page) =>{
-    return {
-        type: CHANGE_PAGE,
-        payload: page
-    }
+export const changePage = page => {
+  return {
+    type: CHANGE_PAGE,
+    payload: page,
+  }
 }
 export const order = (orderType, direction) => {
   return {
     type: ORDER,
-    payload: {orderType, direction}
+    payload: { orderType, direction },
+  }
+}
+
+export const postShoe = shoeData => {
+  return async dispatch => {
+    try {
+      // Log de la data que se enviará al backend
+      console.log('Data a enviar al backend:', shoeData)
+
+      const response = await axios.post(`${API_URL}/shoe/`, shoeData)
+
+      // Log de la respuesta del backend
+      console.log('Respuesta del backend:', response.data)
+
+      dispatch({
+        type: POST_SHOE,
+        payload: response.data,
+      })
+      console.log('Shoe created successfully:', response.data)
+    } catch (error) {
+      console.error('Error creating shoe:', error)
+
+      dispatch({
+        type: POST_SHOE,
+        payload: null,
+        error: 'Error creating shoe',
+      })
+    }
   }
 }
