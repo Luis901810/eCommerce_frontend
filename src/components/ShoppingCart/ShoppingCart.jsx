@@ -39,7 +39,7 @@ const [cart, setCart] = useState(consolidatedCart);
     // try {
     //   console.log(products);
     //   const response = await axios.post(
-    //     "http://localhost:3001/MercadoPago",
+    //     "http://localhost:3001/MercadoPago",//!usar : API_URL
     //     products
     //   );
 
