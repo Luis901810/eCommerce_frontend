@@ -1,4 +1,4 @@
-import { API_URL, FILTER, GET_SHOE_BY_ID, FILTER_RANGE, FILTER_LOCAL, ORDER } from './actions-type'
+import { API_URL, FILTER, GET_SHOE_BY_ID, FILTER_RANGE, FILTER_LOCAL, ORDER, ADD_TO_SHOPPING_CART, SET_SHOPPING_CART } from './actions-type'
 import axios from 'axios'
 
 export const filter = filters => {
@@ -96,3 +96,13 @@ export const order = (orderType, direction) => {
     payload: {orderType, direction}
   }
 }
+export const addToShoppingCart = (product) => {
+  return {
+    type: ADD_TO_SHOPPING_CART,
+    payload: {product}
+  }
+}
+export const setShoppingCart = (cart) => ({
+  type: SET_SHOPPING_CART,
+  payload: cart,
+});

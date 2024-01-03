@@ -146,7 +146,7 @@ const NavBar = () => {
           >
             <Pages />
             <Search />
-            <IconButton aria-label='cart'>
+            <IconButton aria-label='cart'onClick= {()=>navigate('/ShoppingCart')}>
               <ShoppingCartOutlinedIcon sx={{ color: 'white' }} />
             </IconButton>
           </Box>
