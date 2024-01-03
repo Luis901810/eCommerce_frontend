@@ -14,7 +14,7 @@ import Checkbox from '@mui/material/Checkbox'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { useDispatch, useSelector } from 'react-redux'
-import { filter, filterLocal, filterRange } from '../../redux/actions'
+import { filter, filterLocal, filterRange, changePage } from '../../redux/actions'
 import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import PropTypes from 'prop-types'
@@ -175,6 +175,7 @@ export default function Filters() {
       localStorage.setItem(localStorageKey, JSON.stringify(checkedFilters))
       const storedData = JSON.parse(localStorage.getItem(localStorageKey)) || {}
       dispatch(filterLocal(storedData))
+      dispatch(changePage(1))
     } catch (error) {
       console.error('Error storing data in localStorage:', error)
     }
@@ -188,6 +189,7 @@ export default function Filters() {
     setTimeout(() => {
       if (changed) {
         dispatch(filterRange(range.min, range.max))
+        dispatch(changePage(1))
         setChanged(false)
         return
       }
