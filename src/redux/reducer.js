@@ -3,7 +3,9 @@ import {
   GET_SHOE_BY_ID,
   FILTER_RANGE,
   FILTER_LOCAL,
+  CHANGE_PAGE,
   ORDER,
+  POST_SHOE,
 } from './actions-type'
 
 import initialState from './initialState'
@@ -11,13 +13,20 @@ import initialState from './initialState'
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case FILTER:
+      const shoes = action.payload.map(shoe => {
+        const sizeId = shoe.sizeId
+        const sizeFound = state.sizes.find(s => s.id === sizeId)
+        const size = sizeFound.size
+        return {
+          ...shoe,
+          size: size ? size : null,
+        }
+      })
       return {
         ...state,
-        Shoes: action.payload,
+        Shoes: shoes,
         filteredShoes:
-          state.filteredShoes.length === 0
-            ? action.payload
-            : state.filteredShoes,
+          state.filteredShoes.length === 0 ? shoes : state.filteredShoes,
       }
 
     case GET_SHOE_BY_ID:
@@ -58,9 +67,15 @@ const reducer = (state = initialState, action) => {
         ...state,
         filteredShoes: filteredShoes,
       }
+
+    case CHANGE_PAGE:
+      return {
+        ...state,
+        page: action.payload,
+      }
+
     case ORDER:
       const { orderType, direction } = action.payload
-      console.log(orderType, direction)
 
       if (orderType === 'none') {
         return {
@@ -90,11 +105,11 @@ const reducer = (state = initialState, action) => {
       } else if (orderType === 'size') {
         if (direction === 'dec') {
           orderedShoes = [...state.filteredShoes].sort((a, b) => {
-            return a.price.localeCompare(b.price)
+            return a.size.localeCompare(b.size)
           })
         } else if (direction === 'asc') {
           orderedShoes = [...state.filteredShoes].sort((a, b) => {
-            return b.price.localeCompare(a.price)
+            return b.size.localeCompare(a.size)
           })
         }
         return {
@@ -103,6 +118,12 @@ const reducer = (state = initialState, action) => {
           filteredShoes: orderedShoes,
         }
       }
+    case POST_SHOE:
+      return {
+        ...state,
+        Shoes: [...state.Shoes, action.payload],
+      }
+
     default:
       return state
   }

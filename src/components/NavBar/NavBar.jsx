@@ -14,7 +14,7 @@ import AdbIcon from '@mui/icons-material/Adb'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import Search from './Search'
 import Pages from './Pages'
-
+import { Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { useState } from 'react'
 
@@ -148,7 +148,7 @@ const NavBar = () => {
           >
             <Pages />
             <Search />
-            <IconButton aria-label='cart'>
+            <IconButton aria-label='cart' onClick={() => navigate('/ShoppingCart')} >
               <ShoppingCartOutlinedIcon sx={{ color: 'white' }} />
             </IconButton>
           </Box>
