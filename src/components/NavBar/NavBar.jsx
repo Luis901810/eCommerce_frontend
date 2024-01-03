@@ -24,7 +24,7 @@ const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const [error, setError] = useState('')
-  const { user, logaut, loading } = useAuth()
+  const { user, logout, loading } = useAuth()
   const navigate = useNavigate()
 
   const handleOpenNavMenu = event => {
@@ -42,13 +42,15 @@ const NavBar = () => {
     setAnchorElUser(null)
   }
 
-  const handleLogaut = async () => {
+  const handleLogout = async () => {
     try {
-      await logaut()
+      await logout()
+      navigate('/')
     } catch (error) {
       setError(error.message)
     }
   }
+
   if (loading) {
     return <h1>Cerrando seccion....</h1>
   }
@@ -182,8 +184,7 @@ const NavBar = () => {
                   <MenuItem onClick={() => navigate('/UserProfile')}>
                     <Typography textAlign='center'>Perfil</Typography>
                   </MenuItem>
-                  ,
-                  <MenuItem key='logout' onClick={handleLogaut}>
+                  <MenuItem key='logout' onClick={handleLogout}>
                     <Typography textAlign='center'>Cerrar Sesión</Typography>
                   </MenuItem>
                 </>
