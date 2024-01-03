@@ -141,3 +141,13 @@ export const postShoe = shoeData => {
     }
   }
 }
+export const addToShoppingCart = (product) => {
+  return {
+    type: ADD_TO_SHOPPING_CART,
+    payload: {product}
+  }
+}
+export const setShoppingCart = (cart) => ({
+  type: SET_SHOPPING_CART,
+  payload: cart,
+});
