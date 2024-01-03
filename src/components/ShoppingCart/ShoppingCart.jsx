@@ -1,70 +1,45 @@
 import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-// import { setShoppingCart } from "../../redux/actions";//!Crear el setShopping cart,
-//! Preguntar como se van a llevar los productos al ShoppingCart
+import { useDispatch, useSelector } from 'react-redux'
 // import axios from "axios";
 import styles from './ShoppingCart.module.css'
+import {  setShoppingCart } from '../../redux/actions';
+
 
 const ShoppingCart = () => {
-//   const shoppingCart = useSelector((state) => state.shoppingCart);
-  const shoppingCart = [
-    {
-      id: 1,
-      name: 'Shoe 1',
-      price: 50,
-      quantity: 1,
-      stock: 10,
-      image: 'https://falabella.scene7.com/is/image/FalabellaCO/882888180_0?wid=1500&hei=1500&qlt=70'
-    },
-    {
-      id: 2,
-      name: 'Shoe 2',
-      price: 60,
-      quantity: 1,
-      stock: 15,
-      image: 'https://falabella.scene7.com/is/image/FalabellaCO/882888180_0?wid=1500&hei=1500&qlt=70'
-    },
-    {
-      id: 3,
-      name: 'Shoe 3',
-      price: 70,
-      quantity: 1,
-      stock: 20,
-      image: 'https://falabella.scene7.com/is/image/FalabellaCO/882888180_0?wid=1500&hei=1500&qlt=70'
-    },
-    {
-      id: 4,
-      name: 'Shoe 4',
-      price: 80,
-      quantity: 1,
-      stock: 12,
-      image: 'https://falabella.scene7.com/is/image/FalabellaCO/882888180_0?wid=1500&hei=1500&qlt=70'
-    },
-    {
-      id: 5,
-      name: 'Shoe 5',
-      price: 90,
-      quantity: 1,
-      stock: 18,
-      image: 'https://falabella.scene7.com/is/image/FalabellaCO/882888180_0?wid=1500&hei=1500&qlt=70'
-    }
-  ]
+
+  const shoppingCart = useSelector((state) => state.shoppingCart);
+  console.log('Carrito de LLEGADA',shoppingCart)
+  const initialCartState = shoppingCart.map(product => ({
+    ...product,
+    quantity: product.quantity || 1,
+  }));
+const consolidatedCart = initialCartState.reduce((accumulator, product) => {
+
+  const existingProduct = accumulator.find(item => item.id === product.id);//accumulator Corre los productos del carrito y compara con el ID de cada producto
+
+  if (existingProduct) {//existingProduct devuelve el primer objeto que cumplio la condicion
+    existingProduct.quantity += product.quantity; // Suma 'quantity' si el ID ya existe
+  } else {
+    // No borrar lo que tenía el objeto
+    accumulator.push({ ...product });
+  }
+
+  return accumulator;
+}, []);
+
+// Establecer el estado del carrito consolidado
+const [cart, setCart] = useState(consolidatedCart);
 
   const dispatch = useDispatch()
 
-  const [cart, setCart] = useState([...shoppingCart])
-  //   const setShoppingCart = (products) =>{
-  //     console.log(products);
-  //   }
-
-  const buyGames = async (products) => {
+  const buyProducts = async (products) => {
     console.log('Simular Que compra los productos')
     alert('Simular Que compra los productos, dado que no se ha hecho la conexion con el BACK')
     //! Cuando haga el backend
     // try {
     //   console.log(products);
     //   const response = await axios.post(
-    //     "http://localhost:3001/MercadoPago",
+    //     "http://localhost:3001/MercadoPago",//!usar : API_URL
     //     products
     //   );
 
@@ -106,7 +81,7 @@ const ShoppingCart = () => {
         <h3>Total:</h3>
         <p>${totalPurchase.toFixed(2)}</p>
         <button
-          onClick={() => buyGames(cart)}
+          onClick={() => buyProducts(cart)}
           disabled={cart.length === 0}
         >
           Comprar
@@ -117,7 +92,6 @@ const ShoppingCart = () => {
 
   const addQuantity = (product) => {
     const existingProduct = cart.find((item) => item.id === product.id)
-
     if (existingProduct) {
       if (existingProduct.quantity < product.stock) {
         const newCart = cart.map((item) =>
@@ -152,7 +126,8 @@ const ShoppingCart = () => {
   }
 
   useEffect(() => {
-    // dispatch(setShoppingCart(cart));
+    
+    dispatch(setShoppingCart(cart));
     console.log('Carrito actualizado:', cart)
   }, [dispatch, cart])
 
@@ -160,9 +135,7 @@ const ShoppingCart = () => {
     <div>
       <h1>Shopping Cart</h1>
       <div className={styles['pago-container']}>{renderPaymentCard()}</div>
-      <div className={styles['contenedor-productos']}>
-        {renderProducts()}
-      </div>
+      <div className={styles['contenedor-productos']}>{renderProducts()}</div>
     </div>
   )
 }

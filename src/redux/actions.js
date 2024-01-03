@@ -5,8 +5,10 @@ import {
   FILTER_RANGE,
   FILTER_LOCAL,
   CHANGE_PAGE,
-  ORDER,
   POST_SHOE,
+  ORDER, 
+  ADD_TO_SHOPPING_CART, 
+  SET_SHOPPING_CART,
 } from './actions-type'
 import axios from 'axios'
 
@@ -139,3 +141,13 @@ export const postShoe = shoeData => {
     }
   }
 }
+export const addToShoppingCart = (product) => {
+  return {
+    type: ADD_TO_SHOPPING_CART,
+    payload: {product}
+  }
+}
+export const setShoppingCart = (cart) => ({
+  type: SET_SHOPPING_CART,
+  payload: cart,
+});
