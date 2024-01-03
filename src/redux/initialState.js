@@ -5,6 +5,7 @@ const initialState = {
   Shoe: {},
   Shoes: [],
   filteredShoes: [],
+  orderBackup: [],
   error: false,
   brands: await axios(API_URL + '/shoe/brand')
     .then(({ data }) => data)
