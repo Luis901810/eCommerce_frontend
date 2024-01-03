@@ -42,7 +42,8 @@ const initialState = {
     .catch((error) => {
       console.log(error)
       return []
-    })
+    }),
+  page:1,
 }
 
 export default initialState

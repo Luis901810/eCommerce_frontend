@@ -3,6 +3,7 @@ import {
   GET_SHOE_BY_ID,
   FILTER_RANGE,
   FILTER_LOCAL,
+  CHANGE_PAGE,
   ORDER,
 } from './actions-type'
 
@@ -58,6 +59,12 @@ const reducer = (state = initialState, action) => {
         ...state,
         filteredShoes: filteredShoes,
       }
+
+    case CHANGE_PAGE:
+      return {
+        ...state, page: action.payload
+    }
+
     case ORDER:
       const { orderType, direction } = action.payload
       console.log(orderType, direction)

@@ -1,0 +1,1 @@
+export const NUM_SHOES_PER_PAGE = 12

@@ -1,4 +1,4 @@
-import { API_URL, FILTER, GET_SHOE_BY_ID, FILTER_RANGE, FILTER_LOCAL, ORDER } from './actions-type'
+import { API_URL, FILTER, GET_SHOE_BY_ID, FILTER_RANGE, FILTER_LOCAL, CHANGE_PAGE, ORDER } from './actions-type'
 import axios from 'axios'
 
 export const filter = filters => {
@@ -90,6 +90,12 @@ export const filterRange = (min, max) => {
   }
 }
 
+export const changePage = (page) =>{
+    return {
+        type: CHANGE_PAGE,
+        payload: page
+    }
+}
 export const order = (orderType, direction) => {
   return {
     type: ORDER,

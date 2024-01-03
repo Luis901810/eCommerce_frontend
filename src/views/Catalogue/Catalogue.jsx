@@ -7,24 +7,35 @@ import ShoeList from './ShoeList'
 import theme from '../../theme'
 import { filter } from '../../redux/actions'
 import Filters from './Filters'
+import Pager from './Pager'
+import { NUM_SHOES_PER_PAGE } from '../../utils/constants'
+
 
 function Catalogue() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(false)
+  const page = useSelector(state => state.page)
 
   const dispatch = useDispatch()
   const shoes = useSelector(state => state.filteredShoes)
+  const shoePage = shoes.slice((page-1)*NUM_SHOES_PER_PAGE,page*NUM_SHOES_PER_PAGE)
 
   useEffect(() => {
-      setProducts(shoes)
+      setProducts(shoePage)
       setLoading(false)
-  }, [shoes])
+      console.log(page)
+  }, [shoes,page])
 
   useEffect(() => {
-    if (!shoes.length) {
-      setLoading(true)
-      dispatch(filter({}))
+    const fetchData = async () => {
+      if (!shoes.length) {
+        setLoading(true)
+        await dispatch(filter({})) // Asegúrate de que `dispatch` devuelva una promesa
+        setLoading(false)
+      }
     }
+
+    fetchData()
     console.log(shoes)
   }, [])
 
@@ -47,6 +58,9 @@ function Catalogue() {
             </Box>
             <ShoeList products={products} />
             {shoes.length === 0 && !loading ? <Typography variant="h1" color="white">Productos no encontrados</Typography> : null}
+          </Box>
+          <Box>
+            <Pager numShoes={shoes.length}/>
           </Box>
         </>
       )}
