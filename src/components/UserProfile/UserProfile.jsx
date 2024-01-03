@@ -16,6 +16,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     const loadUserProfile = async () => {
+      return
       try {
         const userInfo = await updateUser(idUser, {})
         setUsuario(userInfo)

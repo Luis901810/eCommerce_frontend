@@ -24,7 +24,7 @@ const Register = () => {
   const { password, setPassword, passwordError, setPasswordError } =
     usePassword()
   const navigate = useNavigate()
-  const { createUserWithEmailAndPassword } = useAuth()
+  const { createWithEmailAndPassword, loginWithGoogle } = useAuth()
 
   const handleEmailChange = ({ target: { value } }) => {
     setEmail(value)
@@ -52,12 +52,20 @@ const Register = () => {
     } else {
       console.log(data)
       alert('El usuario ha sido creado con éxito!')
-      await createUserWithEmailAndPassword(email, password)
+      await createWithEmailAndPassword(email, password)
       navigate('/')
     }
   }
 
-  const onGoogleClick = () => {}
+  const handleGoogleSingUp = async () => {
+    try {
+      await loginWithGoogle()
+      navigate('/')
+    } catch (error) {
+      console.error(error)
+      alert(error.message)
+    }
+  }
 
   return (
     <Container
@@ -92,7 +100,7 @@ const Register = () => {
               width: 300,
             }}
             startIcon={<Google />}
-            onClick={onGoogleClick}
+            onClick={handleGoogleSingUp}
           >
             Google
           </Button>

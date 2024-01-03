@@ -13,17 +13,7 @@ const authContext = createContext()
 
 export const useAuth = () => {
   const context = useContext(authContext)
-  if (!context) {
-    console.warn('No se encontró un proveedor de autenticación.')
-    return {
-      user: null,
-      loading: false,
-      signup: () => {},
-      login: () => {},
-      logout: () => {},
-      loginWithGoogle: () => {},
-    }
-  }
+  if (!context) throw new Error('No se encontró un proveedor de autenticación.')
   return context
 }
 
@@ -31,7 +21,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  const _createUserWithEmailAndPassword = async (email, password) => {
+  const createWithEmailAndPassword = async (email, password) => {
     try {
       const response = await createUserWithEmailAndPassword(
         auth,
@@ -50,9 +40,9 @@ export function AuthProvider({ children }) {
 
   const logout = async () => signOut(auth)
 
-  const loginWithGoogle = () => {
+  const loginWithGoogle = async () => {
     const googleProvider = new GoogleAuthProvider()
-    return signInWithPopup(auth, googleProvider)
+    return await signInWithPopup(auth, googleProvider)
   }
 
   useEffect(() => {
@@ -67,7 +57,7 @@ export function AuthProvider({ children }) {
       value={{
         user,
         loading,
-        createUserWithEmailAndPassword: _createUserWithEmailAndPassword,
+        createWithEmailAndPassword,
         login,
         logout,
         loginWithGoogle,
