@@ -5,6 +5,7 @@ import {
   FILTER_LOCAL,
   CHANGE_PAGE,
   ORDER,
+  POST_SHOE,
 } from './actions-type'
 
 import initialState from './initialState'
@@ -12,23 +13,20 @@ import initialState from './initialState'
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case FILTER:
-
       const shoes = action.payload.map(shoe => {
-        const sizeId = shoe.sizeId;
-        const sizeFound = state.sizes.find(s => s.id === sizeId);
+        const sizeId = shoe.sizeId
+        const sizeFound = state.sizes.find(s => s.id === sizeId)
         const size = sizeFound.size
         return {
           ...shoe,
           size: size ? size : null,
-        };
-      });
+        }
+      })
       return {
         ...state,
         Shoes: shoes,
         filteredShoes:
-          state.filteredShoes.length === 0
-            ? shoes
-            : state.filteredShoes,
+          state.filteredShoes.length === 0 ? shoes : state.filteredShoes,
       }
 
     case GET_SHOE_BY_ID:
@@ -72,8 +70,9 @@ const reducer = (state = initialState, action) => {
 
     case CHANGE_PAGE:
       return {
-        ...state, page: action.payload
-    }
+        ...state,
+        page: action.payload,
+      }
 
     case ORDER:
       const { orderType, direction } = action.payload
@@ -119,6 +118,12 @@ const reducer = (state = initialState, action) => {
           filteredShoes: orderedShoes,
         }
       }
+    case POST_SHOE:
+      return {
+        ...state,
+        Shoes: [...state.Shoes, action.payload],
+      }
+
     default:
       return state
   }
