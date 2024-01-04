@@ -9,11 +9,15 @@ import NavBar from './components/NavBar/NavBar'
 import Register from './components/Login/Register'
 import UserProfile from './components/UserProfile/UserProfile'
 import FormShoe from './components/Form/FormShoe/FormShoe'
+import Dashboard from './views/Dashboard/Dashboard'
 
 function App() {
+  const currentPath = window.location.pathname
+
+  const isAdminRoute = currentPath.startsWith('/Admin')
   return (
     <div className='App'>
-      <NavBar />
+      {!isAdminRoute? <NavBar />:null}
       <Routes>
         <Route path='/' element={<Landing />} />
         <Route path='/Catalogue' element={<Catalogue />} />
@@ -23,6 +27,7 @@ function App() {
         <Route path='/ShoppingCart' element={<ShoppingCart />}></Route>
         <Route path='/UserProfile/' element={<UserProfile />}></Route>
         <Route path='/FormShoe' element={<FormShoe />}></Route>
+        <Route path='/Admin' element={<Dashboard/>}></Route>
       </Routes>
     </div>
   )
