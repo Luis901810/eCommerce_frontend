@@ -40,20 +40,18 @@ const Register = () => {
 
   const handleSubmit = async event => {
     event.preventDefault()
-    const userData = {
-      email,
-      password,
-      requiredUserName: false,
-      requiredPhoneNumber: false,
-    }
-    const data = await createUser(userData)
-    if (data.error) {
-      alert(data.error)
-    } else {
-      console.log(data)
-      alert('El usuario ha sido creado con éxito!')
+    try {
       await createWithEmailAndPassword(email, password)
+      const data = await createUser({
+        email,
+        password,
+        requiredUserName: false,
+        requiredPhoneNumber: false,
+      })
       navigate('/')
+    } catch (error) {
+      console.log(error)
+      alert(error.message)
     }
   }
 
