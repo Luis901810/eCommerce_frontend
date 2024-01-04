@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { getShoeById } from '../../redux/actions'
+import { addToShoppingCart, getShoeById } from '../../redux/actions'
 import { Card, CardContent, Typography, Chip, ThemeProvider, createTheme, Box } from '@mui/material'
 
 const theme = createTheme({
@@ -15,10 +15,17 @@ const ShoeDetail = () => {
 
   const dispatch = useDispatch()
   const shoe = useSelector((state) => state.Shoe)
+  console.log('Detail',idShoe)
 
   React.useEffect(() => {
     dispatch(getShoeById(idShoe))
   }, [])
+
+  const addToCart = () => {
+    dispatch(addToShoppingCart(shoe));
+    console.log('Agregado:', shoe.name);
+    alert(`Producto ${shoe.name} agregado al carrito`);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -32,14 +39,19 @@ const ShoeDetail = () => {
           position: 'fixed',
           top: 0,
           left: 0,
-          zIndex: 9999,
+          // zIndex: 999,//! BLOQUEA LA BARRA DE NAVEGACION
           backgroundColor: 'rgba(0, 0, 0, 0.5)'
         }}
       >
+        
         <Card sx={{ maxWidth: 345 }}>
           {/* <img src={shoe.image} alt={shoe.name} sx={{ height: 140 }} /> */}
           <img src={shoe.image} alt={shoe.name} />
+
           <CardContent>
+            <button onClick={()=> addToCart()}>
+              Agregar al Carrito
+            </button>
             <Typography gutterBottom variant="h5" component="h2">
               {shoe.name}
             </Typography>
@@ -67,10 +79,12 @@ const ShoeDetail = () => {
             {shoe.ShoeCategories?.map((category, index) => (
               <Chip key={index} label={category.category} />
             ))}
+
           </CardContent>
         </Card>
       </Box>
     </ThemeProvider>
+    
   )
 }
 

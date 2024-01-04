@@ -2,6 +2,7 @@ import axios from 'axios'
 import { API_URL } from './actions-type'
 
 const initialState = {
+  shoppingCart:[],
   Shoe: {},
   Shoes: [],
   filteredShoes: [],
@@ -42,7 +43,8 @@ const initialState = {
     .catch((error) => {
       console.log(error)
       return []
-    })
+    }),
+  page:1,
 }
 
 export default initialState

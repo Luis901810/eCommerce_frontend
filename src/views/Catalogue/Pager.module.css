@@ -1,0 +1,35 @@
+.pagerContainer{
+    margin-bottom: 20px;
+}
+.numberBbutton{
+    font-size: 1.8rem;
+    padding: 10px 20px;
+    background-color: var(--color-contrast);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 2px;
+    margin-left: 2px;
+    color: #fff;
+}
+.current{
+    background-color: var(--color-bg);
+    font-size: 1.8rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 2px;
+    margin-left: 2px;
+}
+.nextPrevButtons{
+    font-size: 1.8rem;
+    padding: 10px 20px;
+    background-color: var(--color-contrast);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-right: 2px;
+    margin-left: 2px;
+    color: #fff;
+}

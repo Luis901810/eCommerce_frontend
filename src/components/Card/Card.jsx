@@ -1,7 +1,9 @@
 import { Card, Box, CardMedia, Typography } from '@mui/material'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import IconButton from '@mui/material/IconButton'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { addToShoppingCart } from '../../redux/actions'
 
 const CardShoe = ({ product }) => {
   const cardShoeStyle = {
@@ -12,18 +14,27 @@ const CardShoe = ({ product }) => {
     borderRadius: '50',
     width: '140'
   }
+  const dispatch = useDispatch();
 
   const genders = useSelector((state) => state.genders)
   const colors = useSelector((state) => state.colors)
   const sizes = useSelector((state) => state.sizes)
+  const shoes = useSelector((state) => state.Shoes)
+
 
   const gender = genders.find(item => item.id === product.genderId)
   const color = colors.find(item => item.id === product.colorId)
   const size = sizes.find(item => item.id === product.sizeId)
+  
+  const addToCart = (idProducto) => {
 
+    const selectedShoe = shoes.find(shoe => shoe.id === idProducto);
+    dispatch(addToShoppingCart(selectedShoe))
+    console.log('Agregado :',selectedShoe.name)
+    alert(`Producto ${selectedShoe.name} agregado al carrito`)
+  };
   return (
     <Box >
-        <p>product.name</p>
       <Card style={cardShoeStyle}>
         <CardMedia
           component="img"
@@ -36,7 +47,7 @@ const CardShoe = ({ product }) => {
         <Typography
         variant="h5"
         sx={{ color: '#fff', textAlign: 'center' }}>
-            {product.name}
+            <Link to={`/detail/${product.id}`}>{product.name}</Link>
         </Typography>
         <Box
         sx={{
@@ -72,9 +83,9 @@ const CardShoe = ({ product }) => {
         sx={{ color: '#fff', textAlign: 'center' }}>
             ${product.price}
         </Typography>
-        <IconButton aria-label="cart" >
+        <IconButton aria-label="cart" onClick={() => addToCart(product.id)} >{/* //!funcion para agregar al carrito al darle click */}
             <ShoppingCartOutlinedIcon sx={{ color: 'white' }} />
-          </IconButton>
+        </IconButton>
         </Box>
       </Card>
     </Box>
