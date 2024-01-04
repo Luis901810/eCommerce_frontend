@@ -8,6 +8,7 @@ import {
   POST_SHOE,
   ADD_TO_SHOPPING_CART,
   SET_SHOPPING_CART,
+  CREATE_PURCHASE_TICKET,
 } from './actions-type'
 
 import initialState from './initialState'
@@ -134,11 +135,17 @@ const reducer = (state = initialState, action) => {
           
         }
       case SET_SHOPPING_CART:
-          return {
+        return {
             ...state,
             shoppingCart: action.payload,
-          };
-      
+        };
+
+      case CREATE_PURCHASE_TICKET:
+        alert("SIMULA QUE CREA LA ORDEN EN EL BACK EN ESTADO PENDING");
+        return {
+            ...state,
+            PursacheTicket:[...state.PursacheTicket, action.payload]
+        };
     default:
       return state
   }

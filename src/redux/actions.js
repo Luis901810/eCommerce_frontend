@@ -9,6 +9,7 @@ import {
   ORDER, 
   ADD_TO_SHOPPING_CART, 
   SET_SHOPPING_CART,
+  CREATE_PURCHASE_TICKET,
 } from './actions-type'
 import axios from 'axios'
 
@@ -150,4 +151,8 @@ export const addToShoppingCart = (product) => {
 export const setShoppingCart = (cart) => ({
   type: SET_SHOPPING_CART,
   payload: cart,
+});
+export const createPurchaseTicket = (purchaseTicket) => ({
+  type: CREATE_PURCHASE_TICKET,
+  payload: purchaseTicket,
 });

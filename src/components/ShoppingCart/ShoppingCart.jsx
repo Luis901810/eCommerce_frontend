@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-// import axios from "axios";
+import axios from "axios";
 import styles from './ShoppingCart.module.css'
-import {  setShoppingCart } from '../../redux/actions';
+import {  createPurchaseTicket, setShoppingCart } from '../../redux/actions';
 
 
 const ShoppingCart = () => {
@@ -28,27 +28,53 @@ const consolidatedCart = initialCartState.reduce((accumulator, product) => {
 }, []);
 
 // Establecer el estado del carrito consolidado
-const [cart, setCart] = useState(consolidatedCart);
-
+const [cart, setCart] = useState(//!consolidatedCart
+[
+  {
+    id: "1",
+    description: "Descripción del producto 1",
+    name: "Zapto 1",
+    quantity: 1,
+    price: 10
+  },
+  {
+    id: "2",
+    description: "Descripción del producto 2",
+    name: "Zapto 2",
+    quantity: 1,
+    price: 12
+  }
+]
+  );
+  
   const dispatch = useDispatch()
 
   const buyProducts = async (products) => {
-    console.log('Simular Que compra los productos')
-    alert('Simular Que compra los productos, dado que no se ha hecho la conexion con el BACK')
-    //! Cuando haga el backend
-    // try {
-    //   console.log(products);
-    //   const response = await axios.post(
-    //     "http://localhost:3001/MercadoPago",//!usar : API_URL
-    //     products
-    //   );
+    try {
+      //! Apenas se hace la solicitud de compra cambiar el status de PurchaseTicket a Pending
+      //! Crear PursacheTicket
+      dispatch(createPurchaseTicket('Acá iria la creacion del TICKET'))
+      //{
+      //   "idOrder": "123456",//La crea el Backend
+      //   "products": [],//Los paso del carrito
+      //   "totalAmount": 0,// lo paso de ABAJO totalPurchase
+      //   "idUser": "789",//Lo traigo de Redux
+      //   "email": "cliente@email.com",//Lo traigo de Redux
+      //   "status": pending//Lo pongo en pending
+      // }
+      
+      console.log(products);
+      const response = await axios.post(
+        "http://localhost:3001/MercadoPago",//!usar : API_URL
+        products
+      );
 
-    //   // Realiza la redirección al enlace de pago
-    //   window.location.href = response.data;
-    // } catch (error) {
-    //   console.error("Error al procesar el pago:", error.message);
-    //   // Puedes manejar el error según tus necesidades
-    // }
+      // Realiza la redirección al enlace de pago
+      window.location.href = response.data;
+    } catch (error) {
+      console.error("Error al procesar el pago:", error.message);
+      // Puedes manejar el error según tus necesidades
+    }
   }
 
   const renderProducts = () => {
