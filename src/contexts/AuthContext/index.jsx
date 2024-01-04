@@ -22,17 +22,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   const createWithEmailAndPassword = async (email, password) => {
-    try {
-      const response = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      )
-      return response
-    } catch (error) {
-      console.log(error)
-      return { error: error.message }
-    }
+    return await createUserWithEmailAndPassword(auth, email, password)
   }
 
   const login = async (email, password) =>
