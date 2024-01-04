@@ -1,8 +1,14 @@
 import CardShoe from '../../components/Card/Card'
 import { Box, Grid } from '@mui/material'
 import Order from './Order'
+import { useSelector } from 'react-redux'
+
 
 function ShoeList ({ products }) {
+
+    const shoppingCart = useSelector(({shoppingCart}) => shoppingCart)
+    console.log('Carrito: ', shoppingCart);
+
   return (
         <Box
         sx={{

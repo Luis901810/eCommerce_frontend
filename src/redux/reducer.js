@@ -6,6 +6,8 @@ import {
   CHANGE_PAGE,
   ORDER,
   POST_SHOE,
+  ADD_TO_SHOPPING_CART,
+  SET_SHOPPING_CART,
 } from './actions-type'
 
 import initialState from './initialState'
@@ -124,6 +126,19 @@ const reducer = (state = initialState, action) => {
         Shoes: [...state.Shoes, action.payload],
       }
 
+
+      case ADD_TO_SHOPPING_CART:
+        return {
+          ...state,
+          shoppingCart: [...state.shoppingCart, action.payload.product]
+          
+        }
+      case SET_SHOPPING_CART:
+          return {
+            ...state,
+            shoppingCart: action.payload,
+          };
+      
     default:
       return state
   }
