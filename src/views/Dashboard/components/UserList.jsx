@@ -26,6 +26,7 @@ import { API_URL } from '../../../utils/constants';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { getUsers } from '../../../services/Dashboard';
 
 
 function UserList({ users }) {
@@ -121,18 +122,11 @@ function UserList({ users }) {
     const getRoles = async()=>{
         try{
     const {data} =   await axios(API_URL+'/user-rol')
-    await setRoles(data)
+    setRoles(data)
     
-    setUsersFixed(users.map(user=>{
-        console.log(roles)
-        const role = data.find(element => element.id === user.roleId)
-        return {...user, role: role? role.rol:"Invitado"}
-    }))
-    setUsersToShow(users.map(user=>{
-        console.log(data)
-        const role = data.find(element => element.id === user.roleId)
-        return {...user, role: role? role.rol:"Invitado"}
-    }))
+    const users  = await getUsers()
+    setUsersFixed(users)
+    setUsersToShow(users)
 } catch(error){
     console.error("Error fetching data:", error)
 } 
@@ -249,7 +243,7 @@ function UserList({ users }) {
               <EditIcon/>
               </LinkNoDeco>
               <IconButton onClick={() => handleDelete(user.id)}>
-                <DeleteIcon backgroundColor='#334155'/>
+                <DeleteIcon />
                 </IconButton>
             </TableCell>
           </TableRow>
