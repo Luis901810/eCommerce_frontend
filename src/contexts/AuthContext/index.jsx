@@ -6,8 +6,11 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
+  getAdditionalUserInfo,
+  reauthenticateWithPopup,
 } from 'firebase/auth'
 import { auth } from '../../configFirebase.js'
+import createUser from '../../services/User/createUser.jsx'
 
 const authContext = createContext()
 
@@ -32,7 +35,24 @@ export function AuthProvider({ children }) {
 
   const loginWithGoogle = async () => {
     const googleProvider = new GoogleAuthProvider()
-    return await signInWithPopup(auth, googleProvider)
+    const result = await signInWithPopup(auth, googleProvider)
+    // * Registrar usuario si se loguea por primera vez
+    const { isNewUser } = getAdditionalUserInfo(result)
+    const userCredential = result.user
+    const { email } = userCredential
+    if (isNewUser) {
+      await createUser({
+        email,
+        requiredUserName: false,
+        requiredPhoneNumber: false,
+        requiredUserPassword: false,
+      })
+    }
+  }
+
+  const reauthenticate = async () => {
+    const provider = new GoogleAuthProvider()
+    await reauthenticateWithPopup(user, provider)
   }
 
   useEffect(() => {
@@ -51,6 +71,7 @@ export function AuthProvider({ children }) {
         login,
         logout,
         loginWithGoogle,
+        reauthenticate,
       }}
     >
       {!loading && children}
