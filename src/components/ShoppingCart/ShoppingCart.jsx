@@ -83,14 +83,25 @@ const ShoppingCart = () => {
       0
     )
     return (
-      <div className={styles['tarjeta-pago']}>
-        <h1>Resumen de Compra:</h1>
-        <h3>Total:</h3>
-        <p>${totalPurchase.toFixed(2)}</p>
-        <button onClick={() => buyProducts(cart)} disabled={cart.length === 0}>
+      <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}} >
+        <Typography style={textStyle} variant='h3'>
+          Total: ${totalPurchase.toFixed(2)}
+        </Typography>
+        <Button
+          variant='contained'
+          size='large'
+          sx={{
+            backgroundColor: '#42e268',
+            '&:hover': {
+              backgroundColor: '#00ff3d',
+            },
+          }}
+          onClick={() => buyProducts(cart)}
+          disabled={cart.length === 0}
+        >
           Comprar
-        </button>
-      </div>
+        </Button>
+      </Box>
     )
   }
 
@@ -100,7 +111,7 @@ const ShoppingCart = () => {
         sx={{
           display: 'flex',
           flexWrap: 'wrap',
-          justifyContent: 'space-evenly',
+          justifyContent: cart.length === 1 ? 'center' : 'space-evenly',
         }}
       >
         {cart.map(product => (
@@ -124,7 +135,7 @@ const ShoppingCart = () => {
                 marginTop: 3,
               }}
             >
-              <Typography style={textStyle} variant='h4'>
+              <Typography style={textStyle} variant='h5'>
                 {product.name}
               </Typography>
               <Typography style={textStyle} variant='h6'>
