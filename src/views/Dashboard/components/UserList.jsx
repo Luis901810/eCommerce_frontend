@@ -40,7 +40,6 @@ function UserList({ users }) {
 
   const [hoveredRow, setHoveredRow] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("firstName");
   const [selectedRole, setSelectedRole] = useState("all");
 
 
@@ -54,11 +53,7 @@ function UserList({ users }) {
     sortedUsers(usersToShow)
   }
 
-  //
-  const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
-    setSelectedRole("all"); // Reinicia el filtro de roles al cambiar la categoría
-  };
+  // Buscador 
 
   const handleSearchTermChange = (event) => {
     setSearchTerm(event.target.value);
@@ -110,9 +105,16 @@ function UserList({ users }) {
   }
 
   // Borrado de usuario
-  const handleDelete = async(userID)=>{
+  const handleDelete = async(userID,userEmail)=>{
     try{
-        const {data} = await axios.delete(`${API_URL}/shoe/${userID}`)
+        console.log(userID)
+        const {data} = await axios.delete(`${API_URL}/user/${userID}`)
+        const users  = await getUsers()
+        setUsersFixed(sortedUsers(users))
+        setUsersToShow(sortedUsers(users))
+        setSelectedRole('all')
+        setSearchTerm("")
+        window.alert(`El usuario con email: ${userEmail} fue eliminado`)
     } catch(error){
         window.alert(error.message);
     }
@@ -184,7 +186,7 @@ function UserList({ users }) {
     return (
 
       <TableBody>
-        {usersToShow.map((user, index) => (
+        {!usersToShow.length?<h3>No se encontraron resultados</h3>:usersToShow.map((user, index) => (
           <TableRow
             key={user.id}
             sx={{
@@ -242,7 +244,7 @@ function UserList({ users }) {
               <LinkNoDeco to={`/UpdateUser/${user.id}`}>
               <EditIcon/>
               </LinkNoDeco>
-              <IconButton onClick={() => handleDelete(user.id)}>
+              <IconButton onClick={() => handleDelete(user.id, user.email)}>
                 <DeleteIcon />
                 </IconButton>
             </TableCell>
