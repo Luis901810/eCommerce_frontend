@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { updateUser } from '../../redux/actions'
 import { useAuth } from '../../contexts/AuthContext'
+import DeleteAccount from './DeleteAccount'
 
 const UserProfile = () => {
   const { user } = useAuth()
@@ -81,6 +82,9 @@ const UserProfile = () => {
       ) : (
         <button onClick={handleEditarPerfil}>Editar Perfil</button>
       )}
+      <div>
+        <DeleteAccount />
+      </div>
     </div>
   )
 }
