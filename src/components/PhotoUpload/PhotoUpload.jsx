@@ -57,7 +57,7 @@ export default function PhotoUpload({ photo, setPhoto }) {
           sx={{
             color: '#42e268',
             border: '1px solid #42e268',
-            backgroundColor: '#414141',
+            backgroundColor: '#303030',
             position: 'absolute',
             top: 2,
             right: 2,
@@ -71,7 +71,7 @@ export default function PhotoUpload({ photo, setPhoto }) {
           sx={{
             color: '#42e268',
             border: '1px solid #42e268',
-            backgroundColor: '#414141',
+            backgroundColor: '#303030',
           }}
           onClick={() => widgetRef.current.open()}
         >
@@ -89,7 +89,7 @@ export default function PhotoUpload({ photo, setPhoto }) {
         width: 300,
         height: 350,
         marginTop: 3,
-        backgroundColor: '#414141',
+        backgroundColor: '#303030',
       }}
       onClick={() => widgetRef.current.open()}
     >
