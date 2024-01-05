@@ -67,9 +67,54 @@ const [cart, setCart] = useState(//!consolidatedCart
   
   const buyProducts = async (products) => {
     try {
-      //! Artículos Configurados para el Back =>
+      //! Apenas se hace la solicitud de compra cambiar el status de PurchaseTicket a **Pending** ID = "3561d3fa-c899-474f-8df5-6833e9309360"
+      //! Para crear el Status en http://localhost:3001/order-status
+      // {
+        // "status": "Pending",
+        // "description": "La solicitud está en espera de procesamiento."
+      // }
+      //! Crear PursacheTicket
+
+            //   "totalAmount": 15, //lo paso de ABAJO totalPurchase
+      //   "statusId": "3561d3fa-c899-474f-8df5-6833e9309360", //! Lo paso así **Pending** ID = "3561d3fa-c899-474f-8df5-6833e9309360"
+      //   "userId": "3150e5de-1bd7-462a-8594-134f3e589173", // Lo paso del Redux
+      
+      
+      // El back necesita lo siguiente para crear la orden
+      //!Datos del Cliente y Compra:
+
+      //! Artículos =>
       productsToLines(cart);
-      //!Datos del Cliente y Compra para el Back=>
+      // {
+      //   "totalAmount": 15, //lo paso de ABAJO totalPurchase
+      //   "statusId": "3561d3fa-c899-474f-8df5-6833e9309360", //! Lo paso así **Pending** ID = "3561d3fa-c899-474f-8df5-6833e9309360"
+      //   "userId": "3150e5de-1bd7-462a-8594-134f3e589173", // Lo paso del Redux
+      //   "lines": [//! Paso los productos configurados para el back
+                        //! Traer los productos de **cart**
+                  // {//! Actualmente tiene estos datos
+                  //   "id": "1", //! Se cambiar el nombre de la propiedad por shoeId
+                  //   "description": "Descripción del producto 1", //! Se elimina
+                  //   "name": "Zapto 1",//! Se elimina
+                  //   "quantity": 1,
+                  //   "price": 10,//! Se cambia el nombre de la propiedad por unitPrice
+                  //   "discount": 0, //! Dejarlo Predeterminado en 0
+                  // }
+      //       {//! Rquiere estos datos
+      //           "quantity": 2,
+      //           "unitPrice": 594.37,
+      //           "discount": 0,
+      //           "shoeId": "97306a68-15d6-4ba6-b0be-235f7f9d6433"
+      //       }
+      //   ]
+      // }
+      //{
+      //   "idOrder": "123456",//La crea el Backend
+      //   "products": [],//Los paso del carrito
+      //   "totalAmount": 0,// lo paso de ABAJO totalPurchase
+      //   "idUser": "789",//Lo traigo de Redux
+      //   "email": "cliente@email.com",//Lo traigo de Redux
+      //   "status": pending//Lo pongo en pending
+      // }
       const PurchaseTicket = {
         totalAmount: totalPurchase,
         statusId: "3561d3fa-c899-474f-8df5-6833e9309360",
@@ -77,12 +122,7 @@ const [cart, setCart] = useState(//!consolidatedCart
         lines: productsToLines(cart)
       };
       console.log('Ticket de Compra',PurchaseTicket)
-
-      //! Crear PursacheTicket en Back y Cargarlo a Redux
-    
       dispatch(createPurchaseTicket(PurchaseTicket))
-
-      //! Realizar peticion a mercado pago
       console.log(products);
       const response = await axios.post(
         "http://localhost:3001/MercadoPago",//!usar : API_URL
@@ -92,6 +132,7 @@ const [cart, setCart] = useState(//!consolidatedCart
         window.location.href = response.data;
     } catch (error) {
       console.error("Error al procesar el pago:", error.message);
+      // Puedes manejar el error según tus necesidades
     }
   }
 

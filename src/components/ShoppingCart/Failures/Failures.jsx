@@ -13,9 +13,15 @@ const Failures = () => {
   const preferenceId = searchParams.get('preference_id');
 
   useEffect(() => {
-    //! Apenas se aprueba la compra cambiar el status de PurchaseTicket a Approved
+    //! Apenas se aprueba la compra cambiar el status de PurchaseTicket a **Rejected** ID = "e31f73fb-eea5-46da-9e1e-0d421080d499"
+    //! Para crear el Status en http://localhost:3001/order-status
+    // {
+    // "status": "Rejected",
+    // "description": "La compra ha sido rechazada. Por favor, revise la información proporcionada e intente nuevamente."
+    // }
     //! NO VACIAR CARRITO
-    //! Y AL USUARIO REGISTRARLE SU COMPRA COMO RECHAZADA Y NOTIFICAR
+    //! Y AL USUARIO REGISTRARLE SU COMPRA COMO RECHAZADA Y NOTIFICAR 
+
     alert("SIMULA QUE ACTUALIZA LA ORDEN EN EL BACK A STATUS RECHAZADO");
     // Aquí puedes realizar cualquier lógica adicional si es necesario
     console.log('Datos de la consulta en Failures:', {

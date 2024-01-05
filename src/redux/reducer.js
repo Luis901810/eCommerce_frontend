@@ -141,10 +141,9 @@ const reducer = (state = initialState, action) => {
         };
 
       case CREATE_PURCHASE_TICKET:
-        alert("SIMULA QUE CREA LA ORDEN EN EL BACK EN ESTADO PENDING");
         return {
             ...state,
-            PursacheTicket:[...state.PursacheTicket, action.payload]
+            PursacheTicket:action.payload
         };
     default:
       return state

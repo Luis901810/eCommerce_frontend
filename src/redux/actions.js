@@ -152,7 +152,34 @@ export const setShoppingCart = (cart) => ({
   type: SET_SHOPPING_CART,
   payload: cart,
 });
-export const createPurchaseTicket = (purchaseTicket) => ({
-  type: CREATE_PURCHASE_TICKET,
-  payload: purchaseTicket,
-});
+//!http://localhost:3001/order
+export const createPurchaseTicket = (purchaseTicket) => {
+  //Nececesito postear purchaseTicket, a la siguiente ruta  `${API_URL}/order`
+  console.log("Ticket a crear",purchaseTicket)
+  return async dispatch => {
+    try {
+      const response = await axios.post(`${API_URL}/order`, purchaseTicket)
+      console.log('Respuesta del servidor:', response.data)
+      alert('Orden Creada Exitosamente en estado Pending en el BACK')
+      purchaseTicket= { 
+        ...purchaseTicket,
+        idOrder : response.data.id//! el ID del Back
+      }
+        dispatch({
+        type: CREATE_PURCHASE_TICKET,
+        payload: purchaseTicket,
+        })
+//       console.log('Shoe created successfully:', response.data)
+      return response.data
+    } catch (error) {
+      console.log(error.response.data.error)
+      alert(error.message)
+            dispatch({
+              type: CREATE_PURCHASE_TICKET,
+              payload: null,
+              error: 'Error creating TICKET',
+            })
+      
+    }
+  }
+};

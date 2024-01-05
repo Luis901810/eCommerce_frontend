@@ -13,7 +13,12 @@ const Successes = () => {
   const preferenceId = searchParams.get('preference_id');
 
   useEffect(() => {
-    //! Apenas se aprueba la compra cambiar el status de PurchaseTicket a Approved
+    //! Apenas se aprueba la compra cambiar el status de PurchaseTicket a **Approved** ID ="02b2041c-62de-4095-9383-56b59991c5d8"
+    //! Para crear el Status en http://localhost:3001/order-status
+    // {
+    //   "status": "Approved",
+    //   "description": "La compra ha sido aprobada con éxito. ¡Gracias por su transacción!"
+    // }
     //! VACIAR CARRITO
     //! Y AL USUARIO REGISTRARLE SU COMPRA COMO APROBADA Y NOTIFICAR
     alert("SIMULA QUE ACTUALIZA LA ORDEN EN EL BACK A STATUS APROBADO");
