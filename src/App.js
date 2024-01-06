@@ -10,14 +10,17 @@ import Register from './components/Login/Register'
 import UserProfile from './components/UserProfile/UserProfile'
 import FormShoe from './components/Form/FormShoe/FormShoe'
 import Dashboard from './views/Dashboard/Dashboard'
+import DetailUsers from './components/Dashboard/DetailUsers'
+import UpdateUser from './components/Dashboard/UpdateUser'
 
 function App() {
   const currentPath = window.location.pathname
 
   const isAdminRoute = currentPath.startsWith('/Admin')
+  const isUp = currentPath.startsWith('/UpdateUser')
   return (
     <div className='App'>
-      {!isAdminRoute? <NavBar />:null}
+      {!isUp? <NavBar />:null}
       <Routes>
         <Route path='/' element={<Landing />} />
         <Route path='/Catalogue' element={<Catalogue />} />
@@ -27,7 +30,10 @@ function App() {
         <Route path='/ShoppingCart' element={<ShoppingCart />}></Route>
         <Route path='/UserProfile/' element={<UserProfile />}></Route>
         <Route path='/FormShoe' element={<FormShoe />}></Route>
+
         <Route path='/Admin' element={<Dashboard/>}></Route>
+        <Route path="/UsersDetail/:id" element={<DetailUsers/>} />
+        <Route path="/UpdateUser/:id" element={<UpdateUser/>} />
       </Routes>
     </div>
   )

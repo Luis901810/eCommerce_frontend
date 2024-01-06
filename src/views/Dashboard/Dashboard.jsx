@@ -10,7 +10,7 @@ import { API_URL } from '../../utils/constants';
 function Dashboard() {
   const [showMenu, setShowMenu] = useState(true)
 
-  const [showUsers, setShowUsers] = useState(false);
+  const [showUsers, setShowUsers] = useState(true);
   const [showShoes, setShowShoes] = useState(false);
 
   const [shoes, setShoes] = useState([])

@@ -211,19 +211,19 @@ export const TextFieldForm = styled(TextField)`
     }
 
     &:hover fieldset {
-      border-color: #ff9721;
+      border-color: #22C55E;
     }
 
     &.Mui-focused fieldset {
-      border-color: #ff9721;
+      border-color: #22C55E;
     }
   }
 
   & .MuiInputLabel-root {
-    color: #ff9721;
+    color: #22C55E;
 
     &.Mui-focused {
-      color: #ff9721;
+      color: #22C55E;
     }
   }
 `;
