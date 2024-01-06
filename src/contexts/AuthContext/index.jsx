@@ -28,7 +28,7 @@ export function AuthProvider({ children }) {
     return await createUserWithEmailAndPassword(auth, email, password)
   }
 
-  const login = async (email, password) =>
+  const loginWithEmailAndPassword = async (email, password) =>
     await signInWithEmailAndPassword(auth, email, password)
 
   const logout = async () => signOut(auth)
@@ -50,9 +50,10 @@ export function AuthProvider({ children }) {
     }
   }
 
-  const reauthenticate = async () => {
+  const deleteUser = async () => {
     const provider = new GoogleAuthProvider()
     await reauthenticateWithPopup(user, provider)
+    await user.delete()
   }
 
   useEffect(() => {
@@ -68,10 +69,10 @@ export function AuthProvider({ children }) {
         user,
         loading,
         createWithEmailAndPassword,
-        login,
+        loginWithEmailAndPassword,
         logout,
         loginWithGoogle,
-        reauthenticate,
+        deleteUser,
       }}
     >
       {!loading && children}
