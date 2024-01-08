@@ -9,6 +9,8 @@ import NavBar from './components/NavBar/NavBar'
 import Register from './components/Login/Register'
 import UserProfile from './components/UserProfile/UserProfile'
 import FormShoe from './components/Form/FormShoe/FormShoe'
+import Successes from './components/ShoppingCart/Successes/Successes'
+import Failures from './components/ShoppingCart/Failures/Failures'
 
 function App() {
   return (
@@ -21,8 +23,10 @@ function App() {
         <Route path='/Login/Register' element={<Register />}></Route>
         <Route path='/Detail/:idShoe' element={<ShoeDetail />} />
         <Route path='/ShoppingCart' element={<ShoppingCart />}></Route>
-        <Route path='/UserProfile/' element={<UserProfile />}></Route>
+        <Route path='/UserProfile/:idUser' element={<UserProfile />}></Route>
         <Route path='/FormShoe' element={<FormShoe />}></Route>
+        <Route path='/Successes'element={<Successes/>}/>
+        <Route path='/Failures'element={<Failures/>}/>
       </Routes>
     </div>
   )

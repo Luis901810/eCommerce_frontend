@@ -1,0 +1,21 @@
+ 
+{
+    "totalAmount": 1905.24,//Pasarlo por Props
+    "statusId": "3561d3fa-c899-474f-8df5-6833e9309360",//Toca Crearlo Primero
+    "userId": "3150e5de-1bd7-462a-8594-134f3e589173",//Lo paso por props
+    "lines": [//Pasar Productos por Props
+                //Alistar los productos con estos datos
+        {
+            "quantity": 2,
+            "unitPrice": 594.37,
+            "discount": 0,
+            "shoeId": "5f4597b9-bb5a-46e7-be94-d1af8208e524"
+        },
+        {
+            "quantity": 1,
+            "unitPrice": 716.50,
+            "discount": 0,
+            "shoeId": "3930e6f4-6edd-4f55-9ca9-4a5c2b8f7941"
+        }
+    ]
+}
