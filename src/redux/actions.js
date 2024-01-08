@@ -9,11 +9,12 @@ import {
   ORDER, 
   ADD_TO_SHOPPING_CART, 
   SET_SHOPPING_CART,
+  CREATE_PURCHASE_TICKET,
+  UPDATE_PURCHASE_TICKET,
 } from './actions-type'
 import axios from 'axios'
 
 export const filter = filters => {
-  // console.log(filters)
   let endpoint = API_URL + '/shoe'
   // for (const filter in filters) {
   //   if (filters[filter].length) {
@@ -26,6 +27,7 @@ export const filter = filters => {
     axios
       .get(endpoint)
       .then(({ data }) => {
+        console.log(data)
         return dispatch({
           type: FILTER,
           payload: data,
@@ -147,7 +149,79 @@ export const addToShoppingCart = (product) => {
     payload: {product}
   }
 }
-export const setShoppingCart = (cart) => ({
-  type: SET_SHOPPING_CART,
-  payload: cart,
-});
+export const setShoppingCart = (cart) => {
+  return async dispatch => {
+    dispatch ({
+    type: SET_SHOPPING_CART,
+    payload: cart}
+    )
+
+  }
+};
+
+export const createPurchaseTicket = (purchaseTicket, cart) => {
+  //Nececesito postear purchaseTicket, a la siguiente ruta  `${API_URL}/order`
+  console.log("Ticket a crear",purchaseTicket)
+  return async dispatch => {
+    try {
+      const response = await axios.post(`${API_URL}/order`, purchaseTicket)//!http://localhost:3001/order
+      console.log('Respuesta del servidor:', response.data)
+
+      purchaseTicket = { //! Actualizar purchaseTicket con el ID del Back
+        ...purchaseTicket,
+        idOrder : response.data.id//! el ID del Back
+      }
+      localStorage.setItem( 'shoppingCart', JSON.stringify(cart))//! Guardar en localStorage
+      localStorage.setItem( 'PurchaseTicket', JSON.stringify(purchaseTicket));//! Guardar en localStorage
+      //! Despachar la acción
+      dispatch({
+        type: CREATE_PURCHASE_TICKET,
+        payload: purchaseTicket,
+      })
+      alert('Orden Creada Exitosamente en estado Pending en el BACK')//! Me confirma que llegó 
+
+      return response.data
+
+    } catch (error) {
+      console.log(error.response.data.error)
+      alert(error.message)
+      
+        dispatch({
+          type: CREATE_PURCHASE_TICKET,
+          payload: null,
+          error: 'Error creating TICKET',
+        })
+      
+    }
+  }
+};
+export const updatePurchaseTicket = async (idOrder, idStatusTicket) => {
+  
+  try {
+    const response = await axios.put(//! idorder prueba f92b109d-fa83-4a79-bebd-516385893966
+      `${API_URL}/order/${idOrder}`,
+      { statusId: idStatusTicket }
+    )
+    console.log('Respuesta del servidor:', response.data)
+    alert('Ticket Actualizado');
+    // dispatch({ type: UPDATE_PURCHASE_TICKET, payload: response.data });
+    return response.data;
+  } catch (error) {
+    console.log(error.response.data.error)
+    alert(error.message)
+    throw error
+  }
+
+}
+export const saveStateToLocalStorage = () => {
+  return (getState) => {
+    try {
+      const state = getState();
+      const serializedState = JSON.stringify(state);
+      localStorage.setItem("appState", serializedState);
+    } catch (error) {
+      console.error("Error saving state to localStorage:", error);
+    }
+  };
+};
+//! Crear get Orders

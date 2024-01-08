@@ -2,17 +2,19 @@ import React from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import { Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
+import deleteUserBack from '../../services/User/deleteUser'
 
 export default function DeleteAccount() {
-  const { user, reauthenticate } = useAuth()
+  const { user, deleteUser, logout } = useAuth()
   const navigate = useNavigate()
   const handleDelete = async () => {
     if (user) {
       try {
-        // * Reautenticar usuario antes de eliminar la cuenta
-        await reauthenticate()
-        // Eliminar la cuenta
-        await user.delete()
+        await deleteUser() // ! Solo puede eliminarse usuarios registrados con Google
+        deleteUserBack({
+          id: user.email,
+          deleteType: 'email',
+        })
         navigate('/')
       } catch (error) {
         console.error(error)
