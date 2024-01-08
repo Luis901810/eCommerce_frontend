@@ -1,10 +1,12 @@
 import { useParams } from 'react-router-dom'
-import { Box, TextField, MenuItem, Button } from '@mui/material'
+import { Box, TextField, MenuItem, Button, IconButton } from '@mui/material'
 import { TextFieldForm } from '../../styles/ComponentStyles'
 import axios from 'axios'
 import { API_URL } from '../../utils/constants'
 import { useEffect, useState } from 'react'
 import { getUserByID } from '../../services/Dashboard'
+import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from 'react-router-dom'
 
 const UpdateUser = () => {
   const { id } = useParams()
@@ -13,6 +15,7 @@ const UpdateUser = () => {
   const [genders, setGenders] = useState([])
   const [roles, setRoles] = useState([])
   const [status, setStatus] = useState([])
+  const navigate = useNavigate()
 
   const handleChange = (event)=>{
     setUserUpdate({...userUpdate, [event.target.name]: event.target.value})
@@ -26,7 +29,6 @@ const UpdateUser = () => {
         const { data: roles } = await axios(API_URL + '/user-rol')
         const { data: status } = await axios(API_URL + '/user-status')
         setUser(user)
-        setUserUpdate(user)
         setGenders(genders)
         setRoles(roles)
         setStatus(status)
@@ -42,9 +44,20 @@ const UpdateUser = () => {
     console.log(userUpdate)
   }, [userUpdate])
 
-  //   console.log(user)
+  // Updata info
+  const handleUpdate = async()=>{
+    try{
+      const userUpdated = await axios.put(`${API_URL}/user/${id}`,userUpdate)
+      window.alert('Usuario Actualizado')
+      setUserUpdate({})
+      const user = await getUserByID(id)
+      setUser(user)
+    }catch(error){
+      console.log(error)
+    }
+  }
 
-  return userUpdate.gender ? (
+  return user.gender ? (
     <Box
       component='form'
       sx={{
@@ -56,6 +69,9 @@ const UpdateUser = () => {
       noValidate
       autoComplete='off'
     >
+      <IconButton color="secondary" onClick={()=>{navigate('/Admin')}}>
+        <CloseIcon/>
+      </IconButton>
       <TextFieldForm
         required
         id='outlined-required'
@@ -66,7 +82,7 @@ const UpdateUser = () => {
         }}
         name='name'
         label='Nombre'
-        value={userUpdate.name}
+        value={userUpdate.name?userUpdate.name:user.name}
         onChange={handleChange}
       />
 
@@ -75,14 +91,15 @@ const UpdateUser = () => {
         id='outlined-required'
         name='email'
         label='Email'
-        value={userUpdate.email}
+        value={user.email}
       />
       <TextFieldForm
         id='outlined-select-currency'
         select
+        name='genderId'
         label='Género'
-        value={userUpdate.gender.gender}
-      >
+        value={userUpdate.genderId?userUpdate.genderId:user.genderId}
+        onChange={handleChange}>
         {genders.map(option => (
           <MenuItem key={option.id} value={option.id}>
             {option.gender}
@@ -92,9 +109,10 @@ const UpdateUser = () => {
       <TextFieldForm
         id='outlined-select-currency'
         select
+        name='statusId'
         label='Status'
-        defaultValue='EUR'
-        helperText='Please select your currency'
+        value={userUpdate.statusId?userUpdate.statusId:user.statusId}
+        onChange={handleChange}
       >
         {status.map(option => (
           <MenuItem key={option.id} value={option.id}>
@@ -105,9 +123,10 @@ const UpdateUser = () => {
       <TextFieldForm
         id='outlined-select-currency'
         select
+        name='roleId'
         label='Rol'
-        defaultValue=''
-        helperText='Please select your currency'
+        value={userUpdate.roleId?userUpdate.roleId:user.roleId}
+        onChange={handleChange}
       >
         {roles.map(option => (
           <MenuItem key={option.id} value={option.id}>
@@ -115,14 +134,14 @@ const UpdateUser = () => {
           </MenuItem>
         ))}
       </TextFieldForm>
-      <Box>
-        <Button variant='outlined' size='medium'>
+      {Object.keys(userUpdate).length?<Box>
+        <Button variant='outlined' size='medium' onClick={()=>{setUserUpdate({})}}>
           Descartar Cambios
         </Button>
-        <Button variant='outlined' size='medium'>
+        <Button variant='outlined' size='medium' onClick={handleUpdate}>
           Guardar Cambios
         </Button>
-      </Box>
+      </Box>:null}
     </Box>
   ) : null
 }

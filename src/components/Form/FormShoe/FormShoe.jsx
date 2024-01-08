@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { postShoe } from '../../../redux/actions'
 import {
   FormControl,
@@ -8,13 +9,17 @@ import {
   Button,
   Select,
   MenuItem,
+  IconButton 
 } from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios'
 import PhotoUpload from '../../PhotoUpload/PhotoUpload'
 import { Box } from '@mui/system'
 
 function FormShoe() {
   const dispatch = useDispatch()
+
+  const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
     name: '',
@@ -244,6 +249,9 @@ function FormShoe() {
             onChange={handleInputChange}
           />
         </FormControl>
+        <IconButton color="secondary" onClick={()=>{navigate('/Admin')}}>
+        <CloseIcon/>
+      </IconButton>
       </Box>
       <Box style={boxStyle}>
       <FormControl fullWidth margin='normal'>

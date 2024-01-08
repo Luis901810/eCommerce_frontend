@@ -59,3 +59,24 @@ export const getUserByID = async(id) => {
         console.error('Error fetching user:', error.message)
     }
 } 
+
+export const getShoes = async()=>{
+    try{
+        const {data:shoes} = await axios.get(`${API_URL}/shoe`)
+        const shoesFiltered = shoes.filter(element => element.deleteAt === null)
+        // const uniqueNames = new Set(shoes.map(element => element.name))
+        return shoesFiltered
+    } catch(error){
+        console.error('Error fetching shoes:', error)
+    }
+}
+
+export const getShoeById = async(id)=>{
+    try{
+        let {data:shoe} = await axios(`${API_URL}/shoe/${id}`)
+
+        return shoe
+    } catch(error){
+        console.error('Error fetching shoes:', error)
+    }
+}

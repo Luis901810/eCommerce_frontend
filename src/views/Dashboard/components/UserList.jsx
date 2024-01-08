@@ -13,15 +13,13 @@ import {
 } from '@mui/material'
 import theme from '../../../theme';
 import {
-  OrangeContainedButton,
-  BlueContainedButton,
-  RedOutlinedButton,
   StyledSelect,
   StyledMenuItemSelect,
   TextFieldForm,
   LinkNoDeco,
 } from "../../../styles/ComponentStyles";
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../../../utils/constants';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
@@ -42,6 +40,7 @@ function UserList({ users }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRole, setSelectedRole] = useState("all");
 
+  const navigate = useNavigate()
 
   // Ordenamiento de usuarios
   const handleSort = key => {
@@ -50,7 +49,7 @@ function UserList({ users }) {
       direction = 'descending'
     }
     setSortConfig({ key, direction })
-    sortedUsers(usersToShow)
+    sortedUsers(usersToShow,{ key, direction })
   }
 
   // Buscador 
@@ -86,22 +85,22 @@ function UserList({ users }) {
     return usersfilteredRole
   }
   //!Borrar usuarios que no tengan un rol
-  const sortedUsers = (users) => {
-    const sortableUsers = users.slice() // Copia el array para evitar mutar el estado directamente
-    if (sortConfig.key !== null) {
-      sortableUsers.sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? -1 : 1
+  const sortedUsers = (array,sortConfigfunc=sortConfig) => {
+    const sortableArray = array.slice() // Copia el array para evitar mutar el estado directamente
+    if (sortConfigfunc.key !== null) {
+      sortableArray.sort((a, b) => {
+        if (a[sortConfigfunc.key] < b[sortConfigfunc.key]) {
+          return sortConfigfunc.direction === 'ascending' ? -1 : 1
         }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? 1 : -1
+        if (a[sortConfigfunc.key] > b[sortConfigfunc.key]) {
+          return sortConfigfunc.direction === 'ascending' ? 1 : -1
         }
         return 0
       })
     }
-    setUsersToShow(sortableUsers)
+    setUsersToShow(sortableArray)
     console.log(usersToShow)
-    return sortableUsers
+    return sortableArray
   }
 
   // Borrado de usuario
@@ -237,13 +236,9 @@ function UserList({ users }) {
                 justifyContent: 'center',
               }}
             >
-                
-              <LinkNoDeco to={`/UsersDetail/${user.id}`}>
-                <OrangeContainedButton>DETAIL</OrangeContainedButton>
-              </LinkNoDeco>
-              <LinkNoDeco to={`/UpdateUser/${user.id}`}>
-              <EditIcon/>
-              </LinkNoDeco>
+               <IconButton onClick={() => navigate(`/UpdateUser/${user.id}`)}>
+                  <EditIcon />
+                </IconButton> 
               <IconButton onClick={() => handleDelete(user.id, user.email)}>
                 <DeleteIcon />
                 </IconButton>
