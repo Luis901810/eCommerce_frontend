@@ -7,7 +7,7 @@ import logoGoogle2 from '../../Fhoto/logo_google2.jpg'
 
 const Login = () => {
   const navigate = useNavigate()
-  const { login, loginWithGoogle } = useAuth()
+  const { loginWithEmailAndPassword, loginWithGoogle } = useAuth()
   const [error, setError] = useState('')
 
   const [user, setUser] = useState({
@@ -25,12 +25,12 @@ const Login = () => {
 
   const handleSubmit = async event => {
     event.preventDefault()
-
     try {
-      await login(user.email, user.password)
+      await loginWithEmailAndPassword(user.email, user.password)
       navigate('/')
     } catch (error) {
       console.log(error.code)
+      alert(error.message)
       if (error.code === 'auth/invalid-credential') {
         setError('Usuario o Contraseña invalido')
       } else {
@@ -46,6 +46,7 @@ const Login = () => {
       await loginWithGoogle()
       navigate('/')
     } catch (error) {
+      console.error(error)
       setError(error.message)
     }
   }

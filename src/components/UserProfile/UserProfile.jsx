@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import NavBar from '../NavBar/NavBar'
 import { updateUser } from '../../redux/actions'
+import { useAuth } from '../../contexts/AuthContext'
+import DeleteAccount from './DeleteAccount'
 
 const UserProfile = () => {
   const { idUser } = useParams()
@@ -61,7 +63,10 @@ const UserProfile = () => {
           )
         : (
         <button onClick={handleEditarPerfil}>Editar Perfil</button>
-          )}
+      )}
+      <div>
+        <DeleteAccount />
+      </div>
     </div>
   )
 }
