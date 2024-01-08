@@ -1,19 +1,16 @@
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { updatePurchaseTicket } from '../../../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+
+const ID_APPROVED ="4567ffd5-8879-4455-9b06-b1cd23d3d0be"
 
 const Successes = () => {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-
-  // Obtén los valores directamente de searchParams
-  const collectionStatus = searchParams.get('collection_status');
-  const paymentId = searchParams.get('payment_id');
-  const status = searchParams.get('status');
-  const merchantOrderId = searchParams.get('merchant_order_id');
-  const preferenceId = searchParams.get('preference_id');
+  const dispatch = useDispatch()
+  // const PurchaseTicket = useSelector(state => state.PurchaseTicket)
+  const [purchaseDetails, setPurchaseDetails] = useState(null);
 
   useEffect(() => {
-    //! Apenas se aprueba la compra cambiar el status de PurchaseTicket a **Approved** ID ="02b2041c-62de-4095-9383-56b59991c5d8"
+    //! Apenas se aprueba la compra cambiar el status de PurchaseTicket a **Approved** ID ="4567ffd5-8879-4455-9b06-b1cd23d3d0be"
     //! Para crear el Status en http://localhost:3001/order-status
     // {
     //   "status": "Approved",
@@ -21,34 +18,69 @@ const Successes = () => {
     // }
     //! VACIAR CARRITO
     //! Y AL USUARIO REGISTRARLE SU COMPRA COMO APROBADA Y NOTIFICAR
-    alert("SIMULA QUE ACTUALIZA LA ORDEN EN EL BACK A STATUS APROBADO");
-    // Aquí puedes realizar cualquier lógica adicional si es necesario
-    console.log('Datos de la consulta en Successes:', {
-      collectionStatus,
-      paymentId,
-      status,
-      merchantOrderId,
-      preferenceId,
-    });
-  }, [collectionStatus, merchantOrderId, paymentId, preferenceId, status]);
+            //! Recuperar la cadena JSON del localStorage
+            const jsonString = localStorage.getItem('PurchaseTicket');
 
+            // Convertir la cadena JSON a un objeto JavaScript
+            const PurchaseTicket = JSON.parse(jsonString);
+    
+            // Ahora puedes acceder a las propiedades del objeto
+            console.log('Orden Completa:', PurchaseTicket);
+            console.log('Valor en localStorage del ID ORDER:', PurchaseTicket.idOrder);
+            //!Traigo purchaseTicket del REDUX
+            // console.log('Purchase del REDUX:', PurchaseTicket);
+    //! Y AL USUARIO REGISTRARLE SU COMPRA COMO APROBADA 
+    updatePurchaseTicket(PurchaseTicket.idOrder, ID_APPROVED)//!(idOrder, idStatusTicket) //Traer el IDORDER Storage
+    //! Y AL USUARIO  ************NOTIFICARLE SU COMPRA***********
+    const details = {
+      totalAmount: PurchaseTicket.totalAmount,
+      items: PurchaseTicket.lines.map(line => ({
+        shoeId: line.shoeId,
+        quantity: line.quantity,
+        unitPrice: line.unitPrice,
+      })),
+    };
+    setPurchaseDetails(details);
+
+    
+
+    alert("ACTUALIZA LA ORDEN EN EL BACK A STATUS APROBADO");
+  }, [ID_APPROVED]);
+  const Shoes = useSelector(state => state.Shoes)
+  const getNameShoeById = (shoeId) =>{
+    const foundShoe = Shoes.find(shoe => shoe.id === shoeId);
+
+    if (foundShoe) {
+      const { name, image } = foundShoe;
+      return { name, image };
+    } else {
+      // Si no se encuentra el zapato con el ID dado, puedes devolver un objeto con valores predeterminados o manejarlo según tus necesidades.
+      return { name: 'Shoe Not Found', image: 'default-image-url' };
+    }
+  }
   return (
     <div>
       <h1>Successes</h1>
       <h1>Successes</h1>{/* //! Se pone esto porque la barra de navegacion no deja ver debajo */}
-      <h1>ACÁ SE VA A MOSTRAR INFORMACION DE LA COMPRA APROBADA</h1>
-      <p>
-        <span>collectionStatus: </span>
-        {collectionStatus} <br />
-        <span>paymentId: </span>
-        {paymentId} <br />
-        <span>status: </span>
-        {status} <br />
-        <span>merchantOrderId: </span>
-        {merchantOrderId} <br />
-        <span>preferenceId: </span>
-        {preferenceId}
-      </p>
+
+      <h1>Compra Aprobada</h1>
+      {purchaseDetails && (
+        <div>
+          <p>Total Amount: ${purchaseDetails.totalAmount}</p>
+          <h2>Detalles de los Artículos Comprados:</h2>
+          <ul>
+            {purchaseDetails.items.map((item, index) => (
+              <li key={index}>
+                {/* //!Buscar el nombre en el back*/}
+                <img src={getNameShoeById(item.shoeId).image} alt={getNameShoeById(item.shoeId).name} style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                <p>Shoe : {getNameShoeById(item.shoeId).name}</p>
+                <p>Quantity: {item.quantity}</p>
+                <p>Unit Price: ${item.unitPrice}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

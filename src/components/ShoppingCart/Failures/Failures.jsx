@@ -1,55 +1,86 @@
-import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+
+import { useEffect, useState } from 'react';
+import { setShoppingCart, updatePurchaseTicket } from '../../../redux/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+const ID_REJECTED = "ce1f4d24-88ac-4fce-a210-31f64ab45117";
 
 const Failures = () => {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-
-  // Obtén los valores directamente de searchParams
-  const collectionStatus = searchParams.get('collection_status');
-  const paymentId = searchParams.get('payment_id');
-  const status = searchParams.get('status');
-  const merchantOrderId = searchParams.get('merchant_order_id');
-  const preferenceId = searchParams.get('preference_id');
+  const [purchaseDetails, setPurchaseDetails] = useState(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    //! Apenas se aprueba la compra cambiar el status de PurchaseTicket a **Rejected** ID = "e31f73fb-eea5-46da-9e1e-0d421080d499"
-    //! Para crear el Status en http://localhost:3001/order-status
-    // {
-    // "status": "Rejected",
-    // "description": "La compra ha sido rechazada. Por favor, revise la información proporcionada e intente nuevamente."
-    // }
-    //! NO VACIAR CARRITO
-    //! Y AL USUARIO REGISTRARLE SU COMPRA COMO RECHAZADA Y NOTIFICAR 
+    //Cargar al carrito lo que tengo en localStorage
+    //! Recuperar la cadena JSON del localStorage
+    const jsonString = localStorage.getItem('PurchaseTicket');
+    // Convertir la cadena JSON a un objeto JavaScript
+    const PurchaseTicket = JSON.parse(jsonString);
+    
+    // Ahora puedes acceder a las propiedades del objeto
+    console.log('Informacion Completa de la Orden:', PurchaseTicket);
+    console.log('Valor en localStorage del ID ORDER:', PurchaseTicket.idOrder);
+    //! Y AL USUARIO REGISTRARLE SU COMPRA COMO RECHAZADA
+    updatePurchaseTicket(PurchaseTicket.idOrder, ID_REJECTED)//!(idOrder, idStatusTicket) //Traer el IDORDER Storage
+    //! Y AL USUARIO  ************NOTIFICARLE EL FALLO***********
+    const details = {
+      totalAmount: PurchaseTicket.totalAmount,
+      items: PurchaseTicket.lines.map(line => ({
+        shoeId: line.shoeId,
+        quantity: line.quantity,
+        unitPrice: line.unitPrice,
+      })),
+    };
+    setPurchaseDetails(details);
 
-    alert("SIMULA QUE ACTUALIZA LA ORDEN EN EL BACK A STATUS RECHAZADO");
-    // Aquí puedes realizar cualquier lógica adicional si es necesario
-    console.log('Datos de la consulta en Failures:', {
-      collectionStatus,
-      paymentId,
-      status,
-      merchantOrderId,
-      preferenceId,
-    });
-  }, [collectionStatus, merchantOrderId, paymentId, preferenceId, status]);
 
+    alert("ACTUALIZA LA ORDEN EN EL BACK A STATUS RECHAZADO");
+      //! Cargar Carrito
+  const jsonShopingCart = localStorage.getItem('shoppingCart');
+  const shoppingCart = JSON.parse(jsonShopingCart);
+  console.log('Carrito',shoppingCart)
+  dispatch(setShoppingCart(shoppingCart));
+
+  }, [ID_REJECTED]);
+
+
+  const Shoes = useSelector(state => state.Shoes)
+  const getNameShoeById = (shoeId) =>{
+    const foundShoe = Shoes.find(shoe => shoe.id === shoeId);
+
+    if (foundShoe) {
+      const { name, image } = foundShoe;
+      return { name, image };
+    } else {
+      // Si no se encuentra el zapato con el ID dado, puedes devolver un objeto con valores predeterminados o manejarlo según tus necesidades.
+      return { name: 'Shoe Not Found', image: 'default-image-url' };
+    }
+  }
   return (
     <div>
       <h1>Failures</h1>
       <h1>Failures</h1>{/* //! Se pone esto porque la barra de navegacion no deja ver debajo */}
-      <h1>ACÁ SE VA A MOSTRAR INFORMACION DE LA COMPRA FALLIDA</h1>
-      <p>
-        <span>collectionStatus: </span>
-        {collectionStatus} <br />
-        <span>paymentId: </span>
-        {paymentId} <br />
-        <span>status: </span>
-        {status} <br />
-        <span>merchantOrderId: </span>
-        {merchantOrderId} <br />
-        <span>preferenceId: </span>
-        {preferenceId}
-      </p>
+
+      <h1>Compra Rechazada</h1>
+      {purchaseDetails && (
+        <div>
+          <p>Total Amount: ${purchaseDetails.totalAmount}</p>
+          <h2>No se lograron Comprar los siguientes artículos:</h2>
+          <ul>
+            {purchaseDetails.items.map((item, index) => (
+              <li key={index}>
+                {/* //!Buscar el nombre en el back*/}
+                <img src={getNameShoeById(item.shoeId).image} alt={getNameShoeById(item.shoeId).name} style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                <p>Shoe : {getNameShoeById(item.shoeId).name}</p>
+                <p>Quantity: {item.quantity}</p>
+                <p>Unit Price: ${item.unitPrice}</p>
+              </li>
+            ))}
+          </ul>
+          <button onClick={()=>{navigate('/ShoppingCart')}}>Intentar de nuevo la compra</button>
+        </div>
+      )}
     </div>
   );
 };
