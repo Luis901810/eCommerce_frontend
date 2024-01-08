@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { addToShoppingCart, getShoeById } from '../../redux/actions'
 import { Card, CardContent, Typography, Chip, ThemeProvider, createTheme, Box } from '@mui/material'
+import Reviews from '../Card/Reviews/Reviews'
 
 const theme = createTheme({
   palette: {
@@ -79,10 +80,12 @@ const ShoeDetail = () => {
             {shoe.ShoeCategories?.map((category, index) => (
               <Chip key={index} label={category.category} />
             ))}
-
+            <Reviews/>
           </CardContent>
+
         </Card>
       </Box>
+
     </ThemeProvider>
     
   )

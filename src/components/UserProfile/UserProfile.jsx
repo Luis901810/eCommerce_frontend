@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import NavBar from '../NavBar/NavBar'
 import { updateUser } from '../../redux/actions'
 import { useAuth } from '../../contexts/AuthContext'
+import DeleteAccount from './DeleteAccount'
 
 const UserProfile = () => {
-  const { user } = useAuth()
+  const { idUser } = useParams()
   const [usuario, setUsuario] = useState({
     name: '',
     email: '',
-    password: '',
+    password: ''
   })
   const [isEditing, setIsEditing] = useState(false)
-  const idUser = null
-  console.log(user)
 
   useEffect(() => {
     const loadUserProfile = async () => {
-      return
       try {
+        console.log('Info User')
         const userInfo = await updateUser(idUser, {})
         setUsuario(userInfo)
       } catch (error) {
@@ -42,45 +42,31 @@ const UserProfile = () => {
 
   return (
     <div>
-      <h1>{user.email}</h1>
+      <NavBar />
       <h1>User Profile:</h1>
-      <h3>
-        Name:{' '}
-        {isEditing ? (
-          <input
-            type='text'
-            value={usuario.name}
-            onChange={event =>
-              setUsuario({ ...usuario, name: event.target.value })
-            }
-          />
-        ) : (
-          usuario.name
-        )}
-      </h3>
+      <h3>Name: {isEditing
+        ? <input type="text" value={usuario.name} onChange={(event) =>
+          setUsuario({ ...usuario, name: event.target.value })} />
+        : usuario.name}</h3>
 
       <h3>Email: {usuario.email}</h3>
 
-      <h3>
-        Password:
-        {isEditing ? (
-          <input
-            type='password'
-            value={usuario.password}
-            onChange={event =>
-              setUsuario({ ...usuario, password: event.target.value })
-            }
-          />
-        ) : (
-          usuario.password
-        )}
-      </h3>
+      <h3>Password:
+        {isEditing
+          ? <input type="password" value={usuario.password} onChange={(event) =>
+            setUsuario({ ...usuario, password: event.target.value })} />
+          : usuario.password}</h3>
 
-      {isEditing ? (
+      {isEditing
+        ? (
         <button onClick={handleGuardarCambios}>Guardar Cambios</button>
-      ) : (
+          )
+        : (
         <button onClick={handleEditarPerfil}>Editar Perfil</button>
       )}
+      <div>
+        <DeleteAccount />
+      </div>
     </div>
   )
 }
