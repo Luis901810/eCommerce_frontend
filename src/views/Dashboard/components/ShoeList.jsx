@@ -132,10 +132,18 @@ function ShoeList() {
             textAlign: 'start',
           }}
         ></TableCell>
+        
         <SortableTableCell
           onClick={() => handleSort('name')}
           label='Producto'
           sorted={sortConfig.key === 'name'}
+          direction={sortConfig.direction}
+          maxWidth={100}
+        />
+        <SortableTableCell
+          onClick={() => handleSort('price')}
+          label='Precio'
+          sorted={sortConfig.key === 'price'}
           direction={sortConfig.direction}
           maxWidth={100}
         />
@@ -223,6 +231,15 @@ function ShoeList() {
                 }}
               >
                 {shoe.name}
+              </TableCell>
+              <TableCell
+                sx={{
+                  fontSize: 14,
+                  color: 'white',
+                  maxWidth: 100,
+                }}
+              >
+                ${shoe.price}
               </TableCell>
               <TableCell
                 sx={{
