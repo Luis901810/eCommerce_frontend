@@ -35,6 +35,9 @@ function ShoeList() {
     key: null,
     direction: 'ascending',
   })
+
+  const [filters, setFilters] = useState({})
+
   //!Quitar esto y hacerlo con Css
   const [hoveredRow, setHoveredRow] = useState(null)
 
@@ -45,6 +48,11 @@ function ShoeList() {
 
   const navigate = useNavigate()
 
+
+  //* Filtrado de datos
+  const handleFilter = async()=>{
+    
+  }
   //* Ordenamiento de zapatos
   const handleSort = key => {
     let direction = 'ascending'

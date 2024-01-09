@@ -1,5 +1,6 @@
 import axios from "axios"
 import { API_URL } from "../utils/constants"
+import { object } from "prop-types"
 
 export const getUsers = async()=>{
     try {
@@ -53,15 +54,23 @@ export const getUserByID = async(id) => {
             createdAt: "2023-12-13T14:48:37.917Z",
             updatedAt: "2023-12-13T14:48:37.917Z"
           }
-        console.log(user)
+
         return user
     } catch(error){
         console.error('Error fetching user:', error.message)
     }
 } 
 
-export const getShoes = async()=>{
+export const getShoes = async(filters={})=>{
     try{
+        let endpoint = API_URL + '/shoe'
+        for(let filter in filters){
+            if(filters[filter].length){
+                endpoint = endpoint + filter + '=' + filters[filter] + '&'
+            }
+        }
+        Object.keys(filters).length?endpoint = endpoint.slice(0,-1):null
+        console.log(endpoint)
         const {data:shoes} = await axios.get(`${API_URL}/shoe`)
         const shoesFiltered = shoes.filter(element => element.deleteAt === null)
         // const uniqueNames = new Set(shoes.map(element => element.name))
