@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from "axios";
 import styles from './ShoppingCart.module.css'
-import { createPurchaseTicket, setShoppingCart } from '../../redux/actions'
+import { createPurchaseTicket, getUserByEmail, setShoppingCart } from '../../redux/actions'
 import { Box } from '@mui/system'
 import { Typography } from '@mui/material'
 import {
@@ -14,6 +14,7 @@ import {
   MenuItem,
 } from '@mui/material'
 import { API_URL } from '../../redux/actions-type';
+import { useAuth } from '../../contexts/AuthContext';
 
 const ID_PENDING = "39224070-2789-46cc-ad1e-afae9d183981";
 
@@ -22,6 +23,11 @@ const ShoppingCart = () => {
   const dispatch = useDispatch()
 
   const shoppingCart = useSelector(state => state.shoppingCart)
+  const {id} = useSelector(state => state.User);
+  const {user} = useAuth();
+  console.log("user",user);
+  console.log("ID------USER",id);
+
   
 
   console.log('Carrito de LLEGADA', shoppingCart)
@@ -73,7 +79,7 @@ const ShoppingCart = () => {
       const PurchaseTicket = {
         totalAmount: totalPurchase(cart),
         statusId: ID_PENDING,
-        userId: "0486ffae-19b6-4d0d-81e2-185ae3a73453",//!Traerlo de DEL redux *****************userId*****************
+        userId: id,//!Traerlo de DEL redux *****************userId*****************
         lines: lines
       };
       console.log('Ticket de Compra',PurchaseTicket)
@@ -126,8 +132,8 @@ const ShoppingCart = () => {
               backgroundColor: '#00ff3d',
             },
           }}
-          onClick={() => buyProducts(cart)}
-          disabled={cart.length === 0}
+          onClick={() =>  user=== null ? alert("Por favor Inicie Sesion") : buyProducts(cart)}
+          disabled={cart.length === 0 }
         >
           Comprar
         </Button>
@@ -228,6 +234,8 @@ const ShoppingCart = () => {
   }
 
   useEffect(() => {
+    if(user && user.email) dispatch(getUserByEmail(user.email));
+    
     dispatch(setShoppingCart(cart));
     console.log('Carrito actualizado:', cart)
   }, [dispatch, cart])
