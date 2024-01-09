@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Typography, MenuItem } from '@mui/material/'
 import { useNavigate } from 'react-router-dom'
+import { getShoeById } from '../../redux/actions'
+
 
 export default function Results({ shoeName, setShoeName }) {
   const shoes = useSelector(state => state.Shoes)
-
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const [results, setResults] = useState([])
 
@@ -24,6 +26,7 @@ export default function Results({ shoeName, setShoeName }) {
   }, [shoeName])
 
   const handleClick = id => {
+    dispatch(getShoeById(id))
     navigate(`/Detail/${id}`)
     setShoeName('')
   }
