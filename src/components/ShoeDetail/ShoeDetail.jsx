@@ -158,7 +158,6 @@ const ShoeDetail = () => {
           Color: {shoe.ShoeColor?.color}
         </Typography>
       </Box>
-      <Reviews />
     </ThemeProvider>
   )
 }
