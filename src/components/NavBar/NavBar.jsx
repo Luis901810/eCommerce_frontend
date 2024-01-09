@@ -46,8 +46,8 @@ const NavBar = () => {
   }
 
   const handleLogout = async () => {
-    dispatch(cleanUserData())
     try {
+      dispatch(cleanUserData())
       await logout()
       navigate('/')
     } catch (error) {

@@ -4,26 +4,23 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
+import store from './redux/store'
 import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
 import theme from './theme'
 import React from 'react'
-//! Para la PERSISTENCIA DE DATOS
-import { store, persistor } from './redux/store';
 import { AuthProvider } from './contexts/AuthContext'
-import { PersistGate } from 'redux-persist/integration/react';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+const root = ReactDOM.createRoot(document.getElementById('root'))
+root.render(
   <ThemeProvider theme={theme}>
     <CssBaseline />
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <BrowserRouter>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </BrowserRouter>
-      </PersistGate>
+      <BrowserRouter>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </BrowserRouter>
     </Provider>
   </ThemeProvider>
 )

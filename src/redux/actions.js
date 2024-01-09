@@ -99,6 +99,7 @@ export const updateUser = async (idUser, updatedUserData) => {
 }
 
 export const getUserByEmail = (email) => {
+  console.log(GET_USER_BY_EMAIL,"************************")
   return async (dispatch) => {
     try {
       const response = await axios.get(`${API_URL}/user/${email}`, 
@@ -237,15 +238,15 @@ export const updatePurchaseTicket = async (idOrder, idStatusTicket) => {
   }
 
 }
-export const saveStateToLocalStorage = () => {
-  return (getState) => {
-    try {
-      const state = getState();
-      const serializedState = JSON.stringify(state);
-      localStorage.setItem("appState", serializedState);
-    } catch (error) {
-      console.error("Error saving state to localStorage:", error);
-    }
-  };
-};
-//! Crear get Orders
+// export const saveStateToLocalStorage = () => {
+//   return (getState) => {
+//     try {
+//       const state = getState();
+//       const serializedState = JSON.stringify(state);
+//       localStorage.setItem("appState", serializedState);
+//     } catch (error) {
+//       console.error("Error saving state to localStorage:", error);
+//     }
+//   };
+// };
+

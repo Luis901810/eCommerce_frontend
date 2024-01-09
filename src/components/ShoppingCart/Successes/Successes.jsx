@@ -3,13 +3,14 @@ import { updatePurchaseTicket } from '../../../redux/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import Reviews from '../../Review/Review'
 
-const ID_APPROVED = '4567ffd5-8879-4455-9b06-b1cd23d3d0be'
+const ID_APPROVED = '4567ffd5-8879-4455-9b06-b1cd23d3d0be' //! Descontar STOCK
 
 const Successes = () => {
   const dispatch = useDispatch()
   // const PurchaseTicket = useSelector(state => state.PurchaseTicket)
   const [purchaseDetails, setPurchaseDetails] = useState(null)
   const [purchaseTicket, setPurchaseTicket] = useState(null)
+  const updateStock =() => {}
 
   useEffect(() => {
     //! Apenas se aprueba la compra cambiar el status de PurchaseTicket a **Approved** ID ="4567ffd5-8879-4455-9b06-b1cd23d3d0be"
@@ -33,6 +34,7 @@ const Successes = () => {
     // console.log('Purchase del REDUX:', PurchaseTicket);
     //! Y AL USUARIO REGISTRARLE SU COMPRA COMO APROBADA
     updatePurchaseTicket(PurchaseTicket.idOrder, ID_APPROVED) //!(idOrder, idStatusTicket) //Traer el IDORDER Storage
+    
     //! Y AL USUARIO  ************NOTIFICARLE SU COMPRA***********
     const details = {
       totalAmount: PurchaseTicket.totalAmount,
@@ -43,6 +45,7 @@ const Successes = () => {
       })),
     }
     setPurchaseDetails(details)
+    updateStock(purchaseDetails);
 
     alert('ACTUALIZA LA ORDEN EN EL BACK A STATUS APROBADO')
   }, [ID_APPROVED])
