@@ -25,7 +25,16 @@ export default function DeleteAccount() {
     }
   }
   return (
-    <Button variant='contained' color='secondary' onClick={handleDelete}>
+    <Button
+      variant='contained'
+      sx={{
+        backgroundColor: '#ff4646',
+        '&:hover': {
+          backgroundColor: '#ff0000',
+        },
+      }}
+      onClick={handleDelete}
+    >
       Eliminar cuenta
     </Button>
   )
