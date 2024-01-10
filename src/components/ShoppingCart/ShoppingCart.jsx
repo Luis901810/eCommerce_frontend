@@ -238,7 +238,7 @@ const ShoppingCart = () => {
     
     dispatch(setShoppingCart(cart));
     console.log('Carrito actualizado:', cart)
-  }, [dispatch, cart])
+  }, [cart])
 
 
   return (
