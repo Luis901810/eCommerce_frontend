@@ -1,21 +1,27 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import NavBar from '../NavBar/NavBar'
-import { updateUser } from '../../redux/actions'
+import { getUserByEmail, updateUser } from '../../redux/actions'
 import { useAuth } from '../../contexts/AuthContext'
 import DeleteAccount from './DeleteAccount'
+import UserOptions from './UserOptions/UserOptions'
+import { useDispatch, useSelector } from 'react-redux'
 
 const UserProfile = () => {
-  const { idUser } = useParams()
+  const dispatch = useDispatch()
+  const idUser = useSelector(state => state.User.id)
+  console.log("ID del REDUX",idUser)
+  // const {user} = useAuth();
+  // console.log("ESTE ES EL USUARIO",user.email)
+  
   const [usuario, setUsuario] = useState({
     name: '',
     email: '',
     password: ''
   })
-  const [isEditing, setIsEditing] = useState(false)
 
   useEffect(() => {
-    const loadUserProfile = async () => {
+    // dispatch(getUserByEmail(user.email));
+    const loadUserProfile = async (idUser) => {
       try {
         console.log('Info User')
         const userInfo = await updateUser(idUser, {})
@@ -24,46 +30,19 @@ const UserProfile = () => {
         console.error('Error al cargar el perfil del usuario:', error)
       }
     }
-    loadUserProfile()
+    if (idUser) loadUserProfile(idUser)
   }, [idUser])
-
-  const handleEditarPerfil = () => {
-    // Cambia el estado de edición al hacer clic en "Editar Perfil"
-    setIsEditing(true)
-  }
-
-  const handleGuardarCambios = () => {
-    // Lógica para guardar cambios y actualizar el perfil del usuario
-    console.log('Nuevos datos del usuario', usuario)
-    console.log('Guardar cambios')
-    updateUser(idUser, usuario)
-    setIsEditing(false)
-  }
 
   return (
     <div>
       <NavBar />
+
       <h1>User Profile:</h1>
-      <h3>Name: {isEditing
-        ? <input type="text" value={usuario.name} onChange={(event) =>
-          setUsuario({ ...usuario, name: event.target.value })} />
-        : usuario.name}</h3>
-
+      <UserOptions/>
+      <h3>Name: {usuario.name}</h3>
       <h3>Email: {usuario.email}</h3>
+      <h3>Password: **********</h3>
 
-      <h3>Password:
-        {isEditing
-          ? <input type="password" value={usuario.password} onChange={(event) =>
-            setUsuario({ ...usuario, password: event.target.value })} />
-          : usuario.password}</h3>
-
-      {isEditing
-        ? (
-        <button onClick={handleGuardarCambios}>Guardar Cambios</button>
-          )
-        : (
-        <button onClick={handleEditarPerfil}>Editar Perfil</button>
-      )}
       <div>
         <DeleteAccount />
       </div>

@@ -15,6 +15,8 @@ import UpdateUser from './components/Dashboard/UpdateUser'
 import UpdateShoe from './components/Dashboard/UpdateShoe'
 import Successes from './components/ShoppingCart/Successes/Successes'
 import Failures from './components/ShoppingCart/Failures/Failures'
+import EditProfile from './components/UserProfile/UserOptions/EditProfile/EditProfile'
+import PurchaseHistory from './components/UserProfile/UserOptions/PurchaseHistory/PurchaseHistory'
 
 function App() {
 
@@ -42,7 +44,9 @@ function App() {
         <Route path="/UsersDetail/:id" element={<DetailUsers/>} />
         <Route path="/UpdateUser/:id" element={<UpdateUser/>} />
 
-        <Route path='/UserProfile/:idUser' element={<UserProfile />}></Route>
+        <Route path='/UserProfile/:UserEmail' element={<UserProfile />}/>
+        <Route path='/EditProfile/:UserEmail' element={<EditProfile/>}/>
+        <Route path='/PurchaseHistory/:UserEmail' element={<PurchaseHistory />} />
         <Route path='/FormShoe' element={<FormShoe />}></Route>
         <Route path='/Successes'element={<Successes/>}/>
         <Route path='/Failures'element={<Failures/>}/>

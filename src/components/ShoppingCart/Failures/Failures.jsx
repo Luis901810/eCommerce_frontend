@@ -10,6 +10,10 @@ const Failures = () => {
   const [purchaseDetails, setPurchaseDetails] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch()
+  const handleUnload = () => {
+    localStorage.setItem('PurchaseTicket', JSON.stringify(null));
+    console.log('Limpieza de PurchaseTicket del LocalStorage');
+  };
 
   useEffect(() => {
     //Cargar al carrito lo que tengo en localStorage
@@ -42,6 +46,12 @@ const Failures = () => {
   console.log('Carrito',shoppingCart)
   dispatch(setShoppingCart(shoppingCart));
 
+  window.addEventListener('beforeunload', handleUnload)
+  return () => {
+    //! Borrar el Ticket del Local Storage
+    window.removeEventListener('beforeunload', handleUnload);
+  };
+  
   }, [ID_REJECTED]);
 
 
