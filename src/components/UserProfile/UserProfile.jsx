@@ -10,8 +10,8 @@ const UserProfile = () => {
   const dispatch = useDispatch()
   const idUser = useSelector(state => state.User.id)
   console.log("ID del REDUX",idUser)
-  const {user} = useAuth();
-  console.log("ESTE ES EL USUARIO",user.email)
+  // const {user} = useAuth();
+  // console.log("ESTE ES EL USUARIO",user.email)
   
   const [usuario, setUsuario] = useState({
     name: '',
@@ -20,7 +20,7 @@ const UserProfile = () => {
   })
 
   useEffect(() => {
-    dispatch(getUserByEmail(user.email));
+    // dispatch(getUserByEmail(user.email));
     const loadUserProfile = async (idUser) => {
       try {
         console.log('Info User')
