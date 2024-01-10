@@ -2,6 +2,8 @@ import axios from 'axios'
 import { API_URL } from './actions-type'
 
 const initialState = {
+  User: {},
+  PurchaseTicket:[],
   shoppingCart:[],
   Shoe: {},
   Shoes: [],

@@ -8,6 +8,10 @@ import {
   POST_SHOE,
   ADD_TO_SHOPPING_CART,
   SET_SHOPPING_CART,
+  CREATE_PURCHASE_TICKET,
+  UPDATE_PURCHASE_TICKET,
+  GET_USER_BY_EMAIL,
+  CLEAN_USER_DATA,
 } from './actions-type'
 
 import initialState from './initialState'
@@ -15,6 +19,7 @@ import initialState from './initialState'
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case FILTER:
+      console.log(action.payload)
       const shoes = action.payload.map(shoe => {
         const sizeId = shoe.sizeId
         const sizeFound = state.sizes.find(s => s.id === sizeId)
@@ -134,11 +139,33 @@ const reducer = (state = initialState, action) => {
           
         }
       case SET_SHOPPING_CART:
-          return {
+        return {
             ...state,
             shoppingCart: action.payload,
-          };
-      
+        };
+
+      case CREATE_PURCHASE_TICKET:
+        return {
+            ...state,
+            PurchaseTicket:action.payload
+        };
+      case UPDATE_PURCHASE_TICKET:
+        return {
+          ...state,
+          PurchaseTicket: action.payload,
+        };
+      case GET_USER_BY_EMAIL:
+        return {
+          ...state,
+          User: action.payload
+        };
+      case CLEAN_USER_DATA:
+        return {
+          ...state,
+          User: {},
+          PurchaseTicket:[],
+          shoppingCart:[],
+        }
     default:
       return state
   }

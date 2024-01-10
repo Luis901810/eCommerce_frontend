@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-// import axios from "axios";
+import axios from "axios";
 import styles from './ShoppingCart.module.css'
-import { setShoppingCart } from '../../redux/actions'
+import { createPurchaseTicket, getUserByEmail, setShoppingCart } from '../../redux/actions'
 import { Box } from '@mui/system'
 import { Typography } from '@mui/material'
 import {
@@ -13,15 +13,31 @@ import {
   Select,
   MenuItem,
 } from '@mui/material'
+import { API_URL } from '../../redux/actions-type';
+import { useAuth } from '../../contexts/AuthContext';
+
+const ID_PENDING = "39224070-2789-46cc-ad1e-afae9d183981";
 
 const ShoppingCart = () => {
+
+  const dispatch = useDispatch()
+
   const shoppingCart = useSelector(state => state.shoppingCart)
+  const {id} = useSelector(state => state.User);
+  const {user} = useAuth();
+  console.log("user",user);
+  console.log("ID------USER",id);
+
+  
+
   console.log('Carrito de LLEGADA', shoppingCart)
-  const initialCartState = shoppingCart.map(product => ({
+
+  const initialCartState = shoppingCart.map(product => ({//!Asigna quantity a los productos
     ...product,
     quantity: product.quantity || 1,
   }))
-  const consolidatedCart = initialCartState.reduce((accumulator, product) => {
+
+  const consolidatedCart = initialCartState.reduce((accumulator, product) => {//! Agrupa productos del mismo Id
     const existingProduct = accumulator.find(item => item.id === product.id) //accumulator Corre los productos del carrito y compara con el ID de cada producto
 
     if (existingProduct) {
@@ -31,34 +47,59 @@ const ShoppingCart = () => {
       // No borrar lo que tenía el objeto
       accumulator.push({ ...product })
     }
-
     return accumulator
   }, [])
 
-  // Establecer el estado del carrito consolidado
-  const [cart, setCart] = useState(consolidatedCart)
+  const [cart, setCart] = useState(consolidatedCart); //! Establecer el estado del carrito consolidado
+  
+  const productsToLines = (productos) =>  {//! Productos configurados para la petición de Orden al Back
+    return productos.map(producto => ({
+      quantity: producto.quantity,
+      unitPrice: producto.price,
+      discount: 0,
+      shoeId: producto.id
+    }));
+  }
 
-  const dispatch = useDispatch()
+  const totalPurchase = (cart) => {//! Calcula el total Para el Front y el back
+    return cart.reduce(
+      (total, product) => total + product.quantity * product.price, 
+      0
+    );
+  };
 
-  const buyProducts = async products => {
-    console.log('Simular Que compra los productos')
-    alert(
-      'Simular Que compra los productos, dado que no se ha hecho la conexion con el BACK'
-    )
-    //! Cuando haga el backend
-    // try {
-    //   console.log(products);
-    //   const response = await axios.post(
-    //     "http://localhost:3001/MercadoPago",//!usar : API_URL
-    //     products
-    //   );
+  console.log('Productos para LINES',productsToLines(cart))
 
-    //   // Realiza la redirección al enlace de pago
-    //   window.location.href = response.data;
-    // } catch (error) {
-    //   console.error("Error al procesar el pago:", error.message);
-    //   // Puedes manejar el error según tus necesidades
-    // }
+  const buyProducts = async (products) => {
+    try {
+      //! Artículos Configurados para el Back =>
+
+      const lines = productsToLines(cart);
+      //!Datos del Cliente y Compra para el Back=>
+      const PurchaseTicket = {
+        totalAmount: totalPurchase(cart),
+        statusId: ID_PENDING,
+        userId: id,//!Traerlo de DEL redux *****************userId*****************
+        lines: lines
+      };
+      console.log('Ticket de Compra',PurchaseTicket)
+
+      //! Crear PurchaseTicket en Back y Cargarlo a Redux =>
+
+      await dispatch(createPurchaseTicket(PurchaseTicket,cart))//!!! HAY OCACIONES EN LAS QUE NO ACTUALIZA EL PURCHASE
+
+      // //! Realizar peticion a mercado pago
+      console.log(products);
+
+      const response = await axios.post(
+        `${API_URL}/MercadoPago`,//!usar : 
+        products
+      );
+        // Realiza la redirección al enlace de pago
+        window.location.href = response.data;
+    } catch (error) {
+      console.error("Error al procesar el pago:", error.message);
+    }
   }
 
   const setQuantity = (id, newQuantity) => {
@@ -66,9 +107,7 @@ const ShoppingCart = () => {
     const updatedCart = cart.map(item =>
       item.id === id ? { ...item, quantity: newQuantity } : item
     )
-
     console.log('carrito nuevo: ', updatedCart)
-
     setCart(updatedCart)
   }
 
@@ -78,14 +117,11 @@ const ShoppingCart = () => {
   }
 
   const renderPaymentCard = () => {
-    const totalPurchase = cart.reduce(
-      (total, product) => total + product.quantity * product.price,
-      0
-    )
+  const TotalPurchase = totalPurchase(cart)
     return (
       <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}} >
         <Typography style={textStyle} variant='h3'>
-          Total: ${totalPurchase.toFixed(2)}
+          Total: ${TotalPurchase.toFixed(2)}
         </Typography>
         <Button
           variant='contained'
@@ -96,8 +132,8 @@ const ShoppingCart = () => {
               backgroundColor: '#00ff3d',
             },
           }}
-          onClick={() => buyProducts(cart)}
-          disabled={cart.length === 0}
+          onClick={() =>  user=== null ? alert("Por favor Inicie Sesion") : buyProducts(cart)}
+          disabled={cart.length === 0 }
         >
           Comprar
         </Button>
@@ -116,6 +152,7 @@ const ShoppingCart = () => {
       >
         {cart.map(product => (
           <Box
+            key={product.id}  // <-- Aquí agregamos la clave
             sx={{
               display: 'flex',
               backgroundColor: '#414141',
@@ -191,45 +228,18 @@ const ShoppingCart = () => {
     )
   }
 
-  // const addQuantity = product => {
-  //   const existingProduct = cart.find(item => item.id === product.id)
-  //   if (existingProduct) {
-  //     if (existingProduct.quantity < product.stock) {
-  //       const newCart = cart.map(item =>
-  //         item.id === product.id
-  //           ? { ...item, quantity: item.quantity + 1 }
-  //           : item
-  //       )
-  //       setCart(newCart)
-  //     } else {
-  //       alert('No hay suficiente stock disponible')
-  //     }
-  //   } else {
-  //     const productWithQuantity = { ...product, quantity: 1 }
-  //     setCart([...cart, productWithQuantity])
-  //   }
-  // }
-
-  // const reduceQuantity = id => {
-  //   const newCart = cart.map(item =>
-  //     item.id === id && item.quantity > 1
-  //       ? { ...item, quantity: item.quantity - 1 }
-  //       : item
-  //   )
-
-  //   const updatedCart = newCart.filter(item => item.quantity > 0)
-  //   setCart(updatedCart)
-  // }
-
   const deleteProduct = id => {
     const newCart = cart.filter(item => item.id !== id)
     setCart(newCart)
   }
 
   useEffect(() => {
-    dispatch(setShoppingCart(cart))
+    if(user && user.email) dispatch(getUserByEmail(user.email));
+    
+    dispatch(setShoppingCart(cart));
     console.log('Carrito actualizado:', cart)
   }, [dispatch, cart])
+
 
   return (
     <div>
