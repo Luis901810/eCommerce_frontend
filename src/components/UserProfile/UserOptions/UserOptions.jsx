@@ -50,7 +50,7 @@ const UserOptions = () => {
         Historial de Compras
       </Button>
 
-      <Button style={buttonStyle} onClick={() => navigate(`/Reviews/${user.email}`)}>
+      <Button style={buttonStyle} onClick={() => navigate(`/UserReviews/${user.email}`)}>
         Reseñas
       </Button>
 

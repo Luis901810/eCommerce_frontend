@@ -47,11 +47,18 @@ const UserProfile = () => {
         display: 'flex',
         justifyContent: 'Center',
         padding: 10,
-        alignItems: 'center'
+        alignItems: 'center',
       }}
     >
       <UserOptions />
-      <Box sx={{ backgroundColor: '#303030', padding: 10, border: '1px solid #42e268', borderRadius: 5 }}>
+      <Box
+        sx={{
+          backgroundColor: '#303030',
+          padding: 10,
+          border: '1px solid #42e268',
+          borderRadius: 5,
+        }}
+      >
         <Typography variant='h3' style={textStyle}>
           Name: {usuario.name}
         </Typography>

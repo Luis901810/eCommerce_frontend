@@ -68,43 +68,43 @@ const UserProfile = () => {
           borderRadius: 5,
         }}
       >
-        <h3>
-          Name:{' '}
-          {isEditing ? (
-            <input
-              type='text'
-              value={usuario.name}
-              onChange={event =>
-                setUsuario({ ...usuario, name: event.target.value })
-              }
-            />
-          ) : (
-            usuario.name
-          )}
-        </h3>
-
-        <h3>Email: {usuario.email}</h3>
-
-        <h3>
-          Password:
-          {isEditing ? (
-            <input
-              type='password'
-              value={usuario.password}
-              onChange={event =>
-                setUsuario({ ...usuario, password: event.target.value })
-              }
-            />
-          ) : (
-            usuario.password
-          )}
-        </h3>
-
+      <h3>
+        Name:{' '}
         {isEditing ? (
-          <button onClick={handleGuardarCambios}>Guardar Cambios</button>
+          <input
+            type='text'
+            value={usuario.name}
+            onChange={event =>
+              setUsuario({ ...usuario, name: event.target.value })
+            }
+          />
         ) : (
-          <button onClick={handleEditarPerfil}>Editar</button>
+          usuario.name
         )}
+      </h3>
+
+      <h3>Email: {usuario.email}</h3>
+
+      <h3>
+        Password:
+        {isEditing ? (
+          <input
+            type='password'
+            value={usuario.password}
+            onChange={event =>
+              setUsuario({ ...usuario, password: event.target.value })
+            }
+          />
+        ) : (
+          usuario.password
+        )}
+      </h3>
+
+      {isEditing ? (
+        <button onClick={handleGuardarCambios}>Guardar Cambios</button>
+      ) : (
+        <button onClick={handleEditarPerfil}>Editar</button>
+      )}
       </Box>
     </Box>
   )
