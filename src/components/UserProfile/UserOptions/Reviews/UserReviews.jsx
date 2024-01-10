@@ -2,10 +2,37 @@ import { Box } from '@mui/system'
 import { Button, Typography, Rating } from '@mui/material'
 import UserOptions from '../UserOptions'
 import { useEffect, useState } from 'react'
+import axios from 'axios'
+import { API_URL } from '../../../../redux/actions-type'
+import { useSelector } from 'react-redux'
+import { useAuth } from '../../../../contexts/AuthContext'
 
 export default function UserReviews() {
+  const [reviews, setReviews] = useState([])
 
+  const idUser = useSelector(state => state.User.id)
+  const { user } = useAuth()
 
+  const getReviews = async () => {
+    try {
+        console.log(API_URL, idUser);
+      const response = await axios.get(`${API_URL}/${idUser}`)
+
+      const { data } = response
+      if (data) setReviews(data)
+      return
+    } catch (error) {
+      window.alert(`No se encontraron las reviews: ${error.message}`)
+    }
+  }
+
+  useEffect(() => {
+    getReviews()
+  }, [idUser, user])
+
+  useEffect(() => {
+    console.log(reviews)
+  }, [reviews])
 
   return (
     <Box

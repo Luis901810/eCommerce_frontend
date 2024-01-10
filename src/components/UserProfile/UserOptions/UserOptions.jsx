@@ -11,6 +11,7 @@ const UserOptions = () => {
   const dispatch = useDispatch()
   const { user } = useAuth()
   if (user && user.email) dispatch(getUserByEmail(user.email))
+  else console.log('nope');
 
   const buttonStyle = {
     color: '#42e268',
