@@ -15,6 +15,7 @@ import {
 } from '@mui/material'
 import { API_URL } from '../../redux/actions-type';
 import { useAuth } from '../../contexts/AuthContext';
+import { showErrorAlert } from '../../alerts/alerts';
 
 const ID_PENDING = "39224070-2789-46cc-ad1e-afae9d183981";
 
@@ -132,7 +133,7 @@ const ShoppingCart = () => {
               backgroundColor: '#00ff3d',
             },
           }}
-          onClick={() =>  user=== null ? alert("Por favor Inicie Sesion") : buyProducts(cart)}
+          onClick={() =>  user=== null ?  showErrorAlert("Por favor Inicie Sesion") : buyProducts(cart)}
           disabled={cart.length === 0 }
         >
           Comprar
