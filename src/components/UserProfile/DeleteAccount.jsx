@@ -14,6 +14,7 @@ export default function DeleteAccount() {
         deleteUserBack({
           id: user.email,
           deleteType: 'email',
+          hardDelete: true,
         })
         navigate('/')
       } catch (error) {

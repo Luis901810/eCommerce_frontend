@@ -37,17 +37,13 @@ export function AuthProvider({ children }) {
     const googleProvider = new GoogleAuthProvider()
     const result = await signInWithPopup(auth, googleProvider)
     // * Registrar usuario si se loguea por primera vez
-    const { isNewUser } = getAdditionalUserInfo(result)
-    const userCredential = result.user
-    const { email } = userCredential
-    if (isNewUser) {
-      await createUser({
-        email,
-        requiredUserName: false,
-        requiredPhoneNumber: false,
-        requiredUserPassword: false,
-      })
-    }
+    const { email } = result.user
+    await createUser({
+      email,
+      requiredUserName: false,
+      requiredPhoneNumber: false,
+      requiredUserPassword: false,
+    })
   }
 
   const deleteUser = async () => {
