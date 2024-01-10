@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { Box, TextField, MenuItem, Button, IconButton } from '@mui/material'
 import { TextFieldForm } from '../../styles/ComponentStyles'
-import { Unstable_NumberInput as NumberInput } from '@mui/base/Unstable_NumberInput'
 import axios from 'axios'
 import { API_URL } from '../../utils/constants'
 import { useEffect, useState } from 'react'
@@ -9,11 +8,13 @@ import { useSelector } from 'react-redux'
 import CloseIcon from '@mui/icons-material/Close'
 import { useNavigate } from 'react-router-dom'
 import { getShoeById } from '../../services/Dashboard'
+import PhotoUpload from '../PhotoUpload/PhotoUpload'
 
 export default function UpdateShoe() {
   const { id } = useParams()
   const [shoe, setShoe] = useState({})
   const [shoeUpdate, setShoeUpdate] = useState({})
+  const [photo, setPhoto] = useState('')
 
   const genders = useSelector(state => state.genders)
   const colors = useSelector(state => state.colors)
@@ -26,7 +27,10 @@ export default function UpdateShoe() {
   //*Cambio de datos
   const handleChange = event => {
     if (event.target.name === 'stock') {
-        setShoeUpdate({ ...shoeUpdate, [event.target.name]: Number(event.target.value) })
+      setShoeUpdate({
+        ...shoeUpdate,
+        [event.target.name]: Number(event.target.value),
+      })
     } else {
       setShoeUpdate({ ...shoeUpdate, [event.target.name]: event.target.value })
     }
@@ -38,6 +42,9 @@ export default function UpdateShoe() {
         const data = await getShoeById(id)
         console.log(data)
         setShoe(data)
+        data.image
+          ? setPhoto(data.image)
+          : null
       } catch (error) {
         console.error('Error fetching shoe:', error)
       }
@@ -48,6 +55,17 @@ export default function UpdateShoe() {
   useEffect(() => {
     console.log(shoeUpdate)
   }, [shoeUpdate])
+
+  useEffect(() => {
+    console.log(photo)
+    if (photo === '') {
+    } else if (photo !== shoe.image) {
+      setShoeUpdate({
+        ...shoeUpdate,
+        image: photo,
+      })
+    }
+  }, [photo])
 
   // Updata info
   const handleUpdate = async () => {
@@ -95,6 +113,8 @@ export default function UpdateShoe() {
         value={shoeUpdate.name ? shoeUpdate.name : shoe.name}
         onChange={handleChange}
       />
+
+      <PhotoUpload photo={photo} setPhoto={setPhoto} />
       <TextFieldForm
         required
         id='outlined-required'

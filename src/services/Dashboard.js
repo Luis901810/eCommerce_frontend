@@ -63,15 +63,15 @@ export const getUserByID = async(id) => {
 
 export const getShoes = async(filters={})=>{
     try{
-        let endpoint = API_URL + '/shoe'
+        let endpoint = API_URL + '/shoe?'
         for(let filter in filters){
             if(filters[filter].length){
                 endpoint = endpoint + filter + '=' + filters[filter] + '&'
             }
         }
-        Object.keys(filters).length?endpoint = endpoint.slice(0,-1):null
+        endpoint = endpoint.slice(0,-1)
         console.log(endpoint)
-        const {data:shoes} = await axios.get(`${API_URL}/shoe`)
+        const {data:shoes} = await axios.get(endpoint)
         const shoesFiltered = shoes.filter(element => element.deleteAt === null)
         // const uniqueNames = new Set(shoes.map(element => element.name))
         return shoesFiltered

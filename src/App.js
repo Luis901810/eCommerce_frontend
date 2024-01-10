@@ -18,7 +18,7 @@ import Failures from './components/ShoppingCart/Failures/Failures'
 
 function App() {
 
-  const excludedRoutes = ['Admin','UpdateUser',"UpdateShoe"]
+  const excludedRoutes = ['Admin','UpdateUser',"UpdateShoe", "CreateShoe"]
   const currentPath = window.location.pathname.split("/")
 
   const renderNavbar = !excludedRoutes.includes(currentPath[1])
