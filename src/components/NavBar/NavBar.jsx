@@ -19,6 +19,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import { useState } from 'react'
 import { cleanUserData } from '../../redux/actions'
 import { useDispatch } from 'react-redux'
+import logo from './digishoeslogo.png'
 
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
@@ -59,6 +60,11 @@ const NavBar = () => {
     return <h1>Cerrando seccion....</h1>
   }
 
+  const logoStyle={
+    width: '80px',
+    height: '50px'
+  }
+
   return (
     <>
       {error && <p>{error}</p>}
@@ -73,7 +79,7 @@ const NavBar = () => {
         }}
       >
         <Toolbar disableGutters sx={{ paddingLeft: 2, paddingRight: 2 }}>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <img src={logo} style={logoStyle} />
           <Typography
             variant='h6'
             noWrap
@@ -85,11 +91,11 @@ const NavBar = () => {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: '#42e268',
               textDecoration: 'none',
             }}
           >
-            LOGO
+            DIGISHOES
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -141,7 +147,7 @@ const NavBar = () => {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            DIGISHOES
           </Typography>
           <Box
             sx={{
@@ -163,7 +169,7 @@ const NavBar = () => {
                 {user ? (
                   <Avatar alt='User Avatar' src={user.photoURL} />
                 ) : (
-                  <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
+                  <Avatar alt='Remy Sharp' src='https://lippianfamilydentistry.net/wp-content/uploads/2015/11/user-default-300x300.png' />
                 )}
               </IconButton>
             </Tooltip>
