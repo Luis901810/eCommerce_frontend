@@ -40,7 +40,7 @@ function FormShoe() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/shoe/brand')
+      .get('https://ecommerce-zapatosapp.onrender.com/shoe/brand')
       .then(response => {
         setBrands(response.data)
       })
@@ -53,7 +53,7 @@ function FormShoe() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/shoe/category')
+      .get('https://ecommerce-zapatosapp.onrender.com/shoe/category')
       .then(response => {
         setCategories(response.data)
       })
@@ -66,7 +66,7 @@ function FormShoe() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/shoe/color')
+      .get('https://ecommerce-zapatosapp.onrender.com/shoe/color')
       .then(response => {
         setColors(response.data)
       })
@@ -79,7 +79,7 @@ function FormShoe() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/shoe/gender')
+      .get('https://ecommerce-zapatosapp.onrender.com/shoe/gender')
       .then(response => {
         setGenders(response.data)
       })
@@ -92,7 +92,7 @@ function FormShoe() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/shoe/material')
+      .get('https://ecommerce-zapatosapp.onrender.com/shoe/material')
       .then(response => {
         setMaterials(response.data)
       })
@@ -105,7 +105,7 @@ function FormShoe() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/shoe/size')
+      .get('https://ecommerce-zapatosapp.onrender.com/shoe/size')
       .then(response => {
         setSizes(response.data)
       })
