@@ -11,7 +11,7 @@ import { Typography } from '@mui/material'
 const UserProfile = () => {
   const dispatch = useDispatch()
   const idUser = useSelector(state => state.User.id)
-  console.log('ID del REDUX',idUser)
+  console.log("ID del REDUX",idUser)
   // const {user} = useAuth();
   // console.log("ESTE ES EL USUARIO",user.email)
 
