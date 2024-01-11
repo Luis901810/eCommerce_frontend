@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Alert } from '../Alert/Alert'
 import styles from './Login.module.css'
 import logoGoogle2 from '../../Fhoto/logo_google2.jpg'
+import { Box } from '@mui/system'
+import { FormControl, TextField, Button } from '@mui/material'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -51,18 +53,21 @@ const Login = () => {
     }
   }
 
+  const imgStyle = {
+    width: '50px',
+    borderRadius: 100
+  }
+
   return (
-    <div>
+    <Box sx={{padding: 5, mt: 5}} >
       {error && <Alert message={error} />}
 
-      <div>
         <img
-          className={styles.imgLogos}
+          style={imgStyle}
           src={logoGoogle2}
           alt='google'
           onClick={handleGoogleSignin}
         />
-      </div>
 
       <form onSubmit={handleSubmit}>
         <label htmlFor='email'>Correo</label>
@@ -90,7 +95,7 @@ const Login = () => {
           <button>Registrarse</button>
         </Link>
       </form>
-    </div>
+    </Box>
   )
 }
 
