@@ -5,6 +5,11 @@ import { useAuth } from '../../contexts/AuthContext'
 import DeleteAccount from './DeleteAccount'
 import UserOptions from './UserOptions/UserOptions'
 import { useDispatch, useSelector } from 'react-redux'
+import { Box } from '@mui/system'
+import {
+
+  Typography,
+} from '@mui/material'
 
 const UserProfile = () => {
   const dispatch = useDispatch()
@@ -33,20 +38,40 @@ const UserProfile = () => {
     if (idUser) loadUserProfile(idUser)
   }, [idUser])
 
+  const textStyle = {
+    color: 'white'
+  }
+
   return (
-    <div>
-      <NavBar />
-
-      <h1>User Profile:</h1>
-      <UserOptions/>
-      <h3>Name: {usuario.name}</h3>
-      <h3>Email: {usuario.email}</h3>
-      <h3>Password: **********</h3>
-
-      <div>
-        <DeleteAccount />
-      </div>
-    </div>
+    <Box
+      sx={{
+        mt: 10,
+        display: 'flex',
+        justifyContent: 'Center',
+        padding: 10,
+        alignItems: 'center',
+      }}
+    >
+      <UserOptions />
+      <Box
+        sx={{
+          backgroundColor: '#303030',
+          padding: 10,
+          border: '1px solid #42e268',
+          borderRadius: 5,
+        }}
+      >
+        <Typography variant='h3' style={textStyle}>
+          Name: {usuario.name}
+        </Typography>
+        <Typography variant='h3' style={textStyle}>
+          Email: {usuario.email}
+        </Typography>
+        <Typography variant='h3' style={textStyle}>
+          Password: **********
+        </Typography>
+      </Box>
+    </Box>
   )
 }
 
