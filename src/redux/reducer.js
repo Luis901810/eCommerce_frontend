@@ -10,6 +10,7 @@ import {
   SET_SHOPPING_CART,
   CREATE_PURCHASE_TICKET,
   UPDATE_PURCHASE_TICKET,
+  SET_CURRENT_USER,
 } from './actions-type'
 
 import initialState from './initialState'
@@ -152,6 +153,11 @@ const reducer = (state = initialState, action) => {
           ...state,
           PurchaseTicket: action.payload,
         };
+        case SET_CURRENT_USER:
+          return {
+           ...state,
+           currentUser: action.payload
+          }
     default:
       return state
   }

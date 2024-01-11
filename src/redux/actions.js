@@ -11,6 +11,7 @@ import {
   SET_SHOPPING_CART,
   CREATE_PURCHASE_TICKET,
   UPDATE_PURCHASE_TICKET,
+  SET_CURRENT_USER,
 } from './actions-type'
 import axios from 'axios'
 
@@ -225,3 +226,11 @@ export const saveStateToLocalStorage = () => {
   };
 };
 //! Crear get Orders
+
+export const setCurrentUser = (data) => {
+  
+  return {
+          type: SET_CURRENT_USER,
+          payload: data,
+        }
+}

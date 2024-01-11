@@ -15,13 +15,16 @@ import {
   DashBoardListItem,
 } from '../../styles/ComponentStyles'
 
+
 function Dashboard() {
   const [showMenu, setShowMenu] = useState(true)
 
-  const [showUsers, setShowUsers] = useState(false)
+  const [showUsers, setShowUsers] = useState(true)
   const [showShoes, setShowShoes] = useState(false)
-  const [showOrders, setShowOrders] = useState(true)
+  const [showOrders, setShowOrders] = useState(false)
 
+  
+  
 
 
 

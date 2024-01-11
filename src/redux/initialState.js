@@ -46,6 +46,9 @@ const initialState = {
       return []
     }),
   page:1,
+  currentUser:{
+    roleId: 'fc7dd551-c681-488d-9d17-955cad4c16a5'
+  }
 }
 
 export default initialState

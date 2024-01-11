@@ -17,6 +17,8 @@ import Pages from './Pages'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setCurrentUser } from '../../redux/actions'
 
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
@@ -26,6 +28,7 @@ const NavBar = () => {
   const [error, setError] = useState('')
   const { user, logout, loading } = useAuth()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleOpenNavMenu = event => {
     setAnchorElNav(event.currentTarget)
@@ -45,6 +48,9 @@ const NavBar = () => {
   const handleLogout = async () => {
     try {
       await logout()
+      dispatch(setCurrentUser({
+        roleId: 'fc7dd551-c681-488d-9d17-955cad4c16a5'
+      }))
       navigate('/')
     } catch (error) {
       setError(error.message)
