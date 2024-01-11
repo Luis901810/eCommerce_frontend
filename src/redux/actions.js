@@ -59,7 +59,7 @@ export const createUser = user => {
       const response = await axios.post(`${API_URL}/user`, user)
       console.log('Respuesta del servidor:', response.data)
       alert('Registro exitoso')
-      window.location.href = 'https://storecalzado.vercel.app' //! al Landing
+      window.location.href = 'https://storecalzado.vercel.app' 
       return response.data
     } catch (error) {
       console.log(error.response.data.error)
