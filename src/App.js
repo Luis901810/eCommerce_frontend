@@ -17,7 +17,7 @@ import Successes from './components/ShoppingCart/Successes/Successes'
 import Failures from './components/ShoppingCart/Failures/Failures'
 import EditProfile from './components/UserProfile/UserOptions/EditProfile/EditProfile'
 import PurchaseHistory from './components/UserProfile/UserOptions/PurchaseHistory/PurchaseHistory'
-import UserReviews from './components/UserProfile/UserOptions/Reviews/UserReviews'
+import PruebaNotificaciones from './components/PruebaNotificaciones'
 
 function App() {
 
@@ -45,13 +45,14 @@ function App() {
         <Route path="/UsersDetail/:id" element={<DetailUsers/>} />
         <Route path="/UpdateUser/:id" element={<UpdateUser/>} />
 
-        <Route path='/UserReviews/:UserEmail' element={<UserReviews />}/>
         <Route path='/UserProfile/:UserEmail' element={<UserProfile />}/>
         <Route path='/EditProfile/:UserEmail' element={<EditProfile/>}/>
         <Route path='/PurchaseHistory/:UserEmail' element={<PurchaseHistory />} />
+        <Route path='/Reviews/:UserEmail' element={<PruebaNotificaciones />} />
         <Route path='/FormShoe' element={<FormShoe />}></Route>
         <Route path='/Successes'element={<Successes/>}/>
         <Route path='/Failures'element={<Failures/>}/>
+        
 
       </Routes>
     </div>
