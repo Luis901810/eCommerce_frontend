@@ -17,6 +17,7 @@ import Successes from './components/ShoppingCart/Successes/Successes'
 import Failures from './components/ShoppingCart/Failures/Failures'
 import EditProfile from './components/UserProfile/UserOptions/EditProfile/EditProfile'
 import PurchaseHistory from './components/UserProfile/UserOptions/PurchaseHistory/PurchaseHistory'
+import PruebaNotificaciones from './components/PruebaNotificaciones'
 
 function App() {
 
@@ -47,9 +48,11 @@ function App() {
         <Route path='/UserProfile/:UserEmail' element={<UserProfile />}/>
         <Route path='/EditProfile/:UserEmail' element={<EditProfile/>}/>
         <Route path='/PurchaseHistory/:UserEmail' element={<PurchaseHistory />} />
+        <Route path='/Reviews/:UserEmail' element={<PruebaNotificaciones />} />
         <Route path='/FormShoe' element={<FormShoe />}></Route>
         <Route path='/Successes'element={<Successes/>}/>
         <Route path='/Failures'element={<Failures/>}/>
+        
 
       </Routes>
     </div>

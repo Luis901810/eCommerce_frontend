@@ -5,6 +5,7 @@ import Reviews from '../../Review/Review'
 import { API_URL } from '../../../redux/actions-type'
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
+import { showSuccessAlert } from '../../../alerts/alerts'
 
 const ID_APPROVED = '4567ffd5-8879-4455-9b06-b1cd23d3d0be' //! Descontar STOCK
 
@@ -90,8 +91,8 @@ const Successes = () => {
     setPurchaseDetails(details)
 
     if(PurchaseTicket) updateStock(PurchaseTicket)
+    showSuccessAlert("ORDEN APROBADA :D")
 
-    alert('ACTUALIZA LA ORDEN EN EL BACK A STATUS APROBADO')
 
     window.addEventListener('beforeunload', handleUnload);
     return () => {

@@ -4,6 +4,8 @@ import IconButton from '@mui/material/IconButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { addToShoppingCart } from '../../redux/actions'
+import { showSuccessAlert } from '../../alerts/alerts'
+
 
 const CardShoe = ({ product }) => {
   const cardShoeStyle = {
@@ -31,7 +33,7 @@ const CardShoe = ({ product }) => {
     const selectedShoe = shoes.find(shoe => shoe.id === idProducto);
     dispatch(addToShoppingCart(selectedShoe))
     console.log('Agregado :',selectedShoe.name)
-    alert(`Producto ${selectedShoe.name} agregado al carrito`)
+    showSuccessAlert(`Producto ${selectedShoe.name} agregado al carrito`)
   };
   return (
     <Box >

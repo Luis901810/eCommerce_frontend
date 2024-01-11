@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { setShoppingCart, updatePurchaseTicket } from '../../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { showErrorAlert } from '../../../alerts/alerts';
 
 const ID_REJECTED = "ce1f4d24-88ac-4fce-a210-31f64ab45117";
 
@@ -39,7 +40,7 @@ const Failures = () => {
     setPurchaseDetails(details);
 
 
-    alert("ACTUALIZA LA ORDEN EN EL BACK A STATUS RECHAZADO");
+    showErrorAlert("ORDEN RECHAZADA")
       //! Cargar Carrito
   const jsonShopingCart = localStorage.getItem('shoppingCart');
   const shoppingCart = JSON.parse(jsonShopingCart);
