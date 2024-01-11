@@ -1,3 +1,4 @@
+import { showPendingOrderAlert, showSuccessAlert } from '../alerts/alerts'
 import {
   API_URL,
   FILTER,
@@ -89,7 +90,6 @@ export const updateUser = async (idUser, updatedUserData) => {
       updatedUserData
     )
     console.log('Respuesta del servidor:', response.data)
-    // alert('Carga del usuario:');
     return response.data
   } catch (error) {
     console.log(error.response.data.error)
@@ -203,7 +203,7 @@ export const createPurchaseTicket = (purchaseTicket, cart) => {
         type: CREATE_PURCHASE_TICKET,
         payload: purchaseTicket,
       })
-      alert('Orden Creada Exitosamente en estado Pending en el BACK')//! Me confirma que llegó 
+      showPendingOrderAlert()//! Me confirma que llegó 
 
       return response.data
 
@@ -228,7 +228,7 @@ export const updatePurchaseTicket = async (idOrder, idStatusTicket) => {
       { statusId: idStatusTicket }
     )
     console.log('Respuesta del servidor:', response.data)
-    alert('Ticket Actualizado');
+    console.log('Ticket Actualizado');
     // dispatch({ type: UPDATE_PURCHASE_TICKET, payload: response.data });
     return response.data;
   } catch (error) {
