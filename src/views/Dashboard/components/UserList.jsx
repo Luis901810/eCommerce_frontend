@@ -9,14 +9,15 @@ import {
   CssBaseline,
   ThemeProvider,
   Box,
-  IconButton
+  IconButton,
+  Avatar
 } from '@mui/material'
 import theme from '../../../theme';
 import {
   StyledSelect,
   StyledMenuItemSelect,
   TextFieldForm,
-  LinkNoDeco,
+  TableRowHover,
 } from "../../../styles/ComponentStyles";
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +28,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { getUsers } from '../../../services/Dashboard';
 
 
-function UserList({ users }) {
+function UserList() {
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: 'ascending',
@@ -36,7 +37,7 @@ function UserList({ users }) {
   const [ usersFixed, setUsersFixed] = useState([])
   const [usersToShow, setUsersToShow] = useState([])
 
-  const [hoveredRow, setHoveredRow] = useState(null);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRole, setSelectedRole] = useState("all");
 
@@ -136,13 +137,22 @@ function UserList({ users }) {
 }, [])
 
   useEffect(() => {
-    console.log(sortConfig)
-
+  
   }, [usersToShow])
 
   const renderTableHeader = () => (
     <TableHead>
       <TableRow sx={{ backgroundColor: '#414141' }}>
+      <TableCell
+          sx={{
+            fontSize: 18,
+            color: 'white',
+            width: 100,
+            backgroundColor: '#414141',
+
+            textAlign: 'start',
+          }}
+        ></TableCell>
         <SortableTableCell
           onClick={() => handleSort('name')}
           label='Nombre'
@@ -183,19 +193,17 @@ function UserList({ users }) {
   const renderTableData = () => {
     
     return (
-
-      <TableBody>
-        {!usersToShow.length?<h3>No se encontraron resultados</h3>:usersToShow.map((user, index) => (
-          <TableRow
+      !usersToShow.length ? (
+        <h3>No se encontraron resultados</h3>
+      ) : (<TableBody>
+        {usersToShow.map((user, index) => (
+          <TableRowHover
             key={user.id}
-            sx={{
-              backgroundColor: index === hoveredRow ? '#333333' : '#131313',
-              color: 'white',
-              
-            }}
-            onMouseEnter={() => setHoveredRow(index)}
-            onMouseLeave={() => setHoveredRow(null)}
+            
           >
+            <TableCell>
+                <Avatar alt={user.name} src={user.profilePicture} />
+              </TableCell>
             <TableCell
               sx={{
                 fontSize: 14,
@@ -243,9 +251,9 @@ function UserList({ users }) {
                 <DeleteIcon />
                 </IconButton>
             </TableCell>
-          </TableRow>
+          </TableRowHover>
         ))}
-      </TableBody>
+      </TableBody>)
     )
   }
 
@@ -306,12 +314,12 @@ function UserList({ users }) {
       >
 
         <TextFieldForm
-          label="Search"
+          label="Email"
           value={searchTerm}
           onChange={handleSearchTermChange}
           sx={{
             width: "100%",
-            maxWidth: "100px",
+            maxWidth: "200px",
             marginBottom: "10px",
           }}
         />

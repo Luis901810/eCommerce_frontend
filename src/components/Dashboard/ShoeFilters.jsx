@@ -66,7 +66,7 @@ import {
     children: PropTypes.node,
   }
   
-  export default function ShoeFilters({filters,setFilters}) {
+  export default function ShoeFilters({filters:checkedFilters,setFilters:setCheckedFilters}) {
     const localStorageKey = 'filters'
     // const [filters, setFilters] = useState(() => {
     //   try {
@@ -137,7 +137,7 @@ import {
       reviews: false,
     })
   
-    const [checkedFilters, setCheckedFilters] = useState(filters)
+    // const [checkedFilters, setCheckedFilters] = useState(filters)
   
     const handleClick = name => {
       setOpen(prevData => ({ ...prevData, [name]: !prevData[name] }))
@@ -178,7 +178,7 @@ import {
         // const storedData = JSON.parse(localStorage.getItem(localStorageKey)) || {}
         // dispatch(filterLocal(storedData))
         // dispatch(changePage(1))
-        setFilters(checkedFilters)
+        setCheckedFilters(checkedFilters)
       } catch (error) {
         console.error('Error storing data in localStorage:', error)
       }

@@ -25,7 +25,7 @@ import AddIcon from '@mui/icons-material/Add'
 import { getShoes } from '../../../services/Dashboard'
 import ShoeFilters from '../../../components/Dashboard/ShoeFilters'
 import { isEmptyObject } from '../../../utils/tools'
-import { TextFieldForm } from '../../../styles/ComponentStyles'
+import { TextFieldForm, TableRowHover } from '../../../styles/ComponentStyles'
 
 function ShoeList() {
   const [shoes, setShoes] = useState([])
@@ -39,8 +39,6 @@ function ShoeList() {
   const [filters, setFilters] = useState({})
   const [searchTerm, setSearchTerm] = useState("");
 
-  //!Quitar esto y hacerlo con Css
-  const [hoveredRow, setHoveredRow] = useState(null)
 
   const genders = useSelector(state => state.genders)
   const colors = useSelector(state => state.colors)
@@ -50,7 +48,7 @@ function ShoeList() {
   const navigate = useNavigate()
 
   //* Filtrado de datos
-  const handleFilter = async () => {}
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,6 +61,7 @@ function ShoeList() {
           size: sizes.find(item => item.id === element.sizeId).size,
           brand: brands.find(item => item.id === element.brandId).brand,
         }))
+        
         setShoes(dataCleaned)
         setShoesToShow(sortedArray(dataCleaned))
       } catch (error) {
@@ -70,7 +69,6 @@ function ShoeList() {
       }
     }
     fetchData()
-    console.log(filters)
   }, [filters])
 
   //* Barra de busqueda
@@ -250,19 +248,14 @@ function ShoeList() {
 
   const renderTableData = () => {
     return (
-      <TableBody>
-        {!shoesToShow.length ? (
-          <h3>No se encontraron resultados</h3>
-        ) : (
+      !shoesToShow.length ? (
+        <h3>No se encontraron resultados</h3>
+      ) : (<TableBody>
+        {
           shoesToShow.map((shoe, index) => (
-            <TableRow
+            <TableRowHover
               key={shoe.id}
-              sx={{
-                backgroundColor: index === hoveredRow ? '#333333' : '#131313',
-                color: 'white',
-              }}
-              onMouseEnter={() => setHoveredRow(index)}
-              onMouseLeave={() => setHoveredRow(null)}
+            
             >
               <TableCell>
                 <Avatar alt={shoe.name} src={shoe.image} />
@@ -338,10 +331,10 @@ function ShoeList() {
                   <DeleteIcon />
                 </IconButton>
               </TableCell>
-            </TableRow>
+            </TableRowHover>
           ))
-        )}
-      </TableBody>
+        }
+      </TableBody>)
     )
   }
 
@@ -368,12 +361,12 @@ function ShoeList() {
           LISTA DE PRODUCTOS
         </Box>
         <TextFieldForm
-          label='Search'
+          label='Buscar Producto'
           value={searchTerm}
           onChange={handleSearchTermChange}
           sx={{
             width: '100%',
-            maxWidth: '100px',
+            maxWidth: '200px',
             marginBottom: '10px',
           }}
         />
@@ -382,6 +375,7 @@ function ShoeList() {
             <Button
               onClick={() => {
                 setFilters({})
+                setSearchTerm('')
               }}
             >
               Limpiar Filtros
