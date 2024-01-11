@@ -14,7 +14,7 @@ const UserProfile = () => {
   console.log("ID del REDUX",idUser)
   // const {user} = useAuth();
   // console.log("ESTE ES EL USUARIO",user.email)
-
+  
   const [usuario, setUsuario] = useState({
     name: '',
     email: '',
