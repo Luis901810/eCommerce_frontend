@@ -14,12 +14,13 @@ const Landing = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(user)
       try {
-        if (user.email) {
+        if (user) {
           const { data } = await axios(
             `${API_URL}/user/${user.email}?findType=email`
           )
-          dispatch(setCurrentUser(data))
+          localStorage.setItem('currentUser', JSON.stringify(data))
         }
       } catch (error) {
         console.error(error)

@@ -22,8 +22,13 @@ import EditProfile from './components/UserProfile/UserOptions/EditProfile/EditPr
 import PurchaseHistory from './components/UserProfile/UserOptions/PurchaseHistory/PurchaseHistory'
 import PruebaNotificaciones from './components/PruebaNotificaciones'
 function App() {
-  const  user = useSelector(state => state.currentUser)
-  const excludedRoutes = ['Admin','UpdateUser',"UpdateShoe", "CreateShoe", 'UpdateOrder', 'CreateUser']
+  // const  user = useSelector(state => state.currentUser)
+  const  currentUser = JSON.parse(localStorage.getItem('currentUser')) 
+  const user = currentUser? currentUser: {
+    roleId: 'fc7dd551-c681-488d-9d17-955cad4c16a5'
+  }
+  console.log(user)
+  const excludedRoutes = ['UpdateUser',"UpdateShoe", "CreateShoe", 'UpdateOrder', 'CreateUser']
   const currentPath = window.location.pathname.split("/")
 
   const renderNavbar = !excludedRoutes.includes(currentPath[1])

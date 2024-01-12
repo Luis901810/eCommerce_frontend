@@ -20,8 +20,8 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setCurrentUser } from '../../redux/actions'
 import { cleanUserData } from '../../redux/actions'
-import { useDispatch } from 'react-redux'
 import logo from './digishoeslogo.png'
+import { Button } from '@mui/material'
 
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
@@ -30,6 +30,9 @@ const NavBar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const [error, setError] = useState('')
   const { user, logout, loading } = useAuth()
+  const  currentUser = JSON.parse(localStorage.getItem('currentUser'))?JSON.parse(localStorage.getItem('currentUser')):{
+    roleId: 'fc7dd551-c681-488d-9d17-955cad4c16a5'
+  } 
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -52,9 +55,7 @@ const NavBar = () => {
     try {
       dispatch(cleanUserData())
       await logout()
-      dispatch(setCurrentUser({
-        roleId: 'fc7dd551-c681-488d-9d17-955cad4c16a5'
-      }))
+      localStorage.removeItem('currentUser')
       navigate('/')
     } catch (error) {
       setError(error.message)
@@ -163,6 +164,9 @@ const NavBar = () => {
           >
             <Pages />
             <Search />
+
+            {currentUser.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?(<Button onClick={()=>{navigate('/Admin')}}>Dashboard</Button>):null}
+
             <IconButton aria-label='cart' onClick={() => navigate('/ShoppingCart')} >
               <ShoppingCartOutlinedIcon sx={{ color: 'white' }} />
             </IconButton>
