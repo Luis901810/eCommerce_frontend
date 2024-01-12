@@ -4,16 +4,17 @@ import { API_URL } from '../../../../redux/actions-type'
 import axios from 'axios'
 import UserOptions from '../UserOptions'
 import { Box } from '@mui/system'
-import { Button, Typography, Select, MenuItem } from '@mui/material'
+import { Button, Typography, Select, MenuItem, List, ListItem } from '@mui/material'
 
 const PurchaseHistory = () => {
   const idUser = useSelector(state => state.User.id)
   const [orders, setOrders] = useState([])
   const [selectedStatus, setSelectedStatus] = useState(null)
 
-  const [orderList, setOrderList] = useState('Todas las ordenes')
+  const [orderList, setOrderList] = useState('')
 
   useEffect(() => {
+    setOrderList('Todas las Ordenes')
     const fetchData = async () => {
       try {
         const response = await axios.get(`${API_URL}/order`)
@@ -42,24 +43,27 @@ const PurchaseHistory = () => {
   }
 
   useEffect(() => {
-    handleStatusFilter(orderList === 'Todas las Ordenes' ? null : orderList);
-  }, [orderList]);
-  
+    handleStatusFilter(orderList === 'Todas las Ordenes' ? null : orderList)
+  }, [orderList])
 
   const filteredOrdersByStatus = selectedStatus
     ? userOrders.filter(order => order.OrderStatus.status === selectedStatus)
     : userOrders
 
-    const selectStyle = {
-      width: '200px',
-      backgroundColor: '#414141',
-      border: '1px solid #42e268'
-    }
+  const selectStyle = {
+    width: '200px',
+    backgroundColor: '#414141',
+    border: '1px solid #42e268',
+  }
 
-    const itemStyle = {
-      backgroundColor: '#42e268',
-      border: '1px solid #303030 ', 
-    }
+  const itemStyle = {
+    backgroundColor: '#42e268',
+    border: '1px solid #303030 ',
+  }
+
+  const textStyle = {
+    color: 'white',
+  }
 
   return (
     <Box
@@ -80,18 +84,26 @@ const PurchaseHistory = () => {
           borderRadius: 5,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         <Select style={selectStyle} value={orderList} onChange={handleChange}>
-          <MenuItem style={itemStyle} value='Pending'>Ordenes Pendientes</MenuItem>
-          <MenuItem style={itemStyle} value='Approved'>Ordenes Aprobadas</MenuItem>
-          <MenuItem style={itemStyle} value='Rejected'>Ordenes Rechazadas</MenuItem>
-          <MenuItem style={itemStyle} value='Todas las Ordenes'>Todas las Ordenes</MenuItem>
+          <MenuItem style={itemStyle} value='Pending'>
+            Ordenes Pendientes
+          </MenuItem>
+          <MenuItem style={itemStyle} value='Approved'>
+            Ordenes Aprobadas
+          </MenuItem>
+          <MenuItem style={itemStyle} value='Rejected'>
+            Ordenes Rechazadas
+          </MenuItem>
+          <MenuItem style={itemStyle} value='Todas las Ordenes'>
+            Todas las Ordenes
+          </MenuItem>
         </Select>
 
         {filteredOrdersByStatus.map(order => (
-          <div
+          <Box
             key={order.id}
             style={{
               border: '1px solid #ccc',
@@ -99,20 +111,29 @@ const PurchaseHistory = () => {
               margin: '10px',
             }}
           >
-            <p>Order ID: {order.id}</p>
-            <p>Order Date: {new Date(order.date).toLocaleString()}</p>
-            <p>Total Amount: ${parseFloat(order.totalAmount).toFixed(2)}</p>
-            <p>Status: {order.OrderStatus.status}</p>
-            <p>User: {order.User.name}</p>
-            <ul>
+            <Typography style={textStyle} variant='body1'>Order ID: {order.id}</Typography>
+            <Typography style={textStyle} variant='body1'>
+              Order Date: {new Date(order.date).toLocaleString()}
+            </Typography>
+            <Typography style={textStyle} variant='body1'>
+              Total Amount: ${parseFloat(order.totalAmount).toFixed(2)}
+            </Typography>
+            <Typography style={textStyle} variant='body1'>
+              Status: {order.OrderStatus.status}
+            </Typography>
+            <Typography style={textStyle} variant='body1'>User: {order.User.name}</Typography>
+
+            <List>
               {order.OrderLines.map(orderLine => (
-                <li key={orderLine.id}>
-                  {orderLine.Shoe.name} - Quantity: {orderLine.quantity} - Unit
-                  Price: ${parseFloat(orderLine.unitPrice).toFixed(2)}
-                </li>
+                <ListItem key={orderLine.id}>
+                  <Typography sx={{color: 'white'}} >
+                    {orderLine.Shoe.name} - Quantity: {orderLine.quantity} -
+                    Unit Price: ${parseFloat(orderLine.unitPrice).toFixed(2)}
+                  </Typography>
+                </ListItem>
               ))}
-            </ul>
-          </div>
+            </List>
+          </Box>
         ))}
       </Box>
     </Box>

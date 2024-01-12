@@ -18,6 +18,7 @@ import Failures from './components/ShoppingCart/Failures/Failures'
 import EditProfile from './components/UserProfile/UserOptions/EditProfile/EditProfile'
 import PurchaseHistory from './components/UserProfile/UserOptions/PurchaseHistory/PurchaseHistory'
 import PruebaNotificaciones from './components/PruebaNotificaciones'
+import UserReviews from './components/UserProfile/UserOptions/UserReviews/UserReviews'
 
 function App() {
 
@@ -44,7 +45,8 @@ function App() {
         <Route path='/Admin' element={<Dashboard/>}></Route>
         <Route path="/UsersDetail/:id" element={<DetailUsers/>} />
         <Route path="/UpdateUser/:id" element={<UpdateUser/>} />
-
+        
+        <Route path='/UserReviews/:UserEmail' element={<UserReviews/>} />
         <Route path='/UserProfile/:UserEmail' element={<UserProfile />}/>
         <Route path='/EditProfile/:UserEmail' element={<EditProfile/>}/>
         <Route path='/PurchaseHistory/:UserEmail' element={<PurchaseHistory />} />

@@ -3,7 +3,7 @@ import { Button, Typography, Rating } from '@mui/material'
 import UserOptions from '../UserOptions'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { API_URL } from '../../../../redux/actions-type'
+// import { API_URL } from '../../../../redux/actions-type'
 import { useSelector } from 'react-redux'
 import { useAuth } from '../../../../contexts/AuthContext'
 
@@ -13,10 +13,11 @@ export default function UserReviews() {
   const idUser = useSelector(state => state.User.id)
   const { user } = useAuth()
 
+  const API_URL = 'http://localhost:3001'
+
   const getReviews = async () => {
     try {
-        console.log(API_URL, idUser);
-      const response = await axios.get(`${API_URL}/${idUser}`)
+      const response = await axios.get(`${API_URL}/user-review`, )
 
       const { data } = response
       if (data) setReviews(data)
@@ -28,10 +29,10 @@ export default function UserReviews() {
 
   useEffect(() => {
     getReviews()
-  }, [idUser, user])
+  }, [])
 
   useEffect(() => {
-    console.log(reviews)
+    console.log('***************', reviews);
   }, [reviews])
 
   return (
@@ -53,7 +54,7 @@ export default function UserReviews() {
           borderRadius: 5,
         }}
       >
-        <Rating max={10}></Rating>
+        <Rating disabled={true} max={10}></Rating>
       </Box>
     </Box>
   )
