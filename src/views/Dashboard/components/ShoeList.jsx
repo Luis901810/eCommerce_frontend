@@ -26,6 +26,7 @@ import { getShoes } from '../../../services/Dashboard'
 import ShoeFilters from '../../../components/Dashboard/ShoeFilters'
 import { isEmptyObject } from '../../../utils/tools'
 import { TextFieldForm, TableRowHover } from '../../../styles/ComponentStyles'
+import { errorDashboardAlert, successDashboardAlert } from '../../../alerts/alerts'
 
 function ShoeList() {
   const [shoes, setShoes] = useState([])
@@ -125,9 +126,9 @@ function ShoeList() {
       setShoesToShow(sortedArray(dataCleaned))
       // setSelectedRole('all')
       // setSearchTerm("")
-      window.alert(`El producto: ${shoe.name} fue eliminado`)
+      successDashboardAlert(`El producto: ${shoe.name} fue eliminado`)
     } catch (error) {
-      window.alert(error.message)
+      errorDashboardAlert(error.message)
     }
   }
   useEffect(() => {

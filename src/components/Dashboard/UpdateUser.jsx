@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 
 import PhotoUpload from '../PhotoUpload/PhotoUpload'
 import { isEmptyObjectObj } from '../../utils/tools'
+import { successDashboardAlert } from '../../alerts/alerts'
 
 const UpdateUser = () => {
   const { id } = useParams()
@@ -69,7 +70,7 @@ const UpdateUser = () => {
   const handleUpdate = async () => {
     try {
       const userUpdated = await axios.put(`${API_URL}/user/${id}`, userUpdate)
-      window.alert('Usuario Actualizado')
+      successDashboardAlert('Usuario Actualizado')
       setUserUpdate({})
       const user = await getUserByID(id)
       setUser(user)

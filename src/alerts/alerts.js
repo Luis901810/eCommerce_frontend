@@ -1,5 +1,7 @@
 // alert.js
 import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content'
+const MySwal = withReactContent(Swal)
 
 export const showAlert = (title, message, icon) => {
   Swal.fire({
@@ -19,3 +21,23 @@ export const showErrorAlert = (message) => {
 export const showPendingOrderAlert = () => {
     showAlert("¡Orden Creada Exitosamente!", "Estado: Pendiente", "success");
   };
+
+//Dashboards alert
+
+export const dashboardAlert = async(title, message, icon) =>{
+  await MySwal.fire({
+    title: <p>{title}</p>,
+    text: message,
+    icon: icon,
+    showConfirmButton: false,
+    timer: 1500
+  })
+}
+
+export const successDashboardAlert = async(message)=>{
+  await dashboardAlert("¡Todo salió bien!", message, 'success')
+}
+
+export const errorDashboardAlert = async(message)=>{
+  await dashboardAlert("Oops!", message, 'error')
+}

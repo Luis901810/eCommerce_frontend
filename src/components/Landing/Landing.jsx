@@ -12,22 +12,6 @@ const Landing = () => {
   const { user } = useAuth()
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log(user)
-      try {
-        if (user) {
-          const { data } = await axios(
-            `${API_URL}/user/${user.email}?findType=email`
-          )
-          localStorage.setItem('currentUser', JSON.stringify(data))
-        }
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    fetchData()
-  }, [user])
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>

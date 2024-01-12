@@ -20,6 +20,7 @@ import PhotoUpload from '../../PhotoUpload/PhotoUpload'
 import { Box } from '@mui/system'
 import { createShoeSchema } from '../../Dashboard/Schemas'
 import { isEmptyObjectObj } from '../../../utils/tools'
+import { errorDashboardAlert, successDashboardAlert } from '../../../alerts/alerts'
 
 function FormShoe() {
   const navigate = useNavigate()
@@ -141,14 +142,14 @@ function FormShoe() {
       if (isEmptyObjectObj(errors)) {
         const response = await axios.post(`${API_URL}/shoe/`, formData)
 
-        window.alert(`Producto: ${formData.name} fue creado exitosamente`)
+        successDashboardAlert(`Producto: ${formData.name} fue creado exitosamente`)
         // Restablecer el formulario
         setFormData({
           name: '',
           description: '',
-          price: 0,
+          price: '10',
           image: '',
-          stock: 0,
+          stock: 1,
           discountPercentage: 0,
           size: '',
           color: '',
@@ -156,9 +157,10 @@ function FormShoe() {
           material: '',
           gender: '',
           categoryIds: [],
+        
         })
       } else {
-        window.alert("Hay errores en el formulario")
+        errorDashboardAlert('Error en el llenado del formulario')
       }
     } catch (error) {
       console.error('Error creating shoe:', error)

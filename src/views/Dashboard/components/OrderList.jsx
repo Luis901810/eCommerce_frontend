@@ -32,6 +32,7 @@ import {
 } from '../../../styles/ComponentStyles'
 import { getOrders } from '../../../services/Dashboard'
 import dayjs from 'dayjs'
+import { errorDashboardAlert, successDashboardAlert } from '../../../alerts/alerts'
 
 export default function OrderList() {
   const [orders, setOrders] = useState([])
@@ -168,9 +169,9 @@ export default function OrderList() {
     setSelectedStatus('all')
       
       setSearchTerm("")
-      window.alert(`La compra fue eliminada`)
+      successDashboardAlert(`La compra fue eliminada`)
     } catch (error) {
-      window.alert(error.message)
+      errorDashboardAlert(error.message)
     }
   }
   //* Cargado de datos
