@@ -22,6 +22,8 @@ import { setCurrentUser } from '../../redux/actions'
 import { cleanUserData } from '../../redux/actions'
 import logo from './digishoeslogo.png'
 import { Button } from '@mui/material'
+import { API_URL } from '../../utils/constants'
+import axios from 'axios'
 
 
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
@@ -72,9 +74,22 @@ const NavBar = () => {
     height: '50px'
   }
 
-  React.useEffect(()=>{
-    console.log(currentUser)
-  }, [currentUser])
+  React.useEffect(() => {
+    const fetchData = async () => {
+      console.log(user)
+      try {
+        if (user) {
+          const { data } = await axios(
+            `${API_URL}/user/${user.email}?findType=email`
+          )
+          localStorage.setItem('currentUser', JSON.stringify(data))
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchData()
+  }, [user])
 
   return (
     <>
