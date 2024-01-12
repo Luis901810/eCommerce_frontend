@@ -28,6 +28,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add'
 import { getUsers } from '../../../services/Dashboard';
+import { errorDashboardAlert, successDashboardAlert } from '../../../alerts/alerts';
 
 
 function UserList() {
@@ -116,9 +117,9 @@ function UserList() {
         setUsersToShow(sortedUsers(users))
         setSelectedRole('all')
         setSearchTerm("")
-        window.alert(`El usuario con email: ${userEmail} fue eliminado`)
+        successDashboardAlert(`El usuario con email: ${userEmail} fue eliminado`)
     } catch(error){
-        window.alert(error.message);
+        errorDashboardAlert(error.message);
     }
   }
 

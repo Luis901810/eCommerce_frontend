@@ -73,7 +73,7 @@ const NavBar = () => {
   }
 
   React.useEffect(()=>{
-
+    console.log(currentUser)
   }, [currentUser])
 
   return (

@@ -24,6 +24,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import { useNavigate } from 'react-router-dom'
 import { styled } from '@mui/system'
 import dayjs from 'dayjs'
+import { successDashboardAlert } from '../../alerts/alerts'
 
 export default function UpdateOrder() {
   const { id } = useParams()
@@ -75,7 +76,7 @@ export default function UpdateOrder() {
         `${API_URL}/order/${id}`,
         orderUpdate
       )
-      window.alert('Compra Actualizada')
+      successDashboardAlert('Compra Actualizada')
       setOrderUpdate({})
       const order = await getOrderById(id)
       setOrder(order)
@@ -236,6 +237,7 @@ export default function UpdateOrder() {
         display: 'flex',
         flexDirection: 'column',
         justifyItems: 'center',
+        marginTop:10
       }}
       noValidate
       autoComplete='off'

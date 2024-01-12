@@ -23,6 +23,7 @@ import { getShoeById } from '../../services/Dashboard'
 import PhotoUpload from '../PhotoUpload/PhotoUpload'
 import { updateUserSchema } from './Schemas'
 import { isEmptyObject, isEmptyObjectObj } from '../../utils/tools'
+import { dashboardAlert, errorDashboardAlert, successDashboardAlert } from '../../alerts/alerts'
 
 export default function UpdateShoe() {
   const { id } = useParams()
@@ -140,12 +141,12 @@ export default function UpdateShoe() {
       console.log(errors)
       if (isEmptyObjectObj(errors)) {
         const shoeUpdated = await axios.put(`${API_URL}/shoe/${id}`, shoeUpdate)
-        window.alert('Producto Actualizado')
+        await successDashboardAlert('Producto actualizado')
         setShoeUpdate({})
         const data = await getShoeById(id)
         setShoe(data)
       } else {
-        window.alert('Hay errores en el formulario')
+        errorDashboardAlert('Error en el llenado del formulario')
       }
     } catch (error) {
       console.log(error)
@@ -160,6 +161,7 @@ export default function UpdateShoe() {
         display: 'flex',
         flexDirection: 'column',
         justifyItems: 'center',
+        marginTop:10
       }}
       noValidate
       autoComplete='off'
