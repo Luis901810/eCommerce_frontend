@@ -12,28 +12,38 @@ export default function PhotoUpload({ photo, setPhoto }) {
   console.log('Cloud Name:', cloudName)
   console.log('Upload Preset:', uploadPreset)
 
-  const [image, setImage] = useState(null)
+  const [image, setImage] = useState(photo)
 
   useEffect(() => {
-    cloudinaryRef.current = window.cloudinary
+    let isMounted = true;
+  
+    cloudinaryRef.current = window.cloudinary;
     widgetRef.current = cloudinaryRef.current.createUploadWidget(
       {
         cloudName,
         uploadPreset,
       },
       function (error, result) {
-        if (!error) {
-          if (result && result.info.secure_url) {
-            setImage(result.info.secure_url)
-            setPhoto(result.info.secure_url)
-            widgetRef.current.close()
+        if (isMounted) {
+          if (!error) {
+            if (result && result.info.secure_url) {
+              setImage(result.info.secure_url);
+              setPhoto((prevPhoto) =>
+                prevPhoto === result.info.secure_url ? prevPhoto : result.info.secure_url
+              );
+              widgetRef.current.close();
+            }
+          } else {
+            console.error('Error uploading image:', error);
           }
-        } else {
-          console.error('Error uploading image:', error)
         }
       }
-    )
-  }, [])
+    );
+  
+    return () => {
+      isMounted = false;
+    };
+  }, [setPhoto]);
 
   const ImageStyle = {
     height: '300px',

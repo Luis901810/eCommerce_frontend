@@ -8,6 +8,7 @@ import {
   List,
   ListItem,
   Select,
+  TableRow
 } from "@mui/material";
 import { Link } from 'react-router-dom';
 
@@ -255,4 +256,10 @@ export const LinkNoDeco = styled(Link)`
 text-decoration: none;
 `;
 
-
+export const TableRowHover = styled(TableRow)`
+color: #bbbbbb;
+background-color: #131313;
+&:hover {
+background-color: #333333;
+}
+`

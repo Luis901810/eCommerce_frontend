@@ -12,6 +12,7 @@ import {
   SET_SHOPPING_CART,
   CREATE_PURCHASE_TICKET,
   UPDATE_PURCHASE_TICKET,
+  SET_CURRENT_USER,
   GET_USER_BY_EMAIL,
   CLEAN_USER_DATA,
 } from './actions-type'
@@ -238,6 +239,28 @@ export const updatePurchaseTicket = async (idOrder, idStatusTicket) => {
   }
 
 }
+
+export const saveStateToLocalStorage = () => {
+  return (getState) => {
+    try {
+      const state = getState();
+      const serializedState = JSON.stringify(state);
+      localStorage.setItem("appState", serializedState);
+    } catch (error) {
+      console.error("Error saving state to localStorage:", error);
+    }
+  };
+};
+//! Crear get Orders
+
+export const setCurrentUser = (data) => {
+  
+  return {
+          type: SET_CURRENT_USER,
+          payload: data,
+        }
+}
+
 // export const saveStateToLocalStorage = () => {
 //   return (getState) => {
 //     try {
