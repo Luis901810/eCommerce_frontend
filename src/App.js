@@ -18,6 +18,9 @@ import Failures from './components/ShoppingCart/Failures/Failures'
 import { useSelector } from 'react-redux'
 import UpdateOrder from './components/Dashboard/UpdateOrder'
 import CreateUser from './components/Dashboard/CreateUser'
+import EditProfile from './components/UserProfile/UserOptions/EditProfile/EditProfile'
+import PurchaseHistory from './components/UserProfile/UserOptions/PurchaseHistory/PurchaseHistory'
+import PruebaNotificaciones from './components/PruebaNotificaciones'
 function App() {
   const  user = useSelector(state => state.currentUser)
   const excludedRoutes = ['Admin','UpdateUser',"UpdateShoe", "CreateShoe", 'UpdateOrder', 'CreateUser']
@@ -45,10 +48,15 @@ function App() {
         <Route path="/UpdateUser/:id" element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<UpdateUser/>:<Navigate to="/" />} />
         <Route path="/UpdateOrder/:id" element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<UpdateOrder/>:<Navigate to="/" />} />
 
-        <Route path='/UserProfile/:idUser' element={<UserProfile />}></Route>
+
         <Route path='/FormShoe' element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<FormShoe />:<Navigate to="/" />}></Route>
+        <Route path='/UserProfile/:UserEmail' element={<UserProfile />}/>
+        <Route path='/EditProfile/:UserEmail' element={<EditProfile/>}/>
+        <Route path='/PurchaseHistory/:UserEmail' element={<PurchaseHistory />} />
+        <Route path='/Reviews/:UserEmail' element={<PruebaNotificaciones />} />
         <Route path='/Successes'element={<Successes/>}/>
         <Route path='/Failures'element={<Failures/>}/>
+        
 
       </Routes>
     </div>

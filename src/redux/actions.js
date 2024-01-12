@@ -1,3 +1,4 @@
+import { showPendingOrderAlert, showSuccessAlert } from '../alerts/alerts'
 import {
   API_URL,
   FILTER,
@@ -12,6 +13,8 @@ import {
   CREATE_PURCHASE_TICKET,
   UPDATE_PURCHASE_TICKET,
   SET_CURRENT_USER,
+  GET_USER_BY_EMAIL,
+  CLEAN_USER_DATA,
 } from './actions-type'
 import axios from 'axios'
 
@@ -58,7 +61,7 @@ export const createUser = user => {
       const response = await axios.post(`${API_URL}/user`, user)
       console.log('Respuesta del servidor:', response.data)
       alert('Registro exitoso')
-      window.location.href = 'http://localhost:3000' //! al Landing
+      window.location.href = 'https://storecalzado.vercel.app' 
       return response.data
     } catch (error) {
       console.log(error.response.data.error)
@@ -88,7 +91,6 @@ export const updateUser = async (idUser, updatedUserData) => {
       updatedUserData
     )
     console.log('Respuesta del servidor:', response.data)
-    // alert('Carga del usuario:');
     return response.data
   } catch (error) {
     console.log(error.response.data.error)
@@ -96,6 +98,29 @@ export const updateUser = async (idUser, updatedUserData) => {
     throw error
   }
 }
+
+export const getUserByEmail = (email) => {
+  console.log(GET_USER_BY_EMAIL,"************************")
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(`${API_URL}/user/${email}`, 
+      {params: {findType: "email"}}
+      );
+      console.log('Respuesta del servidor:', response.data)
+      dispatch({
+        type: GET_USER_BY_EMAIL,
+        payload: response.data, 
+      });
+    } catch (error) { 
+
+      console.log(error.response.data)      
+    } 
+  }
+};
+
+export const cleanUserData = () => {
+  return { type: CLEAN_USER_DATA }
+};
 
 export const filterRange = (min, max) => {
   return {
@@ -179,7 +204,7 @@ export const createPurchaseTicket = (purchaseTicket, cart) => {
         type: CREATE_PURCHASE_TICKET,
         payload: purchaseTicket,
       })
-      alert('Orden Creada Exitosamente en estado Pending en el BACK')//! Me confirma que llegó 
+      showPendingOrderAlert()//! Me confirma que llegó 
 
       return response.data
 
@@ -204,7 +229,7 @@ export const updatePurchaseTicket = async (idOrder, idStatusTicket) => {
       { statusId: idStatusTicket }
     )
     console.log('Respuesta del servidor:', response.data)
-    alert('Ticket Actualizado');
+    console.log('Ticket Actualizado');
     // dispatch({ type: UPDATE_PURCHASE_TICKET, payload: response.data });
     return response.data;
   } catch (error) {
@@ -214,6 +239,7 @@ export const updatePurchaseTicket = async (idOrder, idStatusTicket) => {
   }
 
 }
+
 export const saveStateToLocalStorage = () => {
   return (getState) => {
     try {
@@ -234,3 +260,16 @@ export const setCurrentUser = (data) => {
           payload: data,
         }
 }
+
+// export const saveStateToLocalStorage = () => {
+//   return (getState) => {
+//     try {
+//       const state = getState();
+//       const serializedState = JSON.stringify(state);
+//       localStorage.setItem("appState", serializedState);
+//     } catch (error) {
+//       console.error("Error saving state to localStorage:", error);
+//     }
+//   };
+// };
+

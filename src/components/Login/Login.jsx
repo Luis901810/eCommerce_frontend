@@ -4,6 +4,16 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Alert } from '../Alert/Alert'
 import styles from './Login.module.css'
 import logoGoogle2 from '../../Fhoto/logo_google2.jpg'
+import { Box } from '@mui/system'
+import {
+  FormControl,
+  TextField,
+  Button,
+  FormLabel,
+  Typography,
+} from '@mui/material'
+
+import Divider from '@mui/material/Divider';
 
 const Login = () => {
   const navigate = useNavigate()
@@ -51,46 +61,118 @@ const Login = () => {
     }
   }
 
+  const imgStyle = {
+    width: '30px',
+    borderRadius: 100,
+  }
+
   return (
-    <div>
-      {error && <Alert message={error} />}
+    <Box sx={{ padding: 5 }}>
+      <Box
+        sx={{
+          padding: 5,
+          mt: 5,
+          display: 'flex',
+          flexDirection: 'column',
+          backgroundColor: '#414141',
+          alignItems: 'center',
+        }}
+      >
+        <FormControl onSubmit={handleSubmit}>
+          <FormLabel htmlFor='email' style={{ color: 'white' }}>
+            Correo:
+          </FormLabel>
+          <TextField
+            type='email'
+            name='email'
+            id='email'
+            placeholder='Ingrese su correo'
+            onChange={handleChange}
+            value={user.email || ''}
+            inputProps={{ style: { color: 'white' } }}
+            sx={{
+              border: '1px solid #42e268 ',
+              borderRadius: 2,
+              backgroundColor: '#303030',
+            }}
+          />
 
-      <div>
-        <img
-          className={styles.imgLogos}
-          src={logoGoogle2}
-          alt='google'
-          onClick={handleGoogleSignin}
-        />
-      </div>
+          <FormLabel
+            htmlFor='password'
+            style={{ color: 'white', marginTop: '5px' }}
+          >
+            Contraseña:
+          </FormLabel>
+          <TextField
+            type='password'
+            name='password'
+            id='password'
+            placeholder='***********'
+            onChange={handleChange}
+            value={user.password || ''}
+            inputProps={{ style: { color: 'white' } }}
+            sx={{
+              border: '1px solid #42e268 ',
+              borderRadius: 2,
+              backgroundColor: '#303030',
+            }}
+          />
 
-      <form onSubmit={handleSubmit}>
-        <label htmlFor='email'>Correo</label>
-        <input
-          type='email'
-          name='email'
-          id='email'
-          placeholder='Ingrese su correo'
-          onChange={handleChange}
-          value={user.email || ''}
-        />
+          <Button
+            sx={{
+              mt: 2,
+              backgroundColor: '#42e268',
+              '&:hover': {
+                backgroundColor: '#00ff3d',
+              },
+            }}
+          >
+            <Typography variant="h7" color="white">Ingresar</Typography>
+          </Button>
 
-        <label htmlFor='password'>Contraseña</label>
-        <input
-          type='password'
-          name='password'
-          id='password'
-          placeholder='***********'
-          onChange={handleChange}
-          value={user.password || ''}
-        />
+          {error && <Alert message={error} />}
+          <Divider sx={{mt: 3}} component={Button} />
+          <Typography variant='h6' color='white' sx={{ mt: 3, mb: 2 }}>
+            Tambien puedes:{' '}
+          </Typography>
 
-        <button>Ingresar</button>
-        <Link to='/Login/Register'>
-          <button>Registrarse</button>
-        </Link>
-      </form>
-    </div>
+          <Button
+            sx={{
+              backgroundColor: '#42e268',
+              '&:hover': {
+                backgroundColor: '#00ff3d',
+              },
+            }}
+          >
+            <img
+              style={imgStyle}
+              src={logoGoogle2}
+              alt='google'
+              onClick={handleGoogleSignin}
+            />
+            <Typography variant='h7' color='white'>
+              Iniciar sesion con google
+            </Typography>
+          </Button>
+          <Typography sx={{ mt: 1, mb: 1 }} variant='h7' color='white'>
+            O
+          </Typography>
+            <Button
+              sx={{
+                backgroundColor: '#ff4646',
+                '&:hover': {
+                  backgroundColor: '#ff0000',
+                },
+              }}
+              onClick={() => navigate('/Login/Register')}
+            >
+              <Typography variant='h7' color='white'>
+                Registrarte
+              </Typography>
+            </Button>
+        </FormControl>
+      </Box>
+    </Box>
   )
 }
 

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { setShoppingCart, updatePurchaseTicket } from '../../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { showErrorAlert } from '../../../alerts/alerts';
 
 const ID_REJECTED = "ce1f4d24-88ac-4fce-a210-31f64ab45117";
 
@@ -10,6 +11,10 @@ const Failures = () => {
   const [purchaseDetails, setPurchaseDetails] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch()
+  const handleUnload = () => {
+    localStorage.setItem('PurchaseTicket', JSON.stringify(null));
+    console.log('Limpieza de PurchaseTicket del LocalStorage');
+  };
 
   useEffect(() => {
     //Cargar al carrito lo que tengo en localStorage
@@ -35,13 +40,19 @@ const Failures = () => {
     setPurchaseDetails(details);
 
 
-    alert("ACTUALIZA LA ORDEN EN EL BACK A STATUS RECHAZADO");
+    showErrorAlert("ORDEN RECHAZADA")
       //! Cargar Carrito
   const jsonShopingCart = localStorage.getItem('shoppingCart');
   const shoppingCart = JSON.parse(jsonShopingCart);
   console.log('Carrito',shoppingCart)
   dispatch(setShoppingCart(shoppingCart));
 
+  window.addEventListener('beforeunload', handleUnload)
+  return () => {
+    //! Borrar el Ticket del Local Storage
+    window.removeEventListener('beforeunload', handleUnload);
+  };
+  
   }, [ID_REJECTED]);
 
 
