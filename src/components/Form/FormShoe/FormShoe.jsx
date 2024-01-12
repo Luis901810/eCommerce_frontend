@@ -9,12 +9,17 @@ import {
   Select,
   MenuItem,
   IconButton,
+  FormHelperText,
+  InputAdornment
 } from '@mui/material'
+import { TextFieldForm } from '../../../styles/ComponentStyles'
 import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
 import { API_URL } from '../../../utils/constants'
 import PhotoUpload from '../../PhotoUpload/PhotoUpload'
 import { Box } from '@mui/system'
+import { createShoeSchema } from '../../Dashboard/Schemas'
+import { isEmptyObjectObj } from '../../../utils/tools'
 
 function FormShoe() {
   const navigate = useNavigate()
@@ -22,9 +27,9 @@ function FormShoe() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
-    price: '0',
+    price: '10',
     image: '',
-    stock: 0,
+    stock: 1,
     discountPercentage: 0,
     size: '',
     color: '',
@@ -42,15 +47,54 @@ function FormShoe() {
   const materials = useSelector(state => state.materials)
   const sizes = useSelector(state => state.sizes)
 
+  //*Validacion de datos
+  const [errors, setErrors] = useState({})
+
+  const handleBlur = async e => {
+    const { name, value } = e.target
+    try {
+      await createShoeSchema.validateAt(name, { [name]: value })
+      setErrors({
+        ...errors,
+        [name]: '',
+      })
+    } catch (error) {
+      setErrors({
+        ...errors,
+        [name]: error.message,
+      })
+    }
+  }
   useEffect(() => {
+    console.log(formData)
+  }, [formData])
+
+  useEffect(() => {
+    const validatePhoto = async()=>{
+      const name = 'image'
+      const value = photo
+      try {
+        await createShoeSchema.validateAt(name, { [name]: value })
+        setErrors({
+          ...errors,
+          [name]: '',
+        })
+      } catch (error) {
+        setErrors({
+          ...errors,
+          [name]: error.message,
+        })
+      }
+    }
+    validatePhoto()
     setFormData({
       ...formData,
       image: photo,
     })
   }, [photo])
 
-  const handleInputChange = e => {
-    const { name, value } = e.target
+  const handleInputChange = async e => {
+    let { name, value } = e.target
 
     // Si es el campo 'price', convierte el valor a un número decimal con dos decimales
     const formattedValue =
@@ -58,7 +102,11 @@ function FormShoe() {
 
     // Si es un campo de categoría, maneja la lógica de selección múltiple
     const updatedCategories =
-      name === 'category' ? (Array.isArray(value) ? value : [value]) : undefined
+      name === 'categoryIds'
+        ? Array.isArray(value)
+          ? value
+          : [value]
+        : undefined
 
     // Actualiza el estado con el nuevo valor
     setFormData({
@@ -66,31 +114,52 @@ function FormShoe() {
       [name]:
         updatedCategories !== undefined ? updatedCategories : formattedValue,
     })
+
+    try {
+      if (name === 'categoryIds') {
+        value = Array.isArray(value) ? value : [value]
+      }
+      await createShoeSchema.validateAt(name, { [name]: value })
+      setErrors({
+        ...errors,
+        [name]: '',
+      })
+    } catch (error) {
+      setErrors({
+        ...errors,
+        [name]: error.message,
+      })
+    }
   }
+  
 
   const handleSubmit = async e => {
     e.preventDefault()
+    
+    
     try {
-      console.log(formData)
+      if (isEmptyObjectObj(errors)) {
+        const response = await axios.post(`${API_URL}/shoe/`, formData)
 
-      const response = await axios.post(`${API_URL}/shoe/`, formData)
-
-      window.alert(`Producto: ${formData.name} fue creado exitosamente`)
-      // Restablecer el formulario
-      setFormData({
-        name: '',
-        description: '',
-        price: 0,
-        image: '',
-        stock: 0,
-        discountPercentage: 0,
-        size: '',
-        color: '',
-        brand: '',
-        material: '',
-        gender: '',
-        categoryIds: [],
-      })
+        window.alert(`Producto: ${formData.name} fue creado exitosamente`)
+        // Restablecer el formulario
+        setFormData({
+          name: '',
+          description: '',
+          price: 0,
+          image: '',
+          stock: 0,
+          discountPercentage: 0,
+          size: '',
+          color: '',
+          brand: '',
+          material: '',
+          gender: '',
+          categoryIds: [],
+        })
+      } else {
+        window.alert("Hay errores en el formulario")
+      }
     } catch (error) {
       console.error('Error creating shoe:', error)
     }
@@ -144,45 +213,57 @@ function FormShoe() {
   return (
     <form onSubmit={handleSubmit} style={formStyle}>
       <Box style={boxStyle}>
-        <FormControl fullWidth margin='normal'>
-          <InputLabel htmlFor='name' style={labelStyle}>
-            Nombre:
-          </InputLabel>
-          <Input
-            id='name'
-            name='name'
-            value={formData.name}
-            style={textStyle}
-            onChange={handleInputChange}
-          />
-        </FormControl>
+        <TextFieldForm
+          required
+          id='outlined-required'
+          sx={{
+            '& .MuiInputBase-input': {
+              color: '#A0AAB4',
+            },
+          }}
+          name='name'
+          label='Producto'
+          value={formData.name}
+          onChange={handleInputChange}
+          error={Boolean(errors.name)}
+          helperText={errors.name}
+        />
 
-        <FormControl fullWidth margin='normal'>
-          <InputLabel htmlFor='description' style={labelStyle}>
-            Descripción:
-          </InputLabel>
-          <Input
-            id='description'
-            name='description'
-            value={formData.description}
-            style={textStyle}
-            onChange={handleInputChange}
-          />
-        </FormControl>
+        <TextFieldForm
+          required
+          id='outlined-required'
+          sx={{
+            '& .MuiInputBase-input': {
+              color: '#A0AAB4',
+            },
+          }}
+          name='description'
+          label='Descripción'
+          value={formData.description}
+          onChange={handleInputChange}
+          error={Boolean(errors.description)}
+          helperText={errors.description}
+        />
 
-        <FormControl fullWidth margin='normal'>
-          <InputLabel htmlFor='price' style={labelStyle}>
-            Precio:
-          </InputLabel>
-          <Input
-            id='price'
-            name='price'
-            type='number'
-            value={formData.price}
-            style={textStyle}
-            onChange={handleInputChange}
-          />
-        </FormControl>
+        <TextFieldForm
+          required
+          id='outlined-required'
+          sx={{
+            '& .MuiInputBase-input': {
+              color: '#A0AAB4',
+            },
+          }}
+          name='price'
+          label='Precio'
+          type='number'
+          value={formData.price}
+          onChange={handleInputChange}
+          error={Boolean(errors.price)}
+          helperText={errors.price}
+          InputProps={{
+            startAdornment: <InputAdornment position="start">$</InputAdornment>,
+          }}
+        />
         <IconButton
           color='secondary'
           onClick={() => {
@@ -193,138 +274,157 @@ function FormShoe() {
         </IconButton>
       </Box>
       <Box style={boxStyle}>
-        <FormControl fullWidth margin='normal'>
+        <FormControl error={Boolean(errors.image)} fullWidth margin='normal'>
           <PhotoUpload photo={photo} setPhoto={setPhoto} />
+          <FormHelperText>{errors.image}</FormHelperText>
         </FormControl>
 
         <Box style={boxStyle2}>
-          <FormControl fullWidth margin='normal' sx={{ marginBottom: 10 }}>
-            <InputLabel htmlFor='stock' style={labelStyle}>
-              Stock:
-            </InputLabel>
-            <Input
-              id='stock'
-              name='stock'
-              type='number'
-              value={formData.stock}
-              style={textStyle}
-              onChange={handleInputChange}
-            />
-          </FormControl>
+          <TextFieldForm
+            required
+            id='outlined-required'
+            sx={{
+              '& .MuiInputBase-input': {
+                color: '#A0AAB4',
+              },
+            }}
+            name='stock'
+            label='Stock'
+            type='number'
+            value={formData.stock}
+            onChange={handleInputChange}
+            error={Boolean(errors.stock)}
+            helperText={errors.stock}
+          />
 
-          <FormControl fullWidth margin='normal'>
-            <InputLabel htmlFor='discountPercentage' style={labelStyle}>
-              Porcentaje de Descuento:
-            </InputLabel>
-            <Input
-              id='discountPercentage'
-              name='discountPercentage'
-              type='number'
-              value={formData.discountPercentage}
-              style={textStyle}
-              onChange={handleInputChange}
-            />
-          </FormControl>
+          <TextFieldForm
+            required
+            id='outlined-required'
+            sx={{
+              '& .MuiInputBase-input': {
+                color: '#A0AAB4',
+              },
+            }}
+            name='discountPercentage'
+            label='Porcentaje de Descuento'
+            type='number'
+            value={formData.discountPercentage}
+            onChange={handleInputChange}
+            error={Boolean(errors.discountPercentage)}
+            helperText={errors.discountPercentage}
+          />
         </Box>
       </Box>
       <Box style={boxStyle}>
-        <FormControl fullWidth margin='normal'>
-          <InputLabel htmlFor='size' style={labelStyle}>
-            Tamaño:
-          </InputLabel>
-          <Select
-            id='size'
-            name='size'
-            value={formData.size}
-            style={selectStyle}
-            onChange={handleInputChange}
-          >
-            {sizes.map(size => (
-              <MenuItem key={size.id} value={size.id} style={itemStyle}>
-                {size.size}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <TextFieldForm
+          id='outlined-select-currency'
+          select
+          required
+          name='size'
+          label='Talla'
+          value={formData.size}
+          onChange={handleInputChange}
+          error={Boolean(errors.size)}
+          helperText={errors.size}
+        >
+          {sizes.map(option => (
+            <MenuItem key={option.id} value={option.id}>
+              {option.size}
+            </MenuItem>
+          ))}
+        </TextFieldForm>
+        <TextFieldForm
+          id='outlined-select-currency'
+          select
+          name='color'
+          label='Color'
+          required
+          value={formData.color}
+          onChange={handleInputChange}
+          error={Boolean(errors.color)}
+          helperText={errors.color}
+        >
+          {colors.map(option => (
+            <MenuItem key={option.id} value={option.id}>
+              {option.color}
+            </MenuItem>
+          ))}
+        </TextFieldForm>
 
-        <FormControl fullWidth margin='normal'>
-          <InputLabel htmlFor='color' style={labelStyle}>
-            Color:
-          </InputLabel>
-          <Select
-            id='color'
-            name='color'
-            value={formData.color}
-            style={selectStyle}
-            onChange={handleInputChange}
-          >
-            {colors.map(color => (
-              <MenuItem key={color.id} value={color.id} style={itemStyle}>
-                {color.color}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <FormControl fullWidth margin='normal'>
-          <InputLabel htmlFor='brand' style={labelStyle}>
-            Marca:
-          </InputLabel>
-          <Select
-            id='brand'
-            name='brand'
-            value={formData.brand}
-            style={selectStyle}
-            onChange={handleInputChange}
-          >
-            {brands.map(brand => (
-              <MenuItem key={brand.id} value={brand.id} style={itemStyle}>
-                {brand.brand}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <TextFieldForm
+          id='outlined-select-currency'
+          select
+          name='brand'
+          label='Marca'
+          required
+          value={formData.brand}
+          onChange={handleInputChange}
+          error={Boolean(errors.brand)}
+          helperText={errors.brand}
+        >
+          {brands.map(option => (
+            <MenuItem key={option.id} value={option.id}>
+              {option.brand}
+            </MenuItem>
+          ))}
+        </TextFieldForm>
       </Box>
       <Box style={boxStyle}>
-        <FormControl fullWidth margin='normal'>
-          <InputLabel htmlFor='material' style={labelStyle}>
-            Material:
-          </InputLabel>
-          <Select
-            id='material'
-            name='material'
-            value={formData.material}
-            style={selectStyle}
-            onChange={handleInputChange}
-          >
-            {materials.map(material => (
-              <MenuItem key={material.id} value={material.id} style={itemStyle}>
-                {material.material}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <TextFieldForm
+          id='outlined-select-currency'
+          select
+          name='material'
+          label='Material'
+          required
+          value={formData.material}
+          onChange={handleInputChange}
+          error={Boolean(errors.material)}
+          helperText={errors.material}
+        >
+          {materials.map(option => (
+            <MenuItem key={option.id} value={option.id}>
+              {option.material}
+            </MenuItem>
+          ))}
+        </TextFieldForm>
+        <TextFieldForm
+          id='outlined-select-currency'
+          select
+          name='gender'
+          label='Género'
+          required
+          value={formData.gender}
+          onChange={handleInputChange}
+          error={Boolean(errors.gender)}
+          helperText={errors.gender}
+        >
+          {genders.map(option => (
+            <MenuItem key={option.id} value={option.id}>
+              {option.gender}
+            </MenuItem>
+          ))}
+        </TextFieldForm>
 
-        <FormControl fullWidth margin='normal'>
-          <InputLabel htmlFor='gender' style={labelStyle}>
-            Genero:
-          </InputLabel>
-          <Select
-            id='gender'
-            name='gender'
-            value={formData.gender}
-            style={selectStyle}
-            onChange={handleInputChange}
-          >
-            {genders.map(gender => (
-              <MenuItem key={gender.id} value={gender.id} style={itemStyle}>
-                {gender.gender}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <TextFieldForm
+          id='outlined-select-currency'
+          select
+          name='categoryIds'
+          required
+          multiple
+          label='Categoria'
+          value={formData.categoryIds}
+          onChange={handleInputChange}
+          error={Boolean(errors.categoryIds)}
+          helperText={errors.categoryIds}
+        >
+          {categories.map(option => (
+            <MenuItem key={option.id} value={option.id}>
+              {option.category}
+            </MenuItem>
+          ))}
+        </TextFieldForm>
 
-        <FormControl fullWidth margin='normal'>
+        {/* <FormControl fullWidth margin='normal'>
           <InputLabel htmlFor='categoryIds' style={labelStyle}>
             Category:
           </InputLabel>
@@ -342,7 +442,7 @@ function FormShoe() {
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
+        </FormControl> */}
       </Box>
       <Button
         sx={{ backgroundColor: '#42e268', marginTop: 5, marginRight: 15 }}

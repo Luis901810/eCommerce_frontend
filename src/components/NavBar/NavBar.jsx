@@ -23,6 +23,7 @@ import { cleanUserData } from '../../redux/actions'
 import logo from './digishoeslogo.png'
 import { Button } from '@mui/material'
 
+
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
 const NavBar = () => {
@@ -70,6 +71,10 @@ const NavBar = () => {
     width: '80px',
     height: '50px'
   }
+
+  React.useEffect(()=>{
+
+  }, [currentUser])
 
   return (
     <>

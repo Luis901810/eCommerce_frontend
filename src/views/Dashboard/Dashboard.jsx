@@ -35,6 +35,7 @@ function Dashboard() {
     <Box
       sx={{
         display: 'flex',
+        marginTop: 10
       }}
     >
       <Box
