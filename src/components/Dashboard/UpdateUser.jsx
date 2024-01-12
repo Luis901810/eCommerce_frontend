@@ -9,6 +9,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import { useNavigate } from 'react-router-dom'
 
 import PhotoUpload from '../PhotoUpload/PhotoUpload'
+import { isEmptyObjectObj } from '../../utils/tools'
 
 const UpdateUser = () => {
   const { id } = useParams()
@@ -162,7 +163,7 @@ const UpdateUser = () => {
           </MenuItem>
         ))}
       </TextFieldForm>
-      {Object.keys(userUpdate).length ? (
+      {!isEmptyObjectObj(userUpdate)? (
         <Box>
           <Button
             variant='outlined'

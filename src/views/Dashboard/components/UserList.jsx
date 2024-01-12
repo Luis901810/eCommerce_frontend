@@ -319,6 +319,7 @@ function UserList() {
           label="Email"
           value={searchTerm}
           onChange={handleSearchTermChange}
+          key='SearchBarUser'
           sx={{
             width: "100%",
             maxWidth: "200px",
@@ -347,13 +348,13 @@ function UserList() {
         </StyledSelect>
 
         <Box>
-          <Button
+          {/* <Button
             variant='outlined'
             startIcon={<AddIcon />}
             onClick={() => navigate('/CreateUser')}
           >
             Agregar Usuario
-          </Button>
+          </Button> */}
         </Box>
       </Box>
       <TableContainer component={Paper}>
