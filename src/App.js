@@ -20,7 +20,7 @@ import UpdateOrder from './components/Dashboard/UpdateOrder'
 import CreateUser from './components/Dashboard/CreateUser'
 import EditProfile from './components/UserProfile/UserOptions/EditProfile/EditProfile'
 import PurchaseHistory from './components/UserProfile/UserOptions/PurchaseHistory/PurchaseHistory'
-import PruebaNotificaciones from './components/PruebaNotificaciones'
+
 function App() {
   // const  user = useSelector(state => state.currentUser)
   const  currentUser = JSON.parse(localStorage.getItem('currentUser')) 
@@ -32,7 +32,7 @@ function App() {
   const currentPath = window.location.pathname.split("/")
 
   const renderNavbar = !excludedRoutes.includes(currentPath[1])
-  
+
   return (
     <div className='App'>
       {renderNavbar? <NavBar />:null}
@@ -58,10 +58,10 @@ function App() {
         <Route path='/UserProfile/:UserEmail' element={<UserProfile />}/>
         <Route path='/EditProfile/:UserEmail' element={<EditProfile/>}/>
         <Route path='/PurchaseHistory/:UserEmail' element={<PurchaseHistory />} />
-        <Route path='/Reviews/:UserEmail' element={<PruebaNotificaciones />} />
+        <Route path='/FormShoe' element={<FormShoe />}></Route>
         <Route path='/Successes'element={<Successes/>}/>
         <Route path='/Failures'element={<Failures/>}/>
-        
+
 
       </Routes>
     </div>

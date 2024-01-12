@@ -29,6 +29,7 @@ const ShoeDetail = () => {
   const dispatch = useDispatch()
   const shoe = useSelector(state => state.Shoe)
   console.log('Detail', idShoe)
+  const {stock} = shoe
 
   React.useEffect(() => {
     dispatch(getShoeById(idShoe))
@@ -106,6 +107,7 @@ const ShoeDetail = () => {
             ))}
           </Box>
           <Button
+            disabled={stock === 0}
             onClick={() => addToCart()}
             variant='contained'
             size='large'
@@ -122,9 +124,17 @@ const ShoeDetail = () => {
             <AddShoppingCartIcon />
             <Typography sx={{ color: 'white' }} variant='h3'>
               Comprar ${shoe.price}
+              
             </Typography>
+            
           </Button>
-
+          
+          <Typography
+            sx={{ color: 'red', marginTop: 5, width: '650px' }}
+            variant='h6'
+          >
+            {shoe.stock === 0 && <span> - No hay stock disponible</span>}
+          </Typography>
           <Typography
             sx={{ color: 'white', marginTop: 5, width: '650px' }}
             variant='h6'
