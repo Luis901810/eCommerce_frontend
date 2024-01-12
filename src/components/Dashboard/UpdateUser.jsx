@@ -5,8 +5,10 @@ import axios from 'axios'
 import { API_URL } from '../../utils/constants'
 import { useEffect, useState } from 'react'
 import { getUserByID } from '../../services/Dashboard'
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from '@mui/icons-material/Close'
 import { useNavigate } from 'react-router-dom'
+
+import PhotoUpload from '../PhotoUpload/PhotoUpload'
 
 const UpdateUser = () => {
   const { id } = useParams()
@@ -15,10 +17,11 @@ const UpdateUser = () => {
   const [genders, setGenders] = useState([])
   const [roles, setRoles] = useState([])
   const [status, setStatus] = useState([])
+  const [photo, setPhoto] = useState('')
   const navigate = useNavigate()
 
-  const handleChange = (event)=>{
-    setUserUpdate({...userUpdate, [event.target.name]: event.target.value})
+  const handleChange = event => {
+    setUserUpdate({ ...userUpdate, [event.target.name]: event.target.value })
   }
 
   useEffect(() => {
@@ -28,7 +31,13 @@ const UpdateUser = () => {
         const { data: genders } = await axios(API_URL + '/user-gender')
         const { data: roles } = await axios(API_URL + '/user-rol')
         const { data: status } = await axios(API_URL + '/user-status')
+
         setUser(user)
+        user.profilePicture
+          ? setPhoto(user.profilePicture)
+          : setPhoto(
+              'https://objetivoligar.com/wp-content/uploads/2017/03/blank-profile-picture-973460_1280.jpg'
+            )
         setGenders(genders)
         setRoles(roles)
         setStatus(status)
@@ -44,15 +53,26 @@ const UpdateUser = () => {
     console.log(userUpdate)
   }, [userUpdate])
 
+  useEffect(() => {
+    console.log(photo)
+    if (photo === '') {
+    } else if (photo !== user.profilePicture) {
+      setUserUpdate({
+        ...userUpdate,
+        profilePicture: photo,
+      })
+    }
+  }, [photo])
+
   // Updata info
-  const handleUpdate = async()=>{
-    try{
-      const userUpdated = await axios.put(`${API_URL}/user/${id}`,userUpdate)
+  const handleUpdate = async () => {
+    try {
+      const userUpdated = await axios.put(`${API_URL}/user/${id}`, userUpdate)
       window.alert('Usuario Actualizado')
       setUserUpdate({})
       const user = await getUserByID(id)
       setUser(user)
-    }catch(error){
+    } catch (error) {
       console.log(error)
     }
   }
@@ -69,22 +89,29 @@ const UpdateUser = () => {
       noValidate
       autoComplete='off'
     >
-      <IconButton color="secondary" onClick={()=>{navigate('/Admin')}}>
-        <CloseIcon/>
+      <IconButton
+        color='secondary'
+        onClick={() => {
+          navigate('/Admin')
+        }}
+      >
+        <CloseIcon />
       </IconButton>
       <TextFieldForm
         required
         id='outlined-required'
         sx={{
-            '& .MuiInputBase-input': {
-                color: '#A0AAB4',
-              },
+          '& .MuiInputBase-input': {
+            color: '#A0AAB4',
+          },
         }}
         name='name'
         label='Nombre'
-        value={userUpdate.name?userUpdate.name:user.name}
+        value={userUpdate.name ? userUpdate.name : user.name}
         onChange={handleChange}
       />
+
+      <PhotoUpload photo={photo} setPhoto={setPhoto} />
 
       <TextFieldForm
         disabled
@@ -98,8 +125,9 @@ const UpdateUser = () => {
         select
         name='genderId'
         label='Género'
-        value={userUpdate.genderId?userUpdate.genderId:user.genderId}
-        onChange={handleChange}>
+        value={userUpdate.genderId ? userUpdate.genderId : user.genderId}
+        onChange={handleChange}
+      >
         {genders.map(option => (
           <MenuItem key={option.id} value={option.id}>
             {option.gender}
@@ -111,7 +139,7 @@ const UpdateUser = () => {
         select
         name='statusId'
         label='Status'
-        value={userUpdate.statusId?userUpdate.statusId:user.statusId}
+        value={userUpdate.statusId ? userUpdate.statusId : user.statusId}
         onChange={handleChange}
       >
         {status.map(option => (
@@ -125,7 +153,7 @@ const UpdateUser = () => {
         select
         name='roleId'
         label='Rol'
-        value={userUpdate.roleId?userUpdate.roleId:user.roleId}
+        value={userUpdate.roleId ? userUpdate.roleId : user.roleId}
         onChange={handleChange}
       >
         {roles.map(option => (
@@ -134,14 +162,27 @@ const UpdateUser = () => {
           </MenuItem>
         ))}
       </TextFieldForm>
-      {Object.keys(userUpdate).length?<Box>
-        <Button variant='outlined' size='medium' onClick={()=>{setUserUpdate({})}}>
-          Descartar Cambios
-        </Button>
-        <Button variant='outlined' size='medium' onClick={handleUpdate}>
-          Guardar Cambios
-        </Button>
-      </Box>:null}
+      {Object.keys(userUpdate).length ? (
+        <Box>
+          <Button
+            variant='outlined'
+            size='medium'
+            onClick={() => {
+              setUserUpdate({})
+              user.profilePicture
+                ? setPhoto(user.profilePicture)
+                : setPhoto(
+                    'https://objetivoligar.com/wp-content/uploads/2017/03/blank-profile-picture-973460_1280.jpg'
+                  )
+            }}
+          >
+            Descartar Cambios
+          </Button>
+          <Button variant='outlined' size='medium' onClick={handleUpdate}>
+            Guardar Cambios
+          </Button>
+        </Box>
+      ) : null}
     </Box>
   ) : null
 }

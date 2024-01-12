@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { postShoe } from '../../../redux/actions'
+import { useSelector } from 'react-redux'
 import {
   FormControl,
   InputLabel,
@@ -9,16 +8,15 @@ import {
   Button,
   Select,
   MenuItem,
-  IconButton 
+  IconButton,
 } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from '@mui/icons-material/Close'
 import axios from 'axios'
+import { API_URL } from '../../../utils/constants'
 import PhotoUpload from '../../PhotoUpload/PhotoUpload'
 import { Box } from '@mui/system'
 
 function FormShoe() {
-  const dispatch = useDispatch()
-
   const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
@@ -35,92 +33,21 @@ function FormShoe() {
     gender: '',
     categoryIds: [],
   })
+  const [photo, setPhoto] = useState('')
 
-  const [brands, setBrands] = useState([])
-
-  useEffect(() => {
-    axios
-      .get('https://ecommerce-zapatosapp.onrender.com/shoe/brand')
-      .then(response => {
-        setBrands(response.data)
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }, [])
-
-  const [categories, setCategories] = useState([])
+  const brands = useSelector(state => state.brands)
+  const categories = useSelector(state => state.categories)
+  const colors = useSelector(state => state.colors)
+  const genders = useSelector(state => state.genders)
+  const materials = useSelector(state => state.materials)
+  const sizes = useSelector(state => state.sizes)
 
   useEffect(() => {
-    axios
-      .get('https://ecommerce-zapatosapp.onrender.com/shoe/category')
-      .then(response => {
-        setCategories(response.data)
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }, [])
-
-  const [colors, setColors] = useState([])
-
-  useEffect(() => {
-    axios
-      .get('https://ecommerce-zapatosapp.onrender.com/shoe/color')
-      .then(response => {
-        setColors(response.data)
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }, [])
-
-  const [genders, setGenders] = useState([])
-
-  useEffect(() => {
-    axios
-      .get('https://ecommerce-zapatosapp.onrender.com/shoe/gender')
-      .then(response => {
-        setGenders(response.data)
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }, [])
-
-  const [materials, setMaterials] = useState([])
-
-  useEffect(() => {
-    axios
-      .get('https://ecommerce-zapatosapp.onrender.com/shoe/material')
-      .then(response => {
-        setMaterials(response.data)
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }, [])
-
-  const [sizes, setSizes] = useState([])
-
-  useEffect(() => {
-    axios
-      .get('https://ecommerce-zapatosapp.onrender.com/shoe/size')
-      .then(response => {
-        setSizes(response.data)
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }, [])
-
-  const handleSetPhoto = photo => {
-    // Actualiza el estado con la nueva imagen
     setFormData({
       ...formData,
       image: photo,
     })
-  }
+  }, [photo])
 
   const handleInputChange = e => {
     const { name, value } = e.target
@@ -141,31 +68,38 @@ function FormShoe() {
     })
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
-    dispatch(postShoe(formData))
+    try {
+      console.log(formData)
 
-    // Restablecer el formulario
-    setFormData({
-      name: '',
-      description: '',
-      price: 0,
-      image: '',
-      stock: 0,
-      discountPercentage: 0,
-      size: '',
-      color: '',
-      brand: '',
-      material: '',
-      gender: '',
-      categoryIds: [],
-    })
+      const response = await axios.post(`${API_URL}/shoe/`, formData)
+
+      window.alert(`Producto: ${formData.name} fue creado exitosamente`)
+      // Restablecer el formulario
+      setFormData({
+        name: '',
+        description: '',
+        price: 0,
+        image: '',
+        stock: 0,
+        discountPercentage: 0,
+        size: '',
+        color: '',
+        brand: '',
+        material: '',
+        gender: '',
+        categoryIds: [],
+      })
+    } catch (error) {
+      console.error('Error creating shoe:', error)
+    }
   }
 
   const formStyle = {
     marginTop: '100px',
     backgroundColor: '#414141',
-    display:'flex',
+    display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'column',
     width: '90vw',
@@ -185,7 +119,7 @@ function FormShoe() {
   const selectStyle = {
     width: '200px',
     backgroundColor: '#303030',
-    border: '1px solid #42e268'
+    border: '1px solid #42e268',
   }
 
   const boxStyle = {
@@ -204,7 +138,7 @@ function FormShoe() {
 
   const itemStyle = {
     backgroundColor: '#42e268',
-    border: '1px solid #303030 ', 
+    border: '1px solid #303030 ',
   }
 
   return (
@@ -249,44 +183,49 @@ function FormShoe() {
             onChange={handleInputChange}
           />
         </FormControl>
-        <IconButton color="secondary" onClick={()=>{navigate('/Admin')}}>
-        <CloseIcon/>
-      </IconButton>
+        <IconButton
+          color='secondary'
+          onClick={() => {
+            navigate('/Admin')
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
       </Box>
       <Box style={boxStyle}>
-      <FormControl fullWidth margin='normal'>
-        <PhotoUpload photo={formData.image} setPhoto={handleSetPhoto} />
-      </FormControl>
-
-      <Box style={boxStyle2}>
-        <FormControl fullWidth margin='normal' sx={{marginBottom: 10}} >
-          <InputLabel htmlFor='stock' style={labelStyle}>
-            Stock:
-          </InputLabel>
-          <Input
-            id='stock'
-            name='stock'
-            type='number'
-            value={formData.stock}
-            style={textStyle}
-            onChange={handleInputChange}
-          />
-        </FormControl>
-
         <FormControl fullWidth margin='normal'>
-          <InputLabel htmlFor='discountPercentage' style={labelStyle}>
-            Porcentaje de Descuento:
-          </InputLabel>
-          <Input
-            id='discountPercentage'
-            name='discountPercentage'
-            type='number'
-            value={formData.discountPercentage}
-            style={textStyle}
-            onChange={handleInputChange}
-          />
+          <PhotoUpload photo={photo} setPhoto={setPhoto} />
         </FormControl>
-      </Box>
+
+        <Box style={boxStyle2}>
+          <FormControl fullWidth margin='normal' sx={{ marginBottom: 10 }}>
+            <InputLabel htmlFor='stock' style={labelStyle}>
+              Stock:
+            </InputLabel>
+            <Input
+              id='stock'
+              name='stock'
+              type='number'
+              value={formData.stock}
+              style={textStyle}
+              onChange={handleInputChange}
+            />
+          </FormControl>
+
+          <FormControl fullWidth margin='normal'>
+            <InputLabel htmlFor='discountPercentage' style={labelStyle}>
+              Porcentaje de Descuento:
+            </InputLabel>
+            <Input
+              id='discountPercentage'
+              name='discountPercentage'
+              type='number'
+              value={formData.discountPercentage}
+              style={textStyle}
+              onChange={handleInputChange}
+            />
+          </FormControl>
+        </Box>
       </Box>
       <Box style={boxStyle}>
         <FormControl fullWidth margin='normal'>
@@ -301,7 +240,7 @@ function FormShoe() {
             onChange={handleInputChange}
           >
             {sizes.map(size => (
-              <MenuItem key={size.id} value={size.id} style={itemStyle} >
+              <MenuItem key={size.id} value={size.id} style={itemStyle}>
                 {size.size}
               </MenuItem>
             ))}
@@ -320,7 +259,7 @@ function FormShoe() {
             onChange={handleInputChange}
           >
             {colors.map(color => (
-              <MenuItem key={color.id} value={color.id} style={itemStyle} >
+              <MenuItem key={color.id} value={color.id} style={itemStyle}>
                 {color.color}
               </MenuItem>
             ))}
@@ -339,7 +278,7 @@ function FormShoe() {
             onChange={handleInputChange}
           >
             {brands.map(brand => (
-              <MenuItem key={brand.id} value={brand.id} style={itemStyle} >
+              <MenuItem key={brand.id} value={brand.id} style={itemStyle}>
                 {brand.brand}
               </MenuItem>
             ))}
@@ -359,7 +298,7 @@ function FormShoe() {
             onChange={handleInputChange}
           >
             {materials.map(material => (
-              <MenuItem key={material.id} value={material.id} style={itemStyle} >
+              <MenuItem key={material.id} value={material.id} style={itemStyle}>
                 {material.material}
               </MenuItem>
             ))}
@@ -378,7 +317,7 @@ function FormShoe() {
             onChange={handleInputChange}
           >
             {genders.map(gender => (
-              <MenuItem key={gender.id} value={gender.id} style={itemStyle} >
+              <MenuItem key={gender.id} value={gender.id} style={itemStyle}>
                 {gender.gender}
               </MenuItem>
             ))}
@@ -398,14 +337,19 @@ function FormShoe() {
             onChange={handleInputChange}
           >
             {categories.map(category => (
-              <MenuItem key={category.id} value={category.id} style={itemStyle} >
+              <MenuItem key={category.id} value={category.id} style={itemStyle}>
                 {category.category}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
       </Box>
-      <Button sx= {{backgroundColor: '#42e268', marginTop: 5, marginRight: 15}} variant='contained' color='primary' type='submit'>
+      <Button
+        sx={{ backgroundColor: '#42e268', marginTop: 5, marginRight: 15 }}
+        variant='contained'
+        color='primary'
+        type='submit'
+      >
         Crear
       </Button>
     </form>
