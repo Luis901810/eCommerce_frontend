@@ -1,13 +1,17 @@
 import { Card, Box, CardMedia, Typography } from '@mui/material'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
+import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import IconButton from '@mui/material/IconButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { addToShoppingCart } from '../../redux/actions'
-import { showSuccessAlert } from '../../alerts/alerts'
+import { showErrorAlert, showSuccessAlert } from '../../alerts/alerts'
 
 
 const CardShoe = ({ product }) => {
+  
+  const {stock} = product
+  console.log(stock)
   const cardShoeStyle = {
     backgroundColor: 'transparent',
     boxShadow: 'none',
@@ -85,8 +89,12 @@ const CardShoe = ({ product }) => {
         sx={{ color: '#fff', textAlign: 'center' }}>
             ${product.price}
         </Typography>
-        <IconButton aria-label="cart" onClick={() => addToCart(product.id)} >{/* //!funcion para agregar al carrito al darle click */}
-            <ShoppingCartOutlinedIcon sx={{ color: 'white' }} />
+        <IconButton aria-label="cart" onClick={() =>  stock === 0 ? showErrorAlert("No hay stock disponible") : addToCart(product.id)}>{/* //!funcion para agregar al carrito al darle click */}
+            {stock === 0 ? (
+              <RemoveShoppingCartIcon sx={{ color: 'red' }} />
+            ) : (
+              <ShoppingCartOutlinedIcon sx={{ color: 'white' }} />
+            )}
         </IconButton>
         </Box>
       </Card>
