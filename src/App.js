@@ -16,9 +16,11 @@ import UpdateShoe from './components/Dashboard/UpdateShoe'
 import Successes from './components/ShoppingCart/Successes/Successes'
 import Failures from './components/ShoppingCart/Failures/Failures'
 import { useSelector } from 'react-redux'
+import UpdateOrder from './components/Dashboard/UpdateOrder'
+import CreateUser from './components/Dashboard/CreateUser'
 function App() {
   const  user = useSelector(state => state.currentUser)
-  const excludedRoutes = ['Admin','UpdateUser',"UpdateShoe", "CreateShoe"]
+  const excludedRoutes = ['Admin','UpdateUser',"UpdateShoe", "CreateShoe", 'UpdateOrder', 'CreateUser']
   const currentPath = window.location.pathname.split("/")
 
   const renderNavbar = !excludedRoutes.includes(currentPath[1])
@@ -39,8 +41,9 @@ function App() {
         <Route path="/UpdateShoe/:id" element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<UpdateShoe/>:<Navigate to="/" />} />
 
         <Route path='/Admin' element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<Dashboard/>:<Navigate to="/" />}></Route>
-        <Route path="/UsersDetail/:id" element={<DetailUsers/>} />
+        <Route path="/CreateUser" element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<CreateUser/>:<Navigate to="/" />} />
         <Route path="/UpdateUser/:id" element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<UpdateUser/>:<Navigate to="/" />} />
+        <Route path="/UpdateOrder/:id" element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<UpdateOrder/>:<Navigate to="/" />} />
 
         <Route path='/UserProfile/:idUser' element={<UserProfile />}></Route>
         <Route path='/FormShoe' element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<FormShoe />:<Navigate to="/" />}></Route>

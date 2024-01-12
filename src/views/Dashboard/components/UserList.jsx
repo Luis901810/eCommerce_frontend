@@ -10,6 +10,7 @@ import {
   ThemeProvider,
   Box,
   IconButton,
+  Button,
   Avatar
 } from '@mui/material'
 import theme from '../../../theme';
@@ -25,6 +26,7 @@ import { API_URL } from '../../../utils/constants';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add'
 import { getUsers } from '../../../services/Dashboard';
 
 
@@ -343,6 +345,16 @@ function UserList() {
           <StyledMenuItemSelect value="all">Todos los Roles</StyledMenuItemSelect>
           {roles.length && roles.map(role=><StyledMenuItemSelect value={role.rol}>{role.rol}</StyledMenuItemSelect>)}
         </StyledSelect>
+
+        <Box>
+          <Button
+            variant='outlined'
+            startIcon={<AddIcon />}
+            onClick={() => navigate('/CreateUser')}
+          >
+            Agregar Usuario
+          </Button>
+        </Box>
       </Box>
       <TableContainer component={Paper}>
         <Table>

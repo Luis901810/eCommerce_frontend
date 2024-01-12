@@ -369,7 +369,7 @@ export default function OrderList() {
                 justifyContent: 'center',
               }}
             >
-              <IconButton onClick={() => navigate(`/UpdateShoe/${order.id}`)}>
+              <IconButton onClick={() => navigate(`/UpdateOrder/${order.id}`)}>
                 <EditIcon />
               </IconButton>
               <IconButton onClick={() => handleDelete(order.id)}>

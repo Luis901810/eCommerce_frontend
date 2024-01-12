@@ -107,3 +107,13 @@ export const getOrders = async () => {
     console.error('Error fetching orders:', error)
   }
 }
+
+export const getOrderById = async id => {
+  try {
+    let { data: order } = await axios(`${API_URL}/order/${id}`)
+
+    return order
+  } catch (error) {
+    console.error('Error fetching order:', error)
+  }
+}
