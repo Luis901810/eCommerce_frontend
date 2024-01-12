@@ -4,16 +4,19 @@ import { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import { Button } from '@mui/material'
 import axios from 'axios'
-import { API_URL } from '../../redux/actions-type'
+// import { API_URL } from '../../redux/actions-type'
 import Loading from '../Loading/loading'
 
 export default function Reviews({ product, idOrder, userId }) {
   const [rating, setRating] = useState(0)
   const [comment, setComment] = useState('')
-
+  const jsonString = localStorage.getItem('PurchaseTicket')
+  const PurchaseTicket = JSON.parse(jsonString)
   const [loading, setLoading] = useState(false)
   const loadingImg =
     'https://firebasestorage.googleapis.com/v0/b/gymspace-d93d8.appspot.com/o/loading.gif?alt=media&token=9b285b61-c22f-4f7f-a3ca-154db8d99d73'
+
+    const API_URL = 'http://localhost:3001'
 
   const handleSend = async () => {
     setLoading(true)
@@ -39,6 +42,7 @@ export default function Reviews({ product, idOrder, userId }) {
     }
   }
 
+  console.log('PURCHASE TICKET: ', PurchaseTicket);
   const textStyle = {
     color: 'white',
     marginTop: 3,

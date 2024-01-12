@@ -34,7 +34,6 @@ const Login = () => {
   }
 
   const handleSubmit = async event => {
-    event.preventDefault()
     try {
       await loginWithEmailAndPassword(user.email, user.password)
       navigate('/')
@@ -78,7 +77,7 @@ const Login = () => {
           alignItems: 'center',
         }}
       >
-        <FormControl onSubmit={handleSubmit}>
+        <FormControl>
           <FormLabel htmlFor='email' style={{ color: 'white' }}>
             Correo:
           </FormLabel>
@@ -126,6 +125,7 @@ const Login = () => {
                 backgroundColor: '#00ff3d',
               },
             }}
+            onClick={() => handleSubmit()}
           >
             <Typography variant="h7" color="white">Ingresar</Typography>
           </Button>
