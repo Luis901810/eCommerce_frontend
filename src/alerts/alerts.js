@@ -10,7 +10,7 @@ export const showAlert = (title, message, icon) => {
 };
 
 export const showSuccessAlert = (message) => {
-  showAlert("Good job!", message, "success");
+  showAlert("Genial!", message, "success");
 };
 
 export const showErrorAlert = (message) => {

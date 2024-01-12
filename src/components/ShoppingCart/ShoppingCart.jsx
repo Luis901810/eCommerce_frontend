@@ -74,6 +74,11 @@ const ShoppingCart = () => {
   const buyProducts = async (products) => {
     try {
       //! Artículos Configurados para el Back =>
+      const insufficientStockProduct = cart.find(product => product.quantity > product.stock);
+      if (insufficientStockProduct) {
+        showErrorAlert("Stock insuficiente, ajustar las unidades");
+        return;
+      }
 
       const lines = productsToLines(cart);
       //!Datos del Cliente y Compra para el Back=>
