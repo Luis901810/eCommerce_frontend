@@ -20,6 +20,7 @@ import UpdateOrder from './components/Dashboard/UpdateOrder'
 import CreateUser from './components/Dashboard/CreateUser'
 import EditProfile from './components/UserProfile/UserOptions/EditProfile/EditProfile'
 import PurchaseHistory from './components/UserProfile/UserOptions/PurchaseHistory/PurchaseHistory'
+import { useEffect } from 'react'
 
 function App() {
   // const  user = useSelector(state => state.currentUser)
@@ -29,6 +30,10 @@ function App() {
   }
   console.log(user)
   const excludedRoutes = ['UpdateUser',"UpdateShoe", "CreateShoe", 'UpdateOrder', 'CreateUser']
+
+  useEffect(()=>{
+    console.log(user)
+  },[user])
   const currentPath = window.location.pathname.split("/")
 
   const renderNavbar = !excludedRoutes.includes(currentPath[1])

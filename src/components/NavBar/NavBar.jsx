@@ -91,6 +91,10 @@ const NavBar = () => {
     fetchData()
   }, [user])
 
+  React.useEffect(()=>{
+    console.log(currentUser)
+  },[currentUser])
+
   return (
     <>
       {error && <p>{error}</p>}
