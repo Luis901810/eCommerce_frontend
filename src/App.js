@@ -21,6 +21,7 @@ import CreateUser from './components/Dashboard/CreateUser'
 import EditProfile from './components/UserProfile/UserOptions/EditProfile/EditProfile'
 import PurchaseHistory from './components/UserProfile/UserOptions/PurchaseHistory/PurchaseHistory'
 import { useEffect } from 'react'
+import UserReviews from './components/UserProfile/UserOptions/UserReviews/UserReviews'
 
 function App() {
   // const  user = useSelector(state => state.currentUser)
