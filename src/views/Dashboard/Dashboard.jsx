@@ -18,7 +18,7 @@ import {
 
 function Dashboard() {
   const [showMenu, setShowMenu] = useState(true)
-
+  const [selectedIndex, setSelectedIndex] = useState(1);
   const [showUsers, setShowUsers] = useState(true)
   const [showShoes, setShowShoes] = useState(false)
   const [showOrders, setShowOrders] = useState(false)
@@ -50,10 +50,12 @@ function Dashboard() {
           {/* Categoria Zapatos */}
           <DashBoardListItem
             button
+            selected={selectedIndex === 0}
             onClick={() => {
               setShowUsers(false)
               setShowShoes(true)
               setShowOrders(false)
+              setSelectedIndex(0);
             }}
           >
             <ListItemText primary='Productos' />
@@ -61,10 +63,12 @@ function Dashboard() {
           {/* Categoria Usuarios */}
           <DashBoardListItem
             button
+            selected={selectedIndex === 1}
             onClick={() => {
               setShowUsers(true)
               setShowShoes(false)
               setShowOrders(false)
+              setSelectedIndex(1)
             }}
           >
             <ListItemText primary='Usarios' />
@@ -74,10 +78,12 @@ function Dashboard() {
             {/* Categoria Ordenes */}
       <DashBoardListItem
             button
+            selected={selectedIndex === 2}
             onClick={() => {
               setShowUsers(false)
               setShowShoes(false)
               setShowOrders(true)
+              setSelectedIndex(2)
             }}
           >
             <ListItemText primary='Historial de Compras' />

@@ -4,10 +4,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import Reviews from '../../Review/Review'
 import { API_URL } from '../../../redux/actions-type'
 import axios from 'axios'
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
 import { showSuccessAlert } from '../../../alerts/alerts'
+import { Box } from '@mui/system'
+import {
+  Button,
+  Typography,
+  Select,
+  MenuItem,
+  List,
+  ListItem,
+} from '@mui/material'
 
-const ID_APPROVED = '4567ffd5-8879-4455-9b06-b1cd23d3d0be' //! Descontar STOCK
+const ID_APPROVED = "9f88b2aa-5174-42c6-a5a7-5d9933dd7ef2" //! Descontar STOCK
 
 const Successes = () => {
   const dispatch = useDispatch()
@@ -17,51 +26,49 @@ const Successes = () => {
 
   const updateStockArray = async ({ shoeId, updatedStock }) => {
     try {
-      const response = await axios.put(
-        `${API_URL}/shoe/${shoeId}`,
-        { stock: updatedStock }
-        );
+      const response = await axios.put(`${API_URL}/shoe/${shoeId}`, {
+        stock: updatedStock,
+      })
       console.log(response.data)
-      return response.data;
+      return response.data
     } catch (error) {
-      console.error(`Error al actualizar el stock del zapato ${shoeId}:`, error);
-      throw error;
+      console.error(`Error al actualizar el stock del zapato ${shoeId}:`, error)
+      throw error
     }
   }
 
-  const updateStock = async (purchaseTicket) => {
+  const updateStock = async purchaseTicket => {
     try {
-      const response = await axios.get(`${API_URL}/shoe`);
-      const shoesArray = response.data;//Traer Shoes
+      const response = await axios.get(`${API_URL}/shoe`)
+      const shoesArray = response.data //Traer Shoes
       //! Filtra shoesArray para buscar su id y el stock
-      const updatedStockArray = purchaseTicket.lines.map((line) => {
-          const { shoeId, quantity } = line;
+      const updatedStockArray = purchaseTicket.lines.map(line => {
+        const { shoeId, quantity } = line
 
-          const shoe = shoesArray.find((shoe) => shoe.id === shoeId);//! Busca los zapatos con los "shoeId"
-          if (shoe) {
-            const stock = shoe.stock - quantity;
-            return { shoeId: shoe.id, updatedStock: stock};//! Objetico con los datos para el la Actualización
-          }
-          return null;//! Si no se encuentra ningún Zapato
-      });
-      const results = await Promise.all(updatedStockArray.map(updateStockArray));
+        const shoe = shoesArray.find(shoe => shoe.id === shoeId) //! Busca los zapatos con los "shoeId"
+        if (shoe) {
+          const stock = shoe.stock - quantity
+          return { shoeId: shoe.id, updatedStock: stock } //! Objetico con los datos para el la Actualización
+        }
+        return null //! Si no se encuentra ningún Zapato
+      })
+      const results = await Promise.all(updatedStockArray.map(updateStockArray))
 
-      console.log('Resultados de la actualización de stock:', results);
+      console.log('Resultados de la actualización de stock:', results)
 
-
-  const filteredUpdatedStockArray = updatedStockArray.filter(Boolean);
-  console.log(filteredUpdatedStockArray)
-  return filteredUpdatedStockArray;
-} catch (error) {
-  console.error('Error al actualizar el stock:', error);
-  throw error;
-}
-  };
+      const filteredUpdatedStockArray = updatedStockArray.filter(Boolean)
+      console.log(filteredUpdatedStockArray)
+      return filteredUpdatedStockArray
+    } catch (error) {
+      console.error('Error al actualizar el stock:', error)
+      throw error
+    }
+  }
 
   const handleUnload = () => {
-    localStorage.setItem('PurchaseTicket', JSON.stringify(null));
-    console.log('Limpieza de PurchaseTicket del LocalStorage');
-  };
+    localStorage.setItem('PurchaseTicket', JSON.stringify(null))
+    console.log('Limpieza de PurchaseTicket del LocalStorage')
+  }
 
   useEffect(() => {
     //! Y AL USUARIO REGISTRARLE SU COMPRA COMO APROBADA Y NOTIFICAR
@@ -70,6 +77,7 @@ const Successes = () => {
     const jsonString = localStorage.getItem('PurchaseTicket')
     const PurchaseTicket = JSON.parse(jsonString)
     if(PurchaseTicket===null) return navigate('/')
+    localStorage.setItem('shoppingCart', JSON.stringify([]));//! Vaciar localStorage
     
     setPurchaseTicket(PurchaseTicket)
     // Ahora puedes acceder a las propiedades del objeto
@@ -90,63 +98,120 @@ const Successes = () => {
     }
     setPurchaseDetails(details)
 
-    if(PurchaseTicket) updateStock(PurchaseTicket)
-    showSuccessAlert("ORDEN APROBADA :D")
+    if (PurchaseTicket) updateStock(PurchaseTicket)
+    showSuccessAlert('ORDEN APROBADA :D')
 
-
-    window.addEventListener('beforeunload', handleUnload);
+    window.addEventListener('beforeunload', handleUnload)
     return () => {
       //! Borrar el Ticket del Local Storage
-      window.removeEventListener('beforeunload', handleUnload);
-    };
+      window.removeEventListener('beforeunload', handleUnload)
+    }
   }, [ID_APPROVED])
-
 
   const Shoes = useSelector(state => state.Shoes)
   const getNameShoeById = shoeId => {
     const foundShoe = Shoes.find(shoe => shoe.id === shoeId)
 
     if (foundShoe) {
-      const { name, image } = foundShoe
-      return { name, image }
+      console.log('found SHOE', foundShoe)
+      return foundShoe
     } else {
       // Si no se encuentra el zapato con el ID dado, puedes devolver un objeto con valores predeterminados o manejarlo según tus necesidades.
       return { name: 'Shoe Not Found', image: 'default-image-url' }
     }
   }
+
+  const textStyle = {
+    color: 'white',
+    marginTop: 3,
+  }
+
+  const imgStyle = {
+    width: '200px',
+    marginTop: 7,
+    marginBottom: 7,
+    borderRadius: 3,
+  }
+
   return (
-    <div>
-      <h1>Successes</h1>
-      <h1>Successes</h1>
+    <Box sx={{ mt: 10 }}>
+      <Typography style={textStyle} variant='h4'>
+        Tu compra ha sido exitosa!
+      </Typography>
       {/* //! Se pone esto porque la barra de navegacion no deja ver debajo */}
 
-      <h1>Compra Aprobada</h1>
       {purchaseDetails && (
-        <div>
-          <p>Total Amount: ${purchaseDetails.totalAmount}</p>
-          <h2>Detalles de los Artículos Comprados:</h2>
-          <ul>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Typography sx={{ mb: 5 }} style={textStyle} variant='h5'>
+            Precio total: ${purchaseDetails.totalAmount}
+          </Typography>
+          <Typography style={textStyle} variant='h4'>
+            Detalles de los Artículos Comprados:
+          </Typography>
+          <Box
+            sx={{
+              mt: 3,
+              backgroundColor: '#414141',
+              display: 'flex',
+              flexWrap: 'wrap',
+              padding: 5,
+              border: '2px solid #42e268',
+              borderRadius: 3,
+            }}
+          >
             {purchaseDetails.items.map((item, index) => {
               const shoe = getNameShoeById(item.shoeId)
               return (
-                <li key={index}>
+                <List key={index}>
                   {/* //!Buscar el nombre en el back*/}
                   <img
                     src={getNameShoeById(item.shoeId).image}
                     alt={getNameShoeById(item.shoeId).name}
-                    style={{ maxWidth: '100px', maxHeight: '100px' }}
+                    style={imgStyle}
                   />
-                  <p>Shoe : {getNameShoeById(item.shoeId).name}</p>
-                  <p>Quantity: {item.quantity}</p>
-                  <p>Unit Price: ${item.unitPrice}</p>
-                  <Reviews product={shoe} idOrder={purchaseTicket && purchaseTicket.idOrder} userId={purchaseTicket && purchaseTicket.userId} />
-                </li>
+                  <Typography style={textStyle} variant='h5'>
+                    {' '}
+                    Zapato: {getNameShoeById(item.shoeId).name}
+                  </Typography>
+                  <Typography style={textStyle} variant='h6'>
+                    Quantity: {item.quantity}
+                  </Typography>
+                  <Typography style={textStyle} variant='h6'>
+                    Unit Price: ${item.unitPrice}
+                  </Typography>
+                </List>
               )
             })}
-          </ul>
-        </div>
+          </Box>
+          <Reviews
+            idOrder={purchaseTicket && purchaseTicket.idOrder}
+            userId={purchaseTicket && purchaseTicket.userId}
+          />
+        </Box>
       )}
-    </div>
+      <Box>
+      <Button
+        variant='contained'
+        size='large'
+        sx={{
+          backgroundColor: '#42e268',
+          '&:hover': {
+            backgroundColor: '#00ff3d',
+          },
+        }}
+        onClick={() => navigate('/Catalogue') }
+      >
+        Regresar al catalogo
+      </Button>
+      </Box>
+    </Box>
   )
 }
 

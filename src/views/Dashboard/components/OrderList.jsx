@@ -32,7 +32,11 @@ import {
 } from '../../../styles/ComponentStyles'
 import { getOrders } from '../../../services/Dashboard'
 import dayjs from 'dayjs'
-import { errorDashboardAlert, successDashboardAlert } from '../../../alerts/alerts'
+import {
+  confirmDeleteAlert,
+  errorDashboardAlert,
+  successDashboardAlert,
+} from '../../../alerts/alerts'
 
 export default function OrderList() {
   const [orders, setOrders] = useState([])
@@ -161,15 +165,17 @@ export default function OrderList() {
 
   //* Borrado
   const handleDelete = async ID => {
+    const isConfirmed = await confirmDeleteAlert('registro')
     try {
-      const { data: order } = await axios.delete(`${API_URL}/order/${ID}`)
-      const data = await getOrders()
-      setOrders(data)
-    setOrdersToShow(sortedArray(data))
-    setSelectedStatus('all')
-      
-      setSearchTerm("")
-      successDashboardAlert(`La compra fue eliminada`)
+      if (isConfirmed == true) {
+        const { data: order } = await axios.delete(`${API_URL}/order/${ID}`)
+        const data = await getOrders()
+        setOrders(data)
+        setOrdersToShow(sortedArray(data))
+        setSelectedStatus('all')
+
+        setSearchTerm('')
+      }
     } catch (error) {
       errorDashboardAlert(error.message)
     }
@@ -370,10 +376,20 @@ export default function OrderList() {
                 justifyContent: 'center',
               }}
             >
-              <IconButton onClick={() => navigate(`/UpdateOrder/${order.id}`)}>
+              <IconButton
+                sx={{
+                  color: '#3085d6',
+                }}
+                onClick={() => navigate(`/UpdateOrder/${order.id}`)}
+              >
                 <EditIcon />
               </IconButton>
-              <IconButton onClick={() => handleDelete(order.id)}>
+              <IconButton
+                sx={{
+                  color: '#d33',
+                }}
+                onClick={() => handleDelete(order.id)}
+              >
                 <DeleteIcon />
               </IconButton>
             </TableCell>
@@ -398,7 +414,7 @@ export default function OrderList() {
       >
         <Box
           sx={{
-            color: '#f3a143',
+            color: '#22C55E',
             fontSize: '40px',
           }}
         >
@@ -422,6 +438,7 @@ export default function OrderList() {
           >
             <TextFieldForm
               label='Codigo o Email'
+              key='OrderSearch'
               value={searchTerm}
               onChange={handleSearchTermChange}
               sx={{
@@ -450,8 +467,8 @@ export default function OrderList() {
                 Todos los Estados
               </StyledMenuItemSelect>
               {status.length &&
-                status.map(stat => (
-                  <StyledMenuItemSelect value={stat.id}>
+                status.map((stat, index) => (
+                  <StyledMenuItemSelect key={index} value={stat.id}>
                     {stat.status}
                   </StyledMenuItemSelect>
                 ))}

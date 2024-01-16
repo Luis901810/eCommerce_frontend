@@ -100,7 +100,7 @@ export const updateUser = async (idUser, updatedUserData) => {
 }
 
 export const getUserByEmail = (email) => {
-  console.log(GET_USER_BY_EMAIL,"************************")
+  console.log(GET_USER_BY_EMAIL,"busca USUARIO POR CORREO")
   return async (dispatch) => {
     try {
       const response = await axios.get(`${API_URL}/user/${email}`, 
@@ -273,3 +273,19 @@ export const setCurrentUser = (data) => {
 //   };
 // };
 
+export const Notifiactions = (id,status) => {
+ const data = { statusId: status,
+  userId: id}
+  console.log('Información a Crear', data)
+  return async dispatch => {
+    try {
+      const response = await axios.post(`${API_URL}/order`, data)
+      console.log('Respuesta del servidor:', response.data)
+      alert('Notificación exitosa')
+      return response.data
+    } catch (error) {
+      console.log(error.response.data.error)
+      alert(error.message)
+    }
+  }
+}

@@ -67,12 +67,12 @@ const PurchaseHistory = () => {
 
   return (
     <Box
+
       sx={{
         mt: 10,
         display: 'flex',
-        justifyContent: 'Center',
+        flexDirection: 'column', // Cambiado a row
         padding: 10,
-        alignItems: 'center',
       }}
     >
       <UserOptions />

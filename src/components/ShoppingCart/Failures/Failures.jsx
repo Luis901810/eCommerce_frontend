@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { showErrorAlert } from '../../../alerts/alerts';
 
-const ID_REJECTED = "ce1f4d24-88ac-4fce-a210-31f64ab45117";
+const ID_REJECTED = "0343ad31-d79f-4421-98dc-a31c3105ffb1";
 
 const Failures = () => {
   const [purchaseDetails, setPurchaseDetails] = useState(null);

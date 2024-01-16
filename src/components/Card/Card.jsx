@@ -39,6 +39,8 @@ const CardShoe = ({ product }) => {
     console.log('Agregado :',selectedShoe.name)
     showSuccessAlert(`Producto ${selectedShoe.name} agregado al carrito`)
   };
+  const defaultImage =
+    "https://www.dtlr.com/cdn/shop/articles/DZ5485-400-A_905x.jpg?v=1689610057"
   return (
     <Box >
       <Card style={cardShoeStyle}>
@@ -46,8 +48,8 @@ const CardShoe = ({ product }) => {
           component="img"
           height="140"
           width="140"
-          image="https://www.dtlr.com/cdn/shop/articles/DZ5485-400-A_905x.jpg?v=1689610057"
-          alt="Hay que cambiar"
+          image={product.image|| defaultImage}//!Para que muestre las fotos
+          alt={product.name}
         />
         
         <Typography

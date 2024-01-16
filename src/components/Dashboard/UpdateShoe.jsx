@@ -143,8 +143,7 @@ export default function UpdateShoe() {
         const shoeUpdated = await axios.put(`${API_URL}/shoe/${id}`, shoeUpdate)
         await successDashboardAlert('Producto actualizado')
         setShoeUpdate({})
-        const data = await getShoeById(id)
-        setShoe(data)
+        navigate('/Admin')
       } else {
         errorDashboardAlert('Error en el llenado del formulario')
       }

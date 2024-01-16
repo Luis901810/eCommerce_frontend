@@ -35,7 +35,8 @@ const NavBar = () => {
   const { user, logout, loading } = useAuth()
   const  currentUser = JSON.parse(localStorage.getItem('currentUser'))?JSON.parse(localStorage.getItem('currentUser')):{
     roleId: 'fc7dd551-c681-488d-9d17-955cad4c16a5'
-  } 
+  }
+  const adminId = 'a125c80f-dbb1-4957-a88d-143cc383a20f' 
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -88,7 +89,9 @@ const NavBar = () => {
         console.error(error)
       }
     }
-    fetchData()
+    if(user){
+      fetchData()
+    } 
   }, [user])
 
   React.useEffect(()=>{
@@ -189,7 +192,7 @@ const NavBar = () => {
             <Pages />
             <Search />
 
-            {currentUser.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?(<Button onClick={()=>{navigate('/Admin')}}>Dashboard</Button>):null}
+            {currentUser.roleId === adminId?(<Button onClick={()=>{navigate('/Admin')}}>Dashboard</Button>):null}
 
             <IconButton aria-label='cart' onClick={() => navigate('/ShoppingCart')} >
               <ShoppingCartOutlinedIcon sx={{ color: 'white' }} />

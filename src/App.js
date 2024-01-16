@@ -21,6 +21,7 @@ import CreateUser from './components/Dashboard/CreateUser'
 import EditProfile from './components/UserProfile/UserOptions/EditProfile/EditProfile'
 import PurchaseHistory from './components/UserProfile/UserOptions/PurchaseHistory/PurchaseHistory'
 import { useEffect } from 'react'
+import UserReviews from './components/UserProfile/UserOptions/UserReviews/UserReviews'
 
 function App() {
   // const  user = useSelector(state => state.currentUser)
@@ -28,12 +29,12 @@ function App() {
   const user = currentUser? currentUser: {
     roleId: 'fc7dd551-c681-488d-9d17-955cad4c16a5'
   }
-  console.log(user)
+  const adminId = 'a125c80f-dbb1-4957-a88d-143cc383a20f'
   const excludedRoutes = ['UpdateUser',"UpdateShoe", "CreateShoe", 'UpdateOrder', 'CreateUser']
 
   useEffect(()=>{
     console.log(user)
-  },[user])
+  },[user,currentUser])
   const currentPath = window.location.pathname.split("/")
 
   const renderNavbar = !excludedRoutes.includes(currentPath[1])
@@ -50,16 +51,16 @@ function App() {
         <Route path='/ShoppingCart' element={<ShoppingCart />}></Route>
 
         <Route path='/UserProfile/' element={<UserProfile />}></Route>
-        <Route path='/CreateShoe' element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<FormShoe />:<Navigate to="/" />}></Route>
-        <Route path="/UpdateShoe/:id" element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<UpdateShoe/>:<Navigate to="/" />} />
+        <Route path='/CreateShoe' element={user.roleId === adminId?<FormShoe />:<Navigate to="/" />}></Route>
+        <Route path="/UpdateShoe/:id" element={user.roleId === adminId?<UpdateShoe/>:<Navigate to="/" />} />
 
-        <Route path='/Admin' element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<Dashboard/>:<Navigate to="/" />}></Route>
-        <Route path="/CreateUser" element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<CreateUser/>:<Navigate to="/" />} />
-        <Route path="/UpdateUser/:id" element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<UpdateUser/>:<Navigate to="/" />} />
-        <Route path="/UpdateOrder/:id" element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<UpdateOrder/>:<Navigate to="/" />} />
+        <Route path='/Admin' element={user.roleId === adminId?<Dashboard/>:<Navigate to="/" />}></Route>
+        <Route path="/CreateUser" element={user.roleId === adminId?<CreateUser/>:<Navigate to="/" />} />
+        <Route path="/UpdateUser/:id" element={user.roleId === adminId?<UpdateUser/>:<Navigate to="/" />} />
+        <Route path="/UpdateOrder/:id" element={user.roleId === adminId?<UpdateOrder/>:<Navigate to="/" />} />
 
-
-        <Route path='/FormShoe' element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<FormShoe />:<Navigate to="/" />}></Route>
+        <Route path='/UserReviews/:UserEmail' element={<UserReviews/>} />
+        <Route path='/FormShoe' element={user.roleId === adminId?<FormShoe />:<Navigate to="/" />}></Route>
         <Route path='/UserProfile/:UserEmail' element={<UserProfile />}/>
         <Route path='/EditProfile/:UserEmail' element={<EditProfile/>}/>
         <Route path='/PurchaseHistory/:UserEmail' element={<PurchaseHistory />} />
