@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material'
 
-import Divider from '@mui/material/Divider';
+import Divider from '@mui/material/Divider'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -127,11 +127,13 @@ const Login = () => {
             }}
             onClick={() => handleSubmit()}
           >
-            <Typography variant="h7" color="white">Ingresar</Typography>
+            <Typography variant='h7' color='white'>
+              Ingresar
+            </Typography>
           </Button>
 
           {error && <Alert message={error} />}
-          <Divider sx={{mt: 3}} component={Button} />
+          <Divider sx={{ mt: 3 }} component={Button} />
           <Typography variant='h6' color='white' sx={{ mt: 3, mb: 2 }}>
             Tambien puedes:{' '}
           </Typography>
@@ -143,13 +145,9 @@ const Login = () => {
                 backgroundColor: '#00ff3d',
               },
             }}
+            onClick={handleGoogleSignin}
           >
-            <img
-              style={imgStyle}
-              src={logoGoogle2}
-              alt='google'
-              onClick={handleGoogleSignin}
-            />
+            <img style={imgStyle} src={logoGoogle2} alt='google' />
             <Typography variant='h7' color='white'>
               Iniciar sesion con google
             </Typography>
@@ -157,19 +155,19 @@ const Login = () => {
           <Typography sx={{ mt: 1, mb: 1 }} variant='h7' color='white'>
             O
           </Typography>
-            <Button
-              sx={{
-                backgroundColor: '#ff4646',
-                '&:hover': {
-                  backgroundColor: '#ff0000',
-                },
-              }}
-              onClick={() => navigate('/Login/Register')}
-            >
-              <Typography variant='h7' color='white'>
-                Registrarte
-              </Typography>
-            </Button>
+          <Button
+            sx={{
+              backgroundColor: '#ff4646',
+              '&:hover': {
+                backgroundColor: '#ff0000',
+              },
+            }}
+            onClick={() => navigate('/Login/Register')}
+          >
+            <Typography variant='h7' color='white'>
+              Registrarte
+            </Typography>
+          </Button>
         </FormControl>
       </Box>
     </Box>

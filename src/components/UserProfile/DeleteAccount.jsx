@@ -10,7 +10,7 @@ export default function DeleteAccount() {
   const handleDelete = async () => {
     if (user) {
       try {
-        await deleteUser() // ! Solo puede eliminarse usuarios registrados con Google
+        await deleteUser() // ! Elimina al usuario de Firebase
         deleteUserBack({
           id: user.email,
           deleteType: 'email',
