@@ -17,7 +17,7 @@ import { API_URL } from '../../redux/actions-type';
 import { useAuth } from '../../contexts/AuthContext';
 import { showErrorAlert } from '../../alerts/alerts';
 
-const ID_PENDING = "39224070-2789-46cc-ad1e-afae9d183981";
+const ID_PENDING = "4d17fad4-36a7-4225-8d0e-4f27a1a76b91";
 
 const ShoppingCart = () => {
 
@@ -40,14 +40,7 @@ const ShoppingCart = () => {
     console.log("El Carrito del local Storage **************************" , LocalStorageShoppingCart)
     shoppingCart = LocalStorageShoppingCart //Quiero pushear lo que hay en este array
   } 
-          
-          // const jsonString = localStorage.getItem('shoppingCart');
-          // Convertir la cadena JSON a un objeto JavaScript
-          // const shoppingCart = JSON.parse(jsonString);
-          // console.log("El Carrito del local Storage **************************" , shoppingCart)
-          // if (cart.length === 0) {
-          //   dispatch(setShoppingCart(shoppingCart))
-          // }
+  
   const initialCartState = shoppingCart.map(product => ({//!Asigna quantity a los productos
     ...product,
     quantity: product.quantity || 1,
