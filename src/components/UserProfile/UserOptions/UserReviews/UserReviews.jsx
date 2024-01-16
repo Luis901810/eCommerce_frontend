@@ -39,6 +39,7 @@ export default function UserReviews() {
       sx={{
         mt: 10,
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'Center',
         padding: 10,
         alignItems: 'center',
