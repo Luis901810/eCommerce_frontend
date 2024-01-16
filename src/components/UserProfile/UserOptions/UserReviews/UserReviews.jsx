@@ -3,7 +3,7 @@ import { Button, Typography, Rating } from '@mui/material'
 import UserOptions from '../UserOptions'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-// import { API_URL } from '../../../../redux/actions-type'
+import { API_URL } from '../../../../redux/actions-type'
 import { useSelector } from 'react-redux'
 import { useAuth } from '../../../../contexts/AuthContext'
 
@@ -12,8 +12,6 @@ export default function UserReviews() {
 
   const idUser = useSelector(state => state.User.id)
   const { user } = useAuth()
-
-  const API_URL = 'http://localhost:3001'
 
   const getReviews = async () => {
     try {
@@ -33,6 +31,7 @@ export default function UserReviews() {
 
   useEffect(() => {
     console.log('***************', reviews);
+    
   }, [reviews])
 
   return (

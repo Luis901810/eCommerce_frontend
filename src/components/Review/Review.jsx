@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import { Button } from '@mui/material'
 import axios from 'axios'
-// import { API_URL } from '../../redux/actions-type'
+import { API_URL } from '../../redux/actions-type'
 import Loading from '../Loading/loading'
 
 export default function Reviews({ idOrder, userId }) {
@@ -15,8 +15,6 @@ export default function Reviews({ idOrder, userId }) {
 
   const [orders, setOrders] = useState([])
   const [currentOrder, setCurrentOrder] = useState(null)
-
-  const API_URL = 'http://localhost:3001'
 
   const handleChange = (value, id) => {
     setLineReviews(prevReviews => ({
