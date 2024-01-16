@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../../redux/actions-type';
+import {
+  Typography, Box, Paper, Divider
+} from '@mui/material'
 
 const Reviews = ({ id }) => {
   const [reviews, setReviews] = useState([]); // Estado local para almacenar las revisiones
@@ -30,28 +33,24 @@ const Reviews = ({ id }) => {
   }, [id]);
 
   return (
-    <div>
-      <h1>Acá van las Reviews</h1>
-      <h3>{id}</h3>
-      {!isNaN(averageRating) && <p>Puntuación Promedio: {averageRating.toFixed(1)}</p>}
+    <Box>
+      
+      {!isNaN(averageRating) && (
+        <Typography variant="h4" color="#42e268" marginBottom={2} marginTop={2} >
+          Puntuación Promedio: {averageRating.toFixed(1)}
+        </Typography>
+      )}
+
       {recentReviews.map((review) => (
-        <div key={review.id} style={styles.reviewBox}>
-          <p>Comment: {review.comment}</p>
-          <p>Rating: {review.rating}</p>
-          <p>Review Date: {review.reviewDate}</p>
-        </div>
+        <Paper key={review.id} elevation={3} style={{ padding: '15px', marginBottom: '10px' }}>
+          <Typography variant="body1">Comentario: {review.comment}</Typography>
+          <Typography variant="body1">Puntuación: {review.rating}</Typography>
+          <Typography variant="body1">Fecha de la reseña: {review.reviewDate}</Typography>
+        </Paper>
       ))}
-    </div>
+    </Box>
   );
 };
 
-const styles = {
-  reviewBox: {
-    border: '1px solid #ccc',
-    borderRadius: '8px',
-    padding: '10px',
-    marginBottom: '10px',
-  },
-};
 
 export default Reviews;

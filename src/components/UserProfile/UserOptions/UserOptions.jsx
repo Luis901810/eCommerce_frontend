@@ -24,7 +24,8 @@ const UserOptions = () => {
     <Box
       sx={{
         display: 'flex',
-        flexDirection: 'column',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
         borderLeft: '2px solid #42e268',
         borderTop: '2px solid #42e268',
         borderBottom: '2px solid #42e268',
