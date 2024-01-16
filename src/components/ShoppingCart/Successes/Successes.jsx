@@ -76,7 +76,7 @@ const Successes = () => {
     //! Recuperar la cadena JSON del localStorage
     const jsonString = localStorage.getItem('PurchaseTicket')
     const PurchaseTicket = JSON.parse(jsonString)
-    if (PurchaseTicket === null) return navigate('/')
+    if(PurchaseTicket === null) return navigate('/')
     localStorage.setItem('shoppingCart', JSON.stringify([]));//! Vaciar localStorage
     
     setPurchaseTicket(PurchaseTicket)

@@ -20,7 +20,6 @@ import UpdateOrder from './components/Dashboard/UpdateOrder'
 import CreateUser from './components/Dashboard/CreateUser'
 import EditProfile from './components/UserProfile/UserOptions/EditProfile/EditProfile'
 import PurchaseHistory from './components/UserProfile/UserOptions/PurchaseHistory/PurchaseHistory'
-import UserReviews from './components/UserProfile/UserOptions/UserReviews/UserReviews'
 import { useEffect } from 'react'
 
 function App() {
