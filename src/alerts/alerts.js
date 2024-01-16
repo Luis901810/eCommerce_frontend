@@ -41,3 +41,29 @@ export const successDashboardAlert = async(message)=>{
 export const errorDashboardAlert = async(message)=>{
   await dashboardAlert("Oops!", message, 'error')
 }
+
+export const confirmDeleteAlert = async (element) => {
+  const result = await MySwal.fire({
+    title: "¿Estás seguro?",
+    text: "¡No podrás recuperar esta información!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sí, estoy seguro.",
+    cancelButtonText: "No, cancelar.",
+  });
+
+  if (result.isConfirmed) {
+    Swal.fire({
+      title: "¡Borrado!",
+      text: `El ${element} ha sido eliminado`,
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1500
+    });
+    return true;
+  } else {
+    return false;
+  }
+};

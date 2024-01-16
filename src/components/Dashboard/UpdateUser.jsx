@@ -37,9 +37,7 @@ const UpdateUser = () => {
         setUser(user)
         user.profilePicture
           ? setPhoto(user.profilePicture)
-          : setPhoto(
-              'https://objetivoligar.com/wp-content/uploads/2017/03/blank-profile-picture-973460_1280.jpg'
-            )
+          : null
         setGenders(genders)
         setRoles(roles)
         setStatus(status)
@@ -72,8 +70,7 @@ const UpdateUser = () => {
       const userUpdated = await axios.put(`${API_URL}/user/${id}`, userUpdate)
       successDashboardAlert('Usuario Actualizado')
       setUserUpdate({})
-      const user = await getUserByID(id)
-      setUser(user)
+      navigate('/Admin')
     } catch (error) {
       console.log(error)
     }
@@ -133,20 +130,6 @@ const UpdateUser = () => {
         {genders.map(option => (
           <MenuItem key={option.id} value={option.id}>
             {option.gender}
-          </MenuItem>
-        ))}
-      </TextFieldForm>
-      <TextFieldForm
-        id='outlined-select-currency'
-        select
-        name='statusId'
-        label='Status'
-        value={userUpdate.statusId ? userUpdate.statusId : user.statusId}
-        onChange={handleChange}
-      >
-        {status.map(option => (
-          <MenuItem key={option.id} value={option.id}>
-            {option.status}
           </MenuItem>
         ))}
       </TextFieldForm>
