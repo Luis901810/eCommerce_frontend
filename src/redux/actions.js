@@ -100,7 +100,7 @@ export const updateUser = async (idUser, updatedUserData) => {
 }
 
 export const getUserByEmail = (email) => {
-  console.log(GET_USER_BY_EMAIL,"************************")
+  console.log(GET_USER_BY_EMAIL,"busca USUARIO POR CORREO")
   return async (dispatch) => {
     try {
       const response = await axios.get(`${API_URL}/user/${email}`, 

@@ -29,7 +29,6 @@ const UserProfile = () => {
   })
   console.log('USUARIO: ',usuario)
   useEffect(() => {
-    // dispatch(getUserByEmail(user.email));
     const loadUserProfile = async (idUser) => {
       try {
         console.log('Info User')

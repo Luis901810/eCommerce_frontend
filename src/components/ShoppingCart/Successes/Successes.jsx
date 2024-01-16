@@ -16,7 +16,7 @@ import {
   ListItem,
 } from '@mui/material'
 
-const ID_APPROVED = '4567ffd5-8879-4455-9b06-b1cd23d3d0be' //! Descontar STOCK
+const ID_APPROVED = "9f88b2aa-5174-42c6-a5a7-5d9933dd7ef2" //! Descontar STOCK
 
 const Successes = () => {
   const dispatch = useDispatch()

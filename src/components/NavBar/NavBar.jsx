@@ -89,7 +89,9 @@ const NavBar = () => {
         console.error(error)
       }
     }
-    fetchData()
+    if(user){
+      fetchData()
+    } 
   }, [user])
 
   React.useEffect(()=>{
