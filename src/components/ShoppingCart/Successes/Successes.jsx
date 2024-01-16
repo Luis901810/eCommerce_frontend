@@ -77,7 +77,8 @@ const Successes = () => {
     const jsonString = localStorage.getItem('PurchaseTicket')
     const PurchaseTicket = JSON.parse(jsonString)
     if (PurchaseTicket === null) return navigate('/')
-
+    localStorage.setItem('shoppingCart', JSON.stringify([]));//! Vaciar localStorage
+    
     setPurchaseTicket(PurchaseTicket)
     // Ahora puedes acceder a las propiedades del objeto
     console.log('Orden Completa del LocalHost:', PurchaseTicket)

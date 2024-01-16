@@ -21,6 +21,8 @@ import CreateUser from './components/Dashboard/CreateUser'
 import EditProfile from './components/UserProfile/UserOptions/EditProfile/EditProfile'
 import PurchaseHistory from './components/UserProfile/UserOptions/PurchaseHistory/PurchaseHistory'
 import UserReviews from './components/UserProfile/UserOptions/UserReviews/UserReviews'
+import { useEffect } from 'react'
+
 function App() {
   // const  user = useSelector(state => state.currentUser)
   const  currentUser = JSON.parse(localStorage.getItem('currentUser')) 
