@@ -23,7 +23,7 @@ const ShoppingCart = () => {
 
   const dispatch = useDispatch()
 
-  const shoppingCart = useSelector(state => state.shoppingCart)
+  let shoppingCart = useSelector(state => state.shoppingCart)
   const {id} = useSelector(state => state.User);
   const {user} = useAuth();
   console.log("user",user);
@@ -32,7 +32,22 @@ const ShoppingCart = () => {
   
 
   console.log('Carrito de LLEGADA', shoppingCart)
-
+  
+  if (shoppingCart.length === 0 ){
+    console.log("Vacioooooooooooooooooooooooooooooooooooo")
+    const jsonString = localStorage.getItem('shoppingCart');// ! Recuperar la cadena JSON del localStorage
+    const LocalStorageShoppingCart = JSON.parse(jsonString);
+    console.log("El Carrito del local Storage **************************" , LocalStorageShoppingCart)
+    shoppingCart = LocalStorageShoppingCart //Quiero pushear lo que hay en este array
+  } 
+          
+          // const jsonString = localStorage.getItem('shoppingCart');
+          // Convertir la cadena JSON a un objeto JavaScript
+          // const shoppingCart = JSON.parse(jsonString);
+          // console.log("El Carrito del local Storage **************************" , shoppingCart)
+          // if (cart.length === 0) {
+          //   dispatch(setShoppingCart(shoppingCart))
+          // }
   const initialCartState = shoppingCart.map(product => ({//!Asigna quantity a los productos
     ...product,
     quantity: product.quantity || 1,
@@ -129,6 +144,15 @@ const ShoppingCart = () => {
         <Typography style={textStyle} variant='h3'>
           Total: ${TotalPurchase.toFixed(2)}
         </Typography>
+        <Button
+        color='secondary'
+        variant='contained'
+        size='large'
+        onClick={clearCart}
+        disabled={cart.length === 0}
+      >
+        Vaciar Carrito
+      </Button>
         <Button
           variant='contained'
           size='large'
@@ -246,7 +270,11 @@ const ShoppingCart = () => {
     console.log('Carrito actualizado:', cart)
   }, [cart])
 
-
+  const clearCart = () => {
+    setCart([]); // Vaciar el carrito
+    localStorage.setItem('shoppingCart', JSON.stringify([]));//! Vaciar localStorage
+  }
+  
   return (
     <div>
       <h1>Shopping Cart</h1>

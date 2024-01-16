@@ -134,6 +134,8 @@ const reducer = (state = initialState, action) => {
 
 
       case ADD_TO_SHOPPING_CART:
+        const updatedCart = [...state.shoppingCart, action.payload.product];
+        localStorage.setItem('shoppingCart', JSON.stringify(updatedCart));//! Guardar en localStorage
         return {
           ...state,
           shoppingCart: [...state.shoppingCart, action.payload.product]

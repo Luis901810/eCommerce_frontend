@@ -1,82 +1,98 @@
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUser } from '../../../../redux/actions';
+import { Typography, Button, Input, Box } from '@mui/material';
+import PhotoUpload from '../../../PhotoUpload/PhotoUpload';
+import UserOptions from '../UserOptions';
 
-import { useDispatch, useSelector } from 'react-redux'
-import UserOptions from '../UserOptions'
-import { updateUser } from '../../../../redux/actions'
-
-const UserProfile = () => {
-  const dispatch = useDispatch()
-  const idUser = useSelector(state => state.User.id)
-  console.log("ID del REDUX",idUser)
-  // const idUser = "d9008f7f-b478-43ec-82ed-a7839a246d34"
-  // const {user} = useAuth();
-  // console.log("ESTE ES EL USUARIO",user.email)
-  
+const EditProfile = () => {
+  const dispatch = useDispatch();
+  const idUser = useSelector((state) => state.User.id);
+  const [image, setImage] = useState(null);
   const [usuario, setUsuario] = useState({
     name: '',
     email: '',
-    password: ''
-  })
-  const [isEditing, setIsEditing] = useState(false)
+    phoneNumber: '',
+    password: '',
+    birthDate: '',
+    profilePicture: '',
+    createdAt: '',
+  });
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    // dispatch(getUserByEmail(user.email));
     const loadUserProfile = async (idUser) => {
       try {
-        console.log('Info User')
-        const userInfo = await updateUser(idUser, {})
-        setUsuario(userInfo)
+        const userInfo = await updateUser(idUser, {});
+        setUsuario(userInfo);
       } catch (error) {
-        console.error('Error al cargar el perfil del usuario:', error)
+        console.error('Error al cargar el perfil del usuario:', error);
       }
-    }
-    if (idUser) loadUserProfile(idUser)
-  }, [idUser])
+    };
+    if (idUser) loadUserProfile(idUser);
+  }, [idUser]);
 
   const handleEditarPerfil = () => {
-    // Cambia el estado de edición al hacer clic en "Editar Perfil"
-    setIsEditing(true)
-  }
+    setIsEditing(true);
+  };
 
   const handleGuardarCambios = () => {
-    // Lógica para guardar cambios y actualizar el perfil del usuario
-    console.log('Nuevos datos del usuario', usuario)
-    console.log('Guardar cambios')
-    updateUser(idUser, usuario)
-    setIsEditing(false)
-  }
+    console.log('Nuevos datos del usuario', usuario);
+    console.log('Guardar cambios');
+    updateUser(idUser, usuario);
+    setIsEditing(false);
+  };
+
+  useEffect(() => {
+    setUsuario((prevUsuario) => ({ ...prevUsuario, profilePicture: image }));
+  }, [image]);
 
   return (
-    <div>
+    <Box sx={{ textAlign: 'center', mt: 4, color: 'white' }}>
+      <Typography variant="h4" mb={2}>
+        Perfil de Usuario
+      </Typography>
+      <UserOptions />
 
-      <h1>User Profile:</h1>
-      <UserOptions/>
-      <h3>Name: {isEditing
-        ? <input type="text" value={usuario.name} onChange={(event) =>
-          setUsuario({ ...usuario, name: event.target.value })} />
-        : usuario.name}</h3>
-
-      <h3>Email: {usuario.email}</h3>
-
-      <h3>Password:
-        {isEditing
-          ? <input type="password" value={usuario.password} onChange={(event) =>
-            setUsuario({ ...usuario, password: event.target.value })} />
-          : usuario.password}</h3>
-
-      {isEditing
-        ? (
-        <button onClick={handleGuardarCambios}>Guardar Cambios</button>
-          )
-        : (
-        <button onClick={handleEditarPerfil}>Editar</button>
+      <Box
+        sx={{
+          backgroundColor: '#303030',
+          padding: 10,
+          border: '1px solid #42e268',
+          borderRadius: 5,
+        }}
+      >
+        <Box sx={{ mt: 2 }}>
+        {isEditing ? (
+          <PhotoUpload photo={image} setPhoto={setImage} />
+        ) : (
+          <img src={usuario.profilePicture} alt="Imagen de perfil" style={{ maxWidth: '200px', borderRadius: '50%' }} />
+        )}
+      </Box>
+      <Typography variant="h5" mt={2}>
+        Nombre: {isEditing ? <Input value={usuario.name} onChange={(event) => setUsuario({ ...usuario, name: event.target.value })} sx={{ color: 'white' }} /> : usuario.name}
+      </Typography>
+      <Typography variant="h5">Correo Electrónico: {usuario.email}</Typography>
+      <Typography variant="h5">
+        Número de Teléfono: {isEditing ? <Input value={usuario.phoneNumber} onChange={(event) => setUsuario({ ...usuario, phoneNumber: event.target.value })} sx={{ color: 'white' }} /> : usuario.phoneNumber}
+      </Typography>
+      <Typography variant="h5">
+        Fecha de Nacimiento: {isEditing ? <Input value={usuario.birthDate} onChange={(event) => setUsuario({ ...usuario, birthDate: event.target.value })} sx={{ color: 'white' }} /> : usuario.birthDate}
+      </Typography>
+      <Typography variant="h5">Fecha de Creación: {usuario.createdAt}</Typography>
+      {isEditing ? (
+        <Button variant="contained" color="primary" onClick={handleGuardarCambios} mt={2}>
+          Guardar Cambios
+        </Button>
+      ) : (
+        <Button variant="outlined" color="primary" onClick={handleEditarPerfil} mt={2}>
+          Editar
+        </Button>
       )}
-      <div>
-        
-      </div>
-    </div>
-  )
-}
+      </Box>
+      
+    </Box>
+  );
+};
 
-export default UserProfile
+export default EditProfile;
