@@ -11,25 +11,28 @@ import {
   Box,
   IconButton,
   Button,
-  Avatar
+  Avatar,
 } from '@mui/material'
-import theme from '../../../theme';
+import theme from '../../../theme'
 import {
   StyledSelect,
   StyledMenuItemSelect,
   TextFieldForm,
   TableRowHover,
-} from "../../../styles/ComponentStyles";
+} from '../../../styles/ComponentStyles'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { API_URL } from '../../../utils/constants';
-import axios from 'axios';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { useNavigate } from 'react-router-dom'
+import { API_URL } from '../../../utils/constants'
+import axios from 'axios'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
-import { getUsers } from '../../../services/Dashboard';
-import { errorDashboardAlert, successDashboardAlert } from '../../../alerts/alerts';
-
+import { getUsers } from '../../../services/Dashboard'
+import {
+  errorDashboardAlert,
+  successDashboardAlert,
+  confirmDeleteAlert,
+} from '../../../alerts/alerts'
 
 function UserList() {
   const [sortConfig, setSortConfig] = useState({
@@ -37,12 +40,11 @@ function UserList() {
     direction: 'ascending',
   })
   const [roles, setRoles] = useState([])
-  const [ usersFixed, setUsersFixed] = useState([])
+  const [usersFixed, setUsersFixed] = useState([])
   const [usersToShow, setUsersToShow] = useState([])
 
-
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedRole, setSelectedRole] = useState("all");
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedRole, setSelectedRole] = useState('all')
 
   const navigate = useNavigate()
 
@@ -53,43 +55,46 @@ function UserList() {
       direction = 'descending'
     }
     setSortConfig({ key, direction })
-    sortedUsers(usersToShow,{ key, direction })
+    sortedUsers(usersToShow, { key, direction })
   }
 
-  // Buscador 
+  // Buscador
 
-  const handleSearchTermChange = (event) => {
-    setSearchTerm(event.target.value);
-    if(!event.target.value){
-        handleRoleChange()
-    }else{
-        const results = handleRoleChange().filter(element => element.email.toLowerCase().includes(event.target.value.toLowerCase()))
-        setUsersToShow(results)
+  const handleSearchTermChange = event => {
+    setSearchTerm(event.target.value)
+    if (!event.target.value) {
+      handleRoleChange()
+    } else {
+      const results = handleRoleChange().filter(element =>
+        element.email.toLowerCase().includes(event.target.value.toLowerCase())
+      )
+      setUsersToShow(results)
     }
-  };
+  }
 
-  const handleRoleChange = (event) => {
-    if(!event){
-        event = {
-            target: {
-                value: selectedRole
-            }
-        }
+  const handleRoleChange = event => {
+    if (!event) {
+      event = {
+        target: {
+          value: selectedRole,
+        },
+      }
     }
     console.log(event)
     setSelectedRole(event.target.value)
     let usersfilteredRole
-    if(event.target.value === 'all'){
-        usersfilteredRole = sortedUsers(usersFixed)
+    if (event.target.value === 'all') {
+      usersfilteredRole = sortedUsers(usersFixed)
     } else {
-        
-        usersfilteredRole = sortedUsers(usersFixed).filter(user => user.role === event.target.value)
-        setUsersToShow(usersfilteredRole)
+      usersfilteredRole = sortedUsers(usersFixed).filter(
+        user => user.role === event.target.value
+      )
+      setUsersToShow(usersfilteredRole)
     }
     return usersfilteredRole
   }
   //!Borrar usuarios que no tengan un rol
-  const sortedUsers = (array,sortConfigfunc=sortConfig) => {
+  const sortedUsers = (array, sortConfigfunc = sortConfig) => {
     const sortableArray = array.slice() // Copia el array para evitar mutar el estado directamente
     if (sortConfigfunc.key !== null) {
       sortableArray.sort((a, b) => {
@@ -103,50 +108,49 @@ function UserList() {
       })
     }
     setUsersToShow(sortableArray)
-    console.log(usersToShow)
     return sortableArray
   }
 
   // Borrado de usuario
-  const handleDelete = async(userID,userEmail)=>{
-    try{
-        console.log(userID)
-        const {data} = await axios.delete(`${API_URL}/user/${userID}`)
-        const users  = await getUsers()
+  const handleDelete = async (userID, userEmail) => {
+    const isConfirmed = await confirmDeleteAlert('usuario')
+
+    try {
+      if (isConfirmed == true) {
+        const { data } = await axios.delete(`${API_URL}/user/${userID}`)
+        const users = await getUsers()
         setUsersFixed(sortedUsers(users))
         setUsersToShow(sortedUsers(users))
         setSelectedRole('all')
-        setSearchTerm("")
-        successDashboardAlert(`El usuario con email: ${userEmail} fue eliminado`)
-    } catch(error){
-        errorDashboardAlert(error.message);
+        setSearchTerm('')
+      }
+    } catch (error) {
+      errorDashboardAlert(error.message)
     }
   }
 
   useEffect(() => {
-    const getRoles = async()=>{
-        try{
-    const {data} =   await axios(API_URL+'/user-rol')
-    setRoles(data)
-    
-    const users  = await getUsers()
-    setUsersFixed(users)
-    setUsersToShow(users)
-} catch(error){
-    console.error("Error fetching data:", error)
-} 
-  }
-  getRoles()
-}, [])
+    const getRoles = async () => {
+      try {
+        const { data } = await axios(API_URL + '/user-rol')
+        setRoles(data)
 
-  useEffect(() => {
-  
-  }, [usersToShow])
+        const users = await getUsers()
+        setUsersFixed(users)
+        setUsersToShow(users)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+    getRoles()
+  }, [])
+
+  useEffect(() => {}, [usersToShow])
 
   const renderTableHeader = () => (
     <TableHead>
       <TableRow sx={{ backgroundColor: '#414141' }}>
-      <TableCell
+        <TableCell
           sx={{
             fontSize: 18,
             color: 'white',
@@ -183,36 +187,29 @@ function UserList() {
             color: 'white',
             width: 100,
             backgroundColor: '#414141',
-            
+
             textAlign: 'start',
           }}
-        >
-          
-        </TableCell>
+        ></TableCell>
       </TableRow>
     </TableHead>
   )
 
   const renderTableData = () => {
-    
-    return (
-      !usersToShow.length ? (
-        <h3>No se encontraron resultados</h3>
-      ) : (<TableBody>
+    return !usersToShow.length ? (
+      <h3>No se encontraron resultados</h3>
+    ) : (
+      <TableBody>
         {usersToShow.map((user, index) => (
-          <TableRowHover
-            key={user.id}
-            
-          >
+          <TableRowHover key={user.id}>
             <TableCell>
-                <Avatar alt={user.name} src={user.profilePicture} />
-              </TableCell>
+              <Avatar alt={user.name} src={user.profilePicture} />
+            </TableCell>
             <TableCell
               sx={{
                 fontSize: 14,
                 color: 'white',
                 maxWidth: 100,
-                
               }}
             >
               {user.name}
@@ -222,7 +219,6 @@ function UserList() {
                 fontSize: 14,
                 color: 'white',
                 maxWidth: 100,
-                
               }}
             >
               {user.email}
@@ -232,7 +228,6 @@ function UserList() {
                 fontSize: 14,
                 color: 'white',
                 maxWidth: 100,
-                
               }}
             >
               {user.role}
@@ -242,21 +237,31 @@ function UserList() {
                 display: 'flex',
                 gap: '8px',
                 minWidth: 150,
-                minHeight:50,
-                
+                minHeight: 50,
+
                 justifyContent: 'center',
               }}
             >
-               <IconButton onClick={() => navigate(`/UpdateUser/${user.id}`)}>
-                  <EditIcon />
-                </IconButton> 
-              <IconButton onClick={() => handleDelete(user.id, user.email)}>
+              <IconButton
+                sx={{
+                  color: '#3085d6',
+                }}
+                onClick={() => navigate(`/UpdateUser/${user.id}`)}
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                sx={{
+                  color: '#d33',
+                }}
+                onClick={() => handleDelete(user.id, user.email)}
+              >
                 <DeleteIcon />
-                </IconButton>
+              </IconButton>
             </TableCell>
           </TableRowHover>
         ))}
-      </TableBody>)
+      </TableBody>
     )
   }
 
@@ -270,103 +275,115 @@ function UserList() {
     <TableCell
       onClick={onClick}
       sx={{
-        cursor: "pointer",
+        cursor: 'pointer',
         fontSize: 18,
-        color: "white",
+        color: 'white',
         maxWidth,
-        backgroundColor: sorted ? "#333333" : "#414141",
-        textAlign: "start",
+        backgroundColor: sorted ? '#333333' : '#414141',
+        textAlign: 'start',
       }}
     >
-      {label} {sorted && (direction === "ascending" ? "▲" : "▼")}
+      {label} {sorted && (direction === 'ascending' ? '▲' : '▼')}
     </TableCell>
-  );
-  
-  return <ThemeProvider theme={theme}>
-  <CssBaseline />
-  <Box
-    sx={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      width: "100%",
-      margin: "0 auto",
-      minHeight: "100vh",
-    }}
-  >
-    <Box sx={{
-      color: "#f3a143",
-      fontSize: "40px",
-    }}>LISTA DE USUARIOS</Box>
-    <Box
-      sx={{
-        py: 1,
-        flexGrow: 1,
-        width: "90%",
-      }}
-    >
+  )
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyItems: "center",
-          marginBottom: "5px",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          margin: '0 auto',
+          minHeight: '100vh',
         }}
       >
-
-        <TextFieldForm
-          label="Email"
-          value={searchTerm}
-          onChange={handleSearchTermChange}
-          key='SearchBarUser'
+        <Box
           sx={{
-            width: "100%",
-            maxWidth: "200px",
-            marginBottom: "10px",
-          }}
-        />
-
-        <StyledSelect
-          value={selectedRole}
-          onChange={handleRoleChange}
-          sx={{
-            width: "100%",
-            maxWidth: "200px",
-            marginBottom: "10px",
-          }}
-          MenuProps={{
-            PaperProps: {
-              sx: {
-                backgroundColor: "black",
-              },
-            },
+            color: '#22C55E',
+            fontSize: '40px',
           }}
         >
-          <StyledMenuItemSelect value="all">Todos los Roles</StyledMenuItemSelect>
-          {roles.length && roles.map(role=><StyledMenuItemSelect value={role.rol}>{role.rol}</StyledMenuItemSelect>)}
-        </StyledSelect>
+          LISTA DE USUARIOS
+        </Box>
+        <Box
+          sx={{
+            py: 1,
+            flexGrow: 1,
+            width: '90%',
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyItems: 'center',
+              marginBottom: '5px',
+            }}
+          >
+            <TextFieldForm
+              label='Email'
+              value={searchTerm}
+              onChange={handleSearchTermChange}
+              key='SearchBarUser'
+              sx={{
+                width: '100%',
+                maxWidth: '200px',
+                marginBottom: '10px',
+              }}
+            />
 
-        <Box>
-          {/* <Button
+            <StyledSelect
+              value={selectedRole}
+              onChange={handleRoleChange}
+              sx={{
+                width: '100%',
+                maxWidth: '200px',
+                marginBottom: '10px',
+              }}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    backgroundColor: 'black',
+                  },
+                },
+              }}
+            >
+              <StyledMenuItemSelect value='all'>
+                Todos los Roles
+              </StyledMenuItemSelect>
+              {roles.length &&
+                roles.map(role => (
+                  <StyledMenuItemSelect value={role.rol}>
+                    {role.rol}
+                  </StyledMenuItemSelect>
+                ))}
+            </StyledSelect>
+
+            <Box>
+              {/* <Button
             variant='outlined'
             startIcon={<AddIcon />}
             onClick={() => navigate('/CreateUser')}
           >
             Agregar Usuario
           </Button> */}
+            </Box>
+          </Box>
+          <TableContainer component={Paper}>
+            <Table>
+              {renderTableHeader()}
+              {renderTableData()}
+            </Table>
+          </TableContainer>
         </Box>
       </Box>
-      <TableContainer component={Paper}>
-        <Table>
-          {renderTableHeader()}
-          {renderTableData()}
-        </Table>
-      </TableContainer>
-    </Box>
-  </Box>
-</ThemeProvider>
+    </ThemeProvider>
+  )
 }
 
 export default UserList

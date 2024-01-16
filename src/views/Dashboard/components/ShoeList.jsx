@@ -26,7 +26,11 @@ import { getShoes } from '../../../services/Dashboard'
 import ShoeFilters from '../../../components/Dashboard/ShoeFilters'
 import { isEmptyObject } from '../../../utils/tools'
 import { TextFieldForm, TableRowHover } from '../../../styles/ComponentStyles'
-import { errorDashboardAlert, successDashboardAlert } from '../../../alerts/alerts'
+import {
+  confirmDeleteAlert,
+  errorDashboardAlert,
+  successDashboardAlert,
+} from '../../../alerts/alerts'
 
 function ShoeList() {
   const [shoes, setShoes] = useState([])
@@ -38,8 +42,7 @@ function ShoeList() {
   })
 
   const [filters, setFilters] = useState({})
-  const [searchTerm, setSearchTerm] = useState("");
-
+  const [searchTerm, setSearchTerm] = useState('')
 
   const genders = useSelector(state => state.genders)
   const colors = useSelector(state => state.colors)
@@ -49,7 +52,6 @@ function ShoeList() {
   const navigate = useNavigate()
 
   //* Filtrado de datos
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,7 +64,7 @@ function ShoeList() {
           size: sizes.find(item => item.id === element.sizeId).size,
           brand: brands.find(item => item.id === element.brandId).brand,
         }))
-        
+
         setShoes(dataCleaned)
         setShoesToShow(sortedArray(dataCleaned))
       } catch (error) {
@@ -73,15 +75,17 @@ function ShoeList() {
   }, [filters])
 
   //* Barra de busqueda
-  const handleSearchTermChange = (event) => {
-    setSearchTerm(event.target.value);
-    if(!event.target.value){
+  const handleSearchTermChange = event => {
+    setSearchTerm(event.target.value)
+    if (!event.target.value) {
       setShoesToShow(sortedArray(shoes))
-    }else{
-        const results = shoes.filter(element => element.name.toLowerCase().includes(event.target.value.toLowerCase()))
-        setShoesToShow(sortedArray(results))
+    } else {
+      const results = shoes.filter(element =>
+        element.name.toLowerCase().includes(event.target.value.toLowerCase())
+      )
+      setShoesToShow(sortedArray(results))
     }
-  };
+  }
   //* Ordenamiento de zapatos
   const handleSort = key => {
     let direction = 'ascending'
@@ -112,21 +116,21 @@ function ShoeList() {
 
   //*Borrado de zapato
   const handleDelete = async ID => {
+    const isConfirmed = await confirmDeleteAlert('producto')
     try {
-      const { data: shoe } = await axios.delete(`${API_URL}/shoe/${ID}`)
-      const data = await getShoes()
-      const dataCleaned = data.map(element => ({
-        ...element,
-        gender: genders.find(item => item.id === element.genderId).gender,
-        color: colors.find(item => item.id === element.colorId).color,
-        size: sizes.find(item => item.id === element.sizeId).size,
-        brand: brands.find(item => item.id === element.brandId).brand,
-      }))
-      setShoes(dataCleaned)
-      setShoesToShow(sortedArray(dataCleaned))
-      // setSelectedRole('all')
-      // setSearchTerm("")
-      successDashboardAlert(`El producto: ${shoe.name} fue eliminado`)
+      if (isConfirmed == true) {
+        const { data: shoe } = await axios.delete(`${API_URL}/shoe/${ID}`)
+        const data = await getShoes()
+        const dataCleaned = data.map(element => ({
+          ...element,
+          gender: genders.find(item => item.id === element.genderId).gender,
+          color: colors.find(item => item.id === element.colorId).color,
+          size: sizes.find(item => item.id === element.sizeId).size,
+          brand: brands.find(item => item.id === element.brandId).brand,
+        }))
+        setShoes(dataCleaned)
+        setShoesToShow(sortedArray(dataCleaned))
+      }
     } catch (error) {
       errorDashboardAlert(error.message)
     }
@@ -151,9 +155,7 @@ function ShoeList() {
     fetchData()
   }, [])
 
-  useEffect(() => {
-    console.log(shoes)
-  }, [shoes])
+  useEffect(() => {}, [shoes])
 
   const renderTableHeader = () => (
     <TableHead>
@@ -248,94 +250,99 @@ function ShoeList() {
   )
 
   const renderTableData = () => {
-    return (
-      !shoesToShow.length ? (
-        <h3>No se encontraron resultados</h3>
-      ) : (<TableBody>
-        {
-          shoesToShow.map((shoe, index) => (
-            <TableRowHover
-              key={shoe.id}
-            
+    return !shoesToShow.length ? (
+      <h3>No se encontraron resultados</h3>
+    ) : (
+      <TableBody>
+        {shoesToShow.map((shoe, index) => (
+          <TableRowHover key={shoe.id}>
+            <TableCell>
+              <Avatar alt={shoe.name} src={shoe.image} />
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 14,
+                color: 'white',
+                maxWidth: 100,
+              }}
             >
-              <TableCell>
-                <Avatar alt={shoe.name} src={shoe.image} />
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 14,
-                  color: 'white',
-                  maxWidth: 100,
-                }}
-              >
-                {shoe.name}
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 14,
-                  color: 'white',
-                  maxWidth: 100,
-                }}
-              >
-                ${shoe.price}
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 14,
-                  color: 'white',
-                  maxWidth: 100,
-                }}
-              >
-                {shoe.brand}
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 14,
-                  color: 'white',
-                  maxWidth: 100,
-                }}
-              >
-                {shoe.gender}
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 14,
-                  color: 'white',
-                  maxWidth: 100,
-                }}
-              >
-                {shoe.size}
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 14,
-                  color: 'white',
-                  maxWidth: 100,
-                }}
-              >
-                {shoe.color}
-              </TableCell>
-              <TableCell
-                sx={{
-                  display: 'flex',
-                  gap: '8px',
-                  minWidth: 150,
-                  minHeight: 50,
+              {shoe.name}
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 14,
+                color: 'white',
+                maxWidth: 100,
+              }}
+            >
+              ${shoe.price}
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 14,
+                color: 'white',
+                maxWidth: 100,
+              }}
+            >
+              {shoe.brand}
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 14,
+                color: 'white',
+                maxWidth: 100,
+              }}
+            >
+              {shoe.gender}
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 14,
+                color: 'white',
+                maxWidth: 100,
+              }}
+            >
+              {shoe.size}
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 14,
+                color: 'white',
+                maxWidth: 100,
+              }}
+            >
+              {shoe.color}
+            </TableCell>
+            <TableCell
+              sx={{
+                display: 'flex',
+                gap: '8px',
+                minWidth: 150,
+                minHeight: 50,
 
-                  justifyContent: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <IconButton
+                sx={{
+                  color: '#3085d6',
                 }}
+                onClick={() => navigate(`/UpdateShoe/${shoe.id}`)}
               >
-                <IconButton onClick={() => navigate(`/UpdateShoe/${shoe.id}`)}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton onClick={() => handleDelete(shoe.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
-            </TableRowHover>
-          ))
-        }
-      </TableBody>)
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                sx={{
+                  color: '#d33',
+                }}
+                onClick={() => handleDelete(shoe.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </TableCell>
+          </TableRowHover>
+        ))}
+      </TableBody>
     )
   }
 
@@ -355,7 +362,7 @@ function ShoeList() {
       >
         <Box
           sx={{
-            color: '#f3a143',
+            color: '#22C55E',
             fontSize: '40px',
           }}
         >

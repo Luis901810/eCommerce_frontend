@@ -54,7 +54,6 @@ export default function UpdateOrder() {
     const fetchData = async () => {
       try {
         const order = await getOrderById(id)
-        console.log(order)
         const { data: statuses } = await axios(API_URL + '/order-status')
         setOrder(order)
         setStatus(statuses)
@@ -66,7 +65,7 @@ export default function UpdateOrder() {
   }, [id])
 
   useEffect(() => {
-    console.log(orderUpdate)
+    
   }, [orderUpdate])
 
   // Updata info
@@ -78,8 +77,7 @@ export default function UpdateOrder() {
       )
       successDashboardAlert('Compra Actualizada')
       setOrderUpdate({})
-      const order = await getOrderById(id)
-      setOrder(order)
+      navigate('/Admin')
     } catch (error) {
       console.log(error)
     }

@@ -156,22 +156,22 @@ export const StyledSelect = styled(Select)`
   width: 350px;
   border-radius: 5px;
   transform: translate(0, 5px);
-  color: #ff9721;
+  color: #22C55E;
 
   &.MuiOutlinedInput-root {
     &:hover fieldset,
     &.Mui-focused fieldset {
-      border-color: #ff9721; // Borde cuando está deseleccionado o enfocado
+      border-color: #22C55E; // Borde cuando está deseleccionado o enfocado
     }
   }
 
   & .MuiSelect-root {
-    color: #ff9721; // Color del texto
+    color: #22C55E; // Color del texto
   }
 `;
 
 export const StyledMenuItemSelect = styled(MenuItem)`
-color: #ff9721;
+color: #22C55E;
 background-color: transparent;
   &:hover {
     background-color: #1c181397;
@@ -244,7 +244,7 @@ export const DashBoardListItem = styled(ListItem)`
     color: #bbbbbb;
     width: 100%;
     &:hover {
-    background-color: #f3a143;
+    background-color: #22C55E;
     color: black;
   }
 `;
