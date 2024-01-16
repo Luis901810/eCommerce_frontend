@@ -20,7 +20,7 @@ import UpdateOrder from './components/Dashboard/UpdateOrder'
 import CreateUser from './components/Dashboard/CreateUser'
 import EditProfile from './components/UserProfile/UserOptions/EditProfile/EditProfile'
 import PurchaseHistory from './components/UserProfile/UserOptions/PurchaseHistory/PurchaseHistory'
-
+import UserReviews from './components/UserProfile/UserOptions/UserReviews/UserReviews'
 function App() {
   // const  user = useSelector(state => state.currentUser)
   const  currentUser = JSON.parse(localStorage.getItem('currentUser')) 
@@ -53,7 +53,7 @@ function App() {
         <Route path="/UpdateUser/:id" element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<UpdateUser/>:<Navigate to="/" />} />
         <Route path="/UpdateOrder/:id" element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<UpdateOrder/>:<Navigate to="/" />} />
 
-
+        <Route path='/UserReviews/:UserEmail' element={<UserReviews/>} />
         <Route path='/FormShoe' element={user.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?<FormShoe />:<Navigate to="/" />}></Route>
         <Route path='/UserProfile/:UserEmail' element={<UserProfile />}/>
         <Route path='/EditProfile/:UserEmail' element={<EditProfile/>}/>

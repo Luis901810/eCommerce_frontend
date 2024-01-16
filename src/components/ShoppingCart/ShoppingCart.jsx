@@ -81,6 +81,7 @@ const ShoppingCart = () => {
       }
 
       const lines = productsToLines(cart);
+      console.log('lines----------------', lines);
       //!Datos del Cliente y Compra para el Back=>
       const PurchaseTicket = {
         totalAmount: totalPurchase(cart),

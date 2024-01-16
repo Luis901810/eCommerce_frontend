@@ -199,6 +199,7 @@ export const createPurchaseTicket = (purchaseTicket, cart) => {
       }
       localStorage.setItem( 'shoppingCart', JSON.stringify(cart))//! Guardar en localStorage
       localStorage.setItem( 'PurchaseTicket', JSON.stringify(purchaseTicket));//! Guardar en localStorage
+      localStorage.setItem( 'newLines', JSON.stringify(response.data.newLines))
       //! Despachar la acción
       dispatch({
         type: CREATE_PURCHASE_TICKET,
