@@ -74,7 +74,7 @@ export default function Order() {
             sx={{
               color: 'white',
               backgroundColor: '#303030',
-              border: '1px solid #42e628',
+              border: '1px solid #42e268',
             }}
             onClick={handleButtonClick}
           >
@@ -89,7 +89,7 @@ export default function Order() {
           sx={{
             color: 'white',
             backgroundColor: '#303030',
-            border: '1px solid #42e628',
+            border: '1px solid #42e268',
             width: 1 / 3,
             marginLeft: 3,
           }}
