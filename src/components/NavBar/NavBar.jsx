@@ -31,14 +31,15 @@ const NavBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const [error, setError] = useState('')
+  const initialUser = {
+    UserRol: {
+      rol: "Invitado"
+    },
+    }
   const { user, logout, loading } = useAuth()
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser'))
     ? JSON.parse(localStorage.getItem('currentUser'))
-    : {
-      UserRol: {
-        rol: "Invitado"
-      },
-      }
+    : initialUser)
   const adminId = 'Administrador'
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -62,7 +63,8 @@ const NavBar = () => {
     try {
       dispatch(cleanUserData())
       await logout()
-      localStorage.removeItem('currentUser')
+      localStorage.setItem('currentUser', JSON.stringify(initialUser))
+        setCurrentUser(initialUser)
       navigate('/')
     } catch (error) {
       setError(error.message)
@@ -91,6 +93,7 @@ const NavBar = () => {
           }
           console.log(data)
           localStorage.setItem('currentUser', JSON.stringify(data))
+          setCurrentUser(data)
         }
       } catch (error) {
         console.error(error)
