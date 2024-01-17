@@ -67,7 +67,7 @@ const CardShoe = ({ product }) => {
           />
 
           <Typography
-            variant={product.name.length < 20 ? 'h5' : 'h6'}
+            variant={product.name.length < 20 ? 'h5' : 'h7'}
             sx={{ color: '#42e268', textAlign: 'center' }}
           >
             {product.name}
