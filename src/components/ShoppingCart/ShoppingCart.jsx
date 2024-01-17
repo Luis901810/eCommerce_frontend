@@ -17,7 +17,7 @@ import { API_URL } from '../../redux/actions-type';
 import { useAuth } from '../../contexts/AuthContext';
 import { showErrorAlert } from '../../alerts/alerts';
 
-const ID_PENDING = "4d17fad4-36a7-4225-8d0e-4f27a1a76b91";
+const ID_PENDING = "418af69a-eae8-4203-9398-daba9c90f8f6";
 
 const ShoppingCart = () => {
 

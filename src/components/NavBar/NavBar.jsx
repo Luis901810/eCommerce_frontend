@@ -77,7 +77,7 @@ const NavBar = () => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      console.log(user)
+      console.log("Acá un  cambio en la nav bar ----------------------",user)
       try {
         if (user) {
           const { data } = await axios(
