@@ -23,7 +23,7 @@ export default function Search() {
     <Box
       sx={{
         height: '35px',
-        width: '300px',
+        width: '400px',
         border: '2px solid #42e268',
         borderRadius: 2,
         paddingLeft: 2,
