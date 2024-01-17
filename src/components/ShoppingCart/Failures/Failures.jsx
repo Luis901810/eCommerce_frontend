@@ -4,8 +4,9 @@ import { setShoppingCart, updatePurchaseTicket } from '../../../redux/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { showErrorAlert } from '../../../alerts/alerts';
+import { Typography, Button, List, ListItem, ListItemText, ListItemAvatar, Avatar, Container, Box } from '@mui/material';
 
-const ID_REJECTED = "0343ad31-d79f-4421-98dc-a31c3105ffb1";
+const ID_REJECTED = "0b3d7ed1-3418-44db-8980-e382a3cecee3";
 
 const Failures = () => {
   const [purchaseDetails, setPurchaseDetails] = useState(null);
@@ -69,30 +70,51 @@ const Failures = () => {
     }
   }
   return (
-    <div>
-      <h1>Failures</h1>
-      <h1>Failures</h1>{/* //! Se pone esto porque la barra de navegacion no deja ver debajo */}
+    <Container maxWidth="md" style={{ textAlign: 'center', color: 'white' }}>
+      <h1>s</h1>
 
-      <h1>Compra Rechazada</h1>
-      {purchaseDetails && (
-        <div>
-          <p>Total Amount: ${purchaseDetails.totalAmount}</p>
-          <h2>No se lograron Comprar los siguientes artículos:</h2>
-          <ul>
-            {purchaseDetails.items.map((item, index) => (
-              <li key={index}>
-                {/* //!Buscar el nombre en el back*/}
-                <img src={getNameShoeById(item.shoeId).image} alt={getNameShoeById(item.shoeId).name} style={{ maxWidth: '100px', maxHeight: '100px' }} />
-                <p>Shoe : {getNameShoeById(item.shoeId).name}</p>
-                <p>Quantity: {item.quantity}</p>
-                <p>Unit Price: ${item.unitPrice}</p>
-              </li>
-            ))}
-          </ul>
-          <button onClick={()=>{navigate('/ShoppingCart')}}>Intentar de nuevo la compra</button>
-        </div>
-      )}
-    </div>
+    <Typography variant="h4" gutterBottom>
+      Compra Rechazada
+    </Typography>
+    {purchaseDetails && (
+      <div>
+        <Typography variant="body1" paragraph>
+          Total Amount: ${purchaseDetails.totalAmount}
+        </Typography>
+        <Typography variant="h6" paragraph>
+          No se lograron Comprar los siguientes artículos:
+        </Typography>
+        <Box>
+        <List>
+          {purchaseDetails.items.map((item, index) => (
+            <ListItem key={index}>
+              <ListItemAvatar>
+                <Avatar src={getNameShoeById(item.shoeId).image} alt={getNameShoeById(item.shoeId).name} />
+              </ListItemAvatar>
+              <ListItemText
+                primary={<span style={{ color: 'white' }}>{`Shoe: ${getNameShoeById(item.shoeId).name}`}</span>}
+                secondary={
+                  <>
+                    <Typography component="span" variant="body2" style={{ color: 'white' }}>
+                      Quantity: {item.quantity}
+                    </Typography>
+                    <br />
+                    <Typography component="span" variant="body2" style={{ color: 'white' }}>
+                      Unit Price: ${item.unitPrice}
+                    </Typography>
+                  </>
+                }
+              />
+            </ListItem>
+          ))}
+        </List>
+        </Box>
+        <Button variant="contained" onClick={() => navigate('/ShoppingCart')}>
+          Intentar de nuevo la compra
+        </Button>
+      </div>
+    )}
+  </Container>
   );
 };
 
