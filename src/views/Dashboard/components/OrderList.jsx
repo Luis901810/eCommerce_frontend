@@ -372,13 +372,15 @@ export default function OrderList() {
                 gap: '8px',
                 minWidth: 150,
                 minHeight: 50,
-
+                alignItems: 'center',
                 justifyContent: 'center',
               }}
             >
               <IconButton
                 sx={{
                   color: '#3085d6',
+                  mt: 5,
+                  mb: 5,
                 }}
                 onClick={() => navigate(`/UpdateOrder/${order.id}`)}
               >
@@ -387,6 +389,8 @@ export default function OrderList() {
               <IconButton
                 sx={{
                   color: '#d33',
+                  mt: 5,
+                  mb: 5,
                 }}
                 onClick={() => handleDelete(order.id)}
               >
@@ -445,6 +449,10 @@ export default function OrderList() {
                 width: '100%',
                 maxWidth: '200px',
                 marginBottom: '10px',
+                backgroundColor: '#303030',
+                '& .MuiInputBase-input': {
+                  color: 'white', 
+                },
               }}
             />
             <StyledSelect
@@ -454,6 +462,7 @@ export default function OrderList() {
                 width: '100%',
                 maxWidth: '200px',
                 marginBottom: '10px',
+                backgroundColor: '#303030',
               }}
               MenuProps={{
                 PaperProps: {
