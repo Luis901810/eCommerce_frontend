@@ -27,13 +27,15 @@ function App() {
   // const  user = useSelector(state => state.currentUser)
   const  currentUser = JSON.parse(localStorage.getItem('currentUser')) 
   const user = currentUser? currentUser: {
-    roleId: 'fc7dd551-c681-488d-9d17-955cad4c16a5'
-  }
-  const adminId = 'a125c80f-dbb1-4957-a88d-143cc383a20f'
+    UserRol: {
+      rol: "Invitado"
+    },
+    }
+  const adminId = 'Administrador'
   const excludedRoutes = ['UpdateUser',"UpdateShoe", "CreateShoe", 'UpdateOrder', 'CreateUser']
 
   useEffect(()=>{
-    console.log(user)
+    
   },[user,currentUser])
   const currentPath = window.location.pathname.split("/")
 
@@ -51,16 +53,16 @@ function App() {
         <Route path='/ShoppingCart' element={<ShoppingCart />}></Route>
 
         <Route path='/UserProfile/' element={<UserProfile />}></Route>
-        <Route path='/CreateShoe' element={user.roleId === adminId?<FormShoe />:<Navigate to="/" />}></Route>
-        <Route path="/UpdateShoe/:id" element={user.roleId === adminId?<UpdateShoe/>:<Navigate to="/" />} />
+        <Route path='/CreateShoe' element={user.UserRol.rol === adminId?<FormShoe />:<Navigate to="/" />}></Route>
+        <Route path="/UpdateShoe/:id" element={user.UserRol.rol === adminId?<UpdateShoe/>:<Navigate to="/" />} />
 
-        <Route path='/Admin' element={user.roleId === adminId?<Dashboard/>:<Navigate to="/" />}></Route>
-        <Route path="/CreateUser" element={user.roleId === adminId?<CreateUser/>:<Navigate to="/" />} />
-        <Route path="/UpdateUser/:id" element={user.roleId === adminId?<UpdateUser/>:<Navigate to="/" />} />
-        <Route path="/UpdateOrder/:id" element={user.roleId === adminId?<UpdateOrder/>:<Navigate to="/" />} />
+        <Route path='/Admin' element={user.UserRol.rol === adminId?<Dashboard/>:<Navigate to="/" />}></Route>
+        <Route path="/CreateUser" element={user.UserRol.rol === adminId?<CreateUser/>:<Navigate to="/" />} />
+        <Route path="/UpdateUser/:id" element={user.UserRol.rol === adminId?<UpdateUser/>:<Navigate to="/" />} />
+        <Route path="/UpdateOrder/:id" element={user.UserRol.rol === adminId?<UpdateOrder/>:<Navigate to="/" />} />
 
         <Route path='/UserReviews/:UserEmail' element={<UserReviews/>} />
-        <Route path='/FormShoe' element={user.roleId === adminId?<FormShoe />:<Navigate to="/" />}></Route>
+        <Route path='/FormShoe' element={user.UserRol.rol === adminId?<FormShoe />:<Navigate to="/" />}></Route>
         <Route path='/UserProfile/:UserEmail' element={<UserProfile />}/>
         <Route path='/EditProfile/:UserEmail' element={<EditProfile/>}/>
         <Route path='/PurchaseHistory/:UserEmail' element={<PurchaseHistory />} />
