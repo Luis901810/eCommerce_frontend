@@ -43,7 +43,7 @@ const CardShoe = ({ product }) => {
         backgroundColor: '#414141',
         padding: 2,
         width: 200,
-        minHeight: 350,
+        minHeight: 360,
         border: '1px solid #42e268',
         borderRadius: 5,
       }}

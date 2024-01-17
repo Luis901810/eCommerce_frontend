@@ -19,7 +19,7 @@ function ShoeList ({ products }) {
         }}>
             <Box sx={{ width: '90%' }}>
                 <Order/>
-                <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-evenly', mt: 4}} >
+                <Box sx={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center', mt: 4}} >
                     {products.map((product, i) => (
                         <Grid item key={i} xs={12} sm={6} md={4} lg={2} xl={2} ml={1} mt={1} >
                             <CardShoe product={product}/>
