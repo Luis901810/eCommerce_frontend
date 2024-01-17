@@ -200,10 +200,10 @@ background-color: #1c181397;
 
 export const TextFieldForm = styled(TextField)`
   margin-top: 10px;
-  width: 600px;
+  width: 100%;
 
   & .MuiInputBase-input {
-    color: white;
+    color: black;
   }
 
   & .MuiOutlinedInput-root {

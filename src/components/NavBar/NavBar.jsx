@@ -25,18 +25,20 @@ import { Button } from '@mui/material'
 import { API_URL } from '../../utils/constants'
 import axios from 'axios'
 
-
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
-const NavBar = () => {
+const NavBar = ({currentUser, setCurrentUser}) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const [error, setError] = useState('')
+  const initialUser = {
+    UserRol: {
+      rol: "Invitado"
+    },
+    }
   const { user, logout, loading } = useAuth()
-  const  currentUser = JSON.parse(localStorage.getItem('currentUser'))?JSON.parse(localStorage.getItem('currentUser')):{
-    roleId: 'fc7dd551-c681-488d-9d17-955cad4c16a5'
-  }
-  const adminId = 'a125c80f-dbb1-4957-a88d-143cc383a20f' 
+
+  const adminId = 'Administrador'
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -59,7 +61,8 @@ const NavBar = () => {
     try {
       dispatch(cleanUserData())
       await logout()
-      localStorage.removeItem('currentUser')
+      localStorage.setItem('currentUser', JSON.stringify(initialUser))
+        setCurrentUser(initialUser)
       navigate('/')
     } catch (error) {
       setError(error.message)
@@ -70,33 +73,38 @@ const NavBar = () => {
     return <h1>Cerrando seccion....</h1>
   }
 
-  const logoStyle={
+  const logoStyle = {
     width: '80px',
-    height: '50px'
+    height: '50px',
   }
 
   React.useEffect(() => {
     const fetchData = async () => {
-      console.log(user)
+      
       try {
         if (user) {
           const { data } = await axios(
             `${API_URL}/user/${user.email}?findType=email`
           )
+          data.UserRol?null:data.UserRol = {
+            rol: "Invitado"
+          }
+          console.log(data)
           localStorage.setItem('currentUser', JSON.stringify(data))
+          setCurrentUser(data)
         }
       } catch (error) {
         console.error(error)
       }
     }
-    if(user){
+    if (user) {
       fetchData()
-    } 
+    }
   }, [user])
 
-  React.useEffect(()=>{
-    console.log(currentUser)
-  },[currentUser])
+  React.useEffect(() => {
+    
+  }, [currentUser])
 
   return (
     <>
@@ -192,9 +200,20 @@ const NavBar = () => {
             <Pages />
             <Search />
 
-            {currentUser.roleId === adminId?(<Button onClick={()=>{navigate('/Admin')}}>Dashboard</Button>):null}
+            {currentUser.UserRol.rol === adminId ? (
+              <Button
+                onClick={() => {
+                  navigate('/Admin')
+                }}
+              >
+                Dashboard
+              </Button>
+            ) : null}
 
-            <IconButton aria-label='cart' onClick={() => navigate('/ShoppingCart')} >
+            <IconButton
+              aria-label='cart'
+              onClick={() => navigate('/ShoppingCart')}
+            >
               <ShoppingCartOutlinedIcon sx={{ color: 'white' }} />
             </IconButton>
           </Box>
@@ -205,7 +224,10 @@ const NavBar = () => {
                 {user ? (
                   <Avatar alt='User Avatar' src={user.photoURL} />
                 ) : (
-                  <Avatar alt='Remy Sharp' src='https://lippianfamilydentistry.net/wp-content/uploads/2015/11/user-default-300x300.png' />
+                  <Avatar
+                    alt='Remy Sharp'
+                    src='https://lippianfamilydentistry.net/wp-content/uploads/2015/11/user-default-300x300.png'
+                  />
                 )}
               </IconButton>
             </Tooltip>
@@ -227,7 +249,9 @@ const NavBar = () => {
             >
               {user ? (
                 <>
-                  <MenuItem onClick={() => navigate(`/UserProfile/${user.email}`)}>
+                  <MenuItem
+                    onClick={() => navigate(`/UserProfile/${user.email}`)}
+                  >
                     <Typography textAlign='center'>Perfil</Typography>
                   </MenuItem>
                   <MenuItem key='logout' onClick={handleLogout}>
