@@ -102,6 +102,7 @@ export const getShoeById = async id => {
 export const getOrders = async () => {
   try {
     let { data: orders } = await axios(`${API_URL}/order`)
+    orders = orders.filter(element => element.User)
     return orders
   } catch (error) {
     console.error('Error fetching orders:', error)

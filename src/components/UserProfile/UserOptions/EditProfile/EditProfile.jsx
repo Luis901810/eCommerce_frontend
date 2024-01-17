@@ -14,7 +14,6 @@ const EditProfile = () => {
     email: '',
     phoneNumber: '',
     password: '',
-    birthDate: '',
     profilePicture: '',
     createdAt: '',
   });
@@ -75,9 +74,6 @@ const EditProfile = () => {
       <Typography variant="h5">Correo Electrónico: {usuario.email}</Typography>
       <Typography variant="h5">
         Número de Teléfono: {isEditing ? <Input value={usuario.phoneNumber} onChange={(event) => setUsuario({ ...usuario, phoneNumber: event.target.value })} sx={{ color: 'white' }} /> : usuario.phoneNumber}
-      </Typography>
-      <Typography variant="h5">
-        Fecha de Nacimiento: {isEditing ? <Input value={usuario.birthDate} onChange={(event) => setUsuario({ ...usuario, birthDate: event.target.value })} sx={{ color: 'white' }} /> : usuario.birthDate}
       </Typography>
       <Typography variant="h5">Fecha de Creación: {usuario.createdAt}</Typography>
       {isEditing ? (

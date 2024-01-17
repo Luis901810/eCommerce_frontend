@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../../redux/actions-type';
 import {
-  Typography, Box, Paper, Divider
+  Typography, Box, Paper, Rating,
 } from '@mui/material'
 
 const Reviews = ({ id }) => {
@@ -33,18 +33,25 @@ const Reviews = ({ id }) => {
   }, [id]);
 
   return (
-    <Box>
+    <Box sx={{ padding: 2, backgroundColor: '#303030', color: '#ffffff' }} >
       
       {!isNaN(averageRating) && (
-        <Typography variant="h4" color="#42e268" marginBottom={2} marginTop={2} >
-          Puntuación Promedio: {averageRating.toFixed(1)}
+        <div>
+          <Typography variant="h4" color="#42e268" marginBottom={2} marginTop={2} >
+          Puntuación Promedio : ({averageRating.toFixed(1)})   
         </Typography>
+        <Rating disabled={false} max={10} value={averageRating.toFixed(1)}></Rating>
+        </div>
+
+        
+        
       )}
 
       {recentReviews.map((review) => (
-        <Paper key={review.id} elevation={3} style={{ padding: '15px', marginBottom: '10px' }}>
+        <Paper key={review.id} elevation={3} sx={{ padding: 2, marginBottom: 2, backgroundColor: '#303030', color: '#ffffff' }}>
           <Typography variant="body1">Comentario: {review.comment}</Typography>
-          <Typography variant="body1">Puntuación: {review.rating}</Typography>
+          <Typography variant="body1">Puntuación: </Typography>
+          <Rating disabled={false} max={10} value={review.rating}></Rating>
           <Typography variant="body1">Fecha de la reseña: {review.reviewDate}</Typography>
         </Paper>
       ))}

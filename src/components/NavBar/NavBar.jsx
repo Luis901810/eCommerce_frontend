@@ -17,7 +17,7 @@ import Pages from './Pages'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentUser } from '../../redux/actions'
 import { cleanUserData } from '../../redux/actions'
 import logo from './digishoeslogo.png'
@@ -25,17 +25,22 @@ import { Button } from '@mui/material'
 import { API_URL } from '../../utils/constants'
 import axios from 'axios'
 
-
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
-const NavBar = () => {
+const NavBar = ({currentUser, setCurrentUser}) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const [error, setError] = useState('')
+  const initialUser = {
+    UserRol: {
+      rol: "Invitado"
+    },
+    }
   const { user, logout, loading } = useAuth()
-  const  currentUser = JSON.parse(localStorage.getItem('currentUser'))?JSON.parse(localStorage.getItem('currentUser')):{
-    roleId: 'fc7dd551-c681-488d-9d17-955cad4c16a5'
-  } 
+
+  const profilePic = useSelector((state) => state.User.profilePicture)
+
+  const adminId = 'Administrador'
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -58,7 +63,8 @@ const NavBar = () => {
     try {
       dispatch(cleanUserData())
       await logout()
-      localStorage.removeItem('currentUser')
+      localStorage.setItem('currentUser', JSON.stringify(initialUser))
+        setCurrentUser(initialUser)
       navigate('/')
     } catch (error) {
       setError(error.message)
@@ -69,31 +75,38 @@ const NavBar = () => {
     return <h1>Cerrando seccion....</h1>
   }
 
-  const logoStyle={
+  const logoStyle = {
     width: '80px',
-    height: '50px'
+    height: '50px',
   }
 
   React.useEffect(() => {
     const fetchData = async () => {
-      console.log(user)
+      
       try {
         if (user) {
           const { data } = await axios(
             `${API_URL}/user/${user.email}?findType=email`
           )
+          data.UserRol?null:data.UserRol = {
+            rol: "Invitado"
+          }
+          console.log(data)
           localStorage.setItem('currentUser', JSON.stringify(data))
+          setCurrentUser(data)
         }
       } catch (error) {
         console.error(error)
       }
     }
-    fetchData()
+    if (user) {
+      fetchData()
+    }
   }, [user])
 
-  React.useEffect(()=>{
-    console.log(currentUser)
-  },[currentUser])
+  React.useEffect(() => {
+    
+  }, [currentUser])
 
   return (
     <>
@@ -189,9 +202,20 @@ const NavBar = () => {
             <Pages />
             <Search />
 
-            {currentUser.roleId === "1e9f34d0-ed48-45fc-94f4-5cbca35b662b"?(<Button onClick={()=>{navigate('/Admin')}}>Dashboard</Button>):null}
+            {currentUser.UserRol.rol === adminId ? (
+              <Button
+                onClick={() => {
+                  navigate('/Admin')
+                }}
+              >
+                Dashboard
+              </Button>
+            ) : null}
 
-            <IconButton aria-label='cart' onClick={() => navigate('/ShoppingCart')} >
+            <IconButton
+              aria-label='cart'
+              onClick={() => navigate('/ShoppingCart')}
+            >
               <ShoppingCartOutlinedIcon sx={{ color: 'white' }} />
             </IconButton>
           </Box>
@@ -200,9 +224,12 @@ const NavBar = () => {
             <Tooltip title='Open settings'>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 {user ? (
-                  <Avatar alt='User Avatar' src={user.photoURL} />
+                  <Avatar alt='User Avatar' src={profilePic ? profilePic : user.photoURL} />
                 ) : (
-                  <Avatar alt='Remy Sharp' src='https://lippianfamilydentistry.net/wp-content/uploads/2015/11/user-default-300x300.png' />
+                  <Avatar
+                    alt='Remy Sharp'
+                    src='https://lippianfamilydentistry.net/wp-content/uploads/2015/11/user-default-300x300.png'
+                  />
                 )}
               </IconButton>
             </Tooltip>
@@ -224,7 +251,9 @@ const NavBar = () => {
             >
               {user ? (
                 <>
-                  <MenuItem onClick={() => navigate(`/UserProfile/${user.email}`)}>
+                  <MenuItem
+                    onClick={() => navigate(`/UserProfile/${user.email}`)}
+                  >
                     <Typography textAlign='center'>Perfil</Typography>
                   </MenuItem>
                   <MenuItem key='logout' onClick={handleLogout}>

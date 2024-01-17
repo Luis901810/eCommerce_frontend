@@ -17,7 +17,7 @@ import { API_URL } from '../../redux/actions-type';
 import { useAuth } from '../../contexts/AuthContext';
 import { showErrorAlert } from '../../alerts/alerts';
 
-const ID_PENDING = "39224070-2789-46cc-ad1e-afae9d183981";
+const ID_PENDING = "c3b43af5-6bd2-49d7-a09a-a1122e52f438";
 
 const ShoppingCart = () => {
 
@@ -40,19 +40,12 @@ const ShoppingCart = () => {
     console.log("El Carrito del local Storage **************************" , LocalStorageShoppingCart)
     shoppingCart = LocalStorageShoppingCart //Quiero pushear lo que hay en este array
   } 
-          
-          // const jsonString = localStorage.getItem('shoppingCart');
-          // Convertir la cadena JSON a un objeto JavaScript
-          // const shoppingCart = JSON.parse(jsonString);
-          // console.log("El Carrito del local Storage **************************" , shoppingCart)
-          // if (cart.length === 0) {
-          //   dispatch(setShoppingCart(shoppingCart))
-          // }
-  const initialCartState = shoppingCart.map(product => ({//!Asigna quantity a los productos
+  
+  const initialCartState = shoppingCart ? shoppingCart.map(product => ({//!Asigna quantity a los productos
     ...product,
     quantity: product.quantity || 1,
-  }))
-
+  })): []
+  
   const consolidatedCart = initialCartState.reduce((accumulator, product) => {//! Agrupa productos del mismo Id
     const existingProduct = accumulator.find(item => item.id === product.id) //accumulator Corre los productos del carrito y compara con el ID de cada producto
 

@@ -23,13 +23,11 @@ const UserProfile = () => {
     name: '',
     email: '',
     phoneNumber: '',
-    birthDate: '',
     profilePicture: '',
     createdAt: '',
   })
   console.log('USUARIO: ',usuario)
   useEffect(() => {
-    // dispatch(getUserByEmail(user.email));
     const loadUserProfile = async (idUser) => {
       try {
         console.log('Info User')
@@ -79,9 +77,7 @@ const UserProfile = () => {
         <Typography variant='h5' style={textStyle}>
           Número de Teléfono: {usuario.phoneNumber}
         </Typography>
-        <Typography variant='h5' style={textStyle}>
-          Fecha de Nacimiento: {usuario.birthDate}
-        </Typography>
+
         <Typography variant='h5' style={textStyle}>
           Fecha de Creación: {usuario.createdAt}
         </Typography>
