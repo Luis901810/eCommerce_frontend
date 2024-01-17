@@ -27,18 +27,17 @@ import axios from 'axios'
 
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
-const NavBar = () => {
+const NavBar = ({currentUser, setCurrentUser}) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const [error, setError] = useState('')
+  const initialUser = {
+    UserRol: {
+      rol: "Invitado"
+    },
+    }
   const { user, logout, loading } = useAuth()
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
-    ? JSON.parse(localStorage.getItem('currentUser'))
-    : {
-      UserRol: {
-        rol: "Invitado"
-      },
-      }
+
   const adminId = 'Administrador'
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -62,7 +61,8 @@ const NavBar = () => {
     try {
       dispatch(cleanUserData())
       await logout()
-      localStorage.removeItem('currentUser')
+      localStorage.setItem('currentUser', JSON.stringify(initialUser))
+        setCurrentUser(initialUser)
       navigate('/')
     } catch (error) {
       setError(error.message)
@@ -86,8 +86,12 @@ const NavBar = () => {
           const { data } = await axios(
             `${API_URL}/user/${user.email}?findType=email`
           )
-          
+          data.UserRol?null:data.UserRol = {
+            rol: "Invitado"
+          }
+          console.log(data)
           localStorage.setItem('currentUser', JSON.stringify(data))
+          setCurrentUser(data)
         }
       } catch (error) {
         console.error(error)

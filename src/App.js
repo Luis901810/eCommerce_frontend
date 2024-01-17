@@ -22,28 +22,32 @@ import EditProfile from './components/UserProfile/UserOptions/EditProfile/EditPr
 import PurchaseHistory from './components/UserProfile/UserOptions/PurchaseHistory/PurchaseHistory'
 import { useEffect } from 'react'
 import UserReviews from './components/UserProfile/UserOptions/UserReviews/UserReviews'
+import { useAuth } from './contexts/AuthContext'
+import { useState } from 'react'
 
 function App() {
   // const  user = useSelector(state => state.currentUser)
-  const  currentUser = JSON.parse(localStorage.getItem('currentUser')) 
-  const user = currentUser? currentUser: {
-    UserRol: {
-      rol: "Invitado"
-    },
-    }
+  const{user} = useAuth()
+  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser'))
+    ? JSON.parse(localStorage.getItem('currentUser'))
+    : {
+      UserRol: {
+        rol: "Invitado"
+      }
+      })
   const adminId = 'Administrador'
   const excludedRoutes = ['UpdateUser',"UpdateShoe", "CreateShoe", 'UpdateOrder', 'CreateUser']
 
   useEffect(()=>{
-    
-  },[user,currentUser])
+    setCurrentUser(JSON.parse(localStorage.getItem('currentUser')))
+  },[user])
   const currentPath = window.location.pathname.split("/")
 
   const renderNavbar = !excludedRoutes.includes(currentPath[1])
 
   return (
     <div className='App'>
-      {renderNavbar? <NavBar />:null}
+      {renderNavbar? <NavBar currentUser={currentUser} setCurrentUser={setCurrentUser}/>:null}
       <Routes>
         <Route path='/' element={<Landing />} />
         <Route path='/Catalogue' element={<Catalogue />} />
@@ -53,16 +57,16 @@ function App() {
         <Route path='/ShoppingCart' element={<ShoppingCart />}></Route>
 
         <Route path='/UserProfile/' element={<UserProfile />}></Route>
-        <Route path='/CreateShoe' element={user.UserRol.rol === adminId?<FormShoe />:<Navigate to="/" />}></Route>
-        <Route path="/UpdateShoe/:id" element={user.UserRol.rol === adminId?<UpdateShoe/>:<Navigate to="/" />} />
+        <Route path='/CreateShoe' element={currentUser.UserRol.rol === adminId?<FormShoe />:<Navigate to="/" />}></Route>
+        <Route path="/UpdateShoe/:id" element={currentUser.UserRol.rol === adminId?<UpdateShoe/>:<Navigate to="/" />} />
 
-        <Route path='/Admin' element={user.UserRol.rol === adminId?<Dashboard/>:<Navigate to="/" />}></Route>
-        <Route path="/CreateUser" element={user.UserRol.rol === adminId?<CreateUser/>:<Navigate to="/" />} />
-        <Route path="/UpdateUser/:id" element={user.UserRol.rol === adminId?<UpdateUser/>:<Navigate to="/" />} />
-        <Route path="/UpdateOrder/:id" element={user.UserRol.rol === adminId?<UpdateOrder/>:<Navigate to="/" />} />
+        <Route path='/Admin' element={currentUser.UserRol.rol === adminId?<Dashboard/>:<Navigate to="/" />}></Route>
+        <Route path="/CreateUser" element={currentUser.UserRol.rol === adminId?<CreateUser/>:<Navigate to="/" />} />
+        <Route path="/UpdateUser/:id" element={currentUser.UserRol.rol === adminId?<UpdateUser/>:<Navigate to="/" />} />
+        <Route path="/UpdateOrder/:id" element={currentUser.UserRol.rol === adminId?<UpdateOrder/>:<Navigate to="/" />} />
 
         <Route path='/UserReviews/:UserEmail' element={<UserReviews/>} />
-        <Route path='/FormShoe' element={user.UserRol.rol === adminId?<FormShoe />:<Navigate to="/" />}></Route>
+        <Route path='/FormShoe' element={currentUser.UserRol.rol === adminId?<FormShoe />:<Navigate to="/" />}></Route>
         <Route path='/UserProfile/:UserEmail' element={<UserProfile />}/>
         <Route path='/EditProfile/:UserEmail' element={<EditProfile/>}/>
         <Route path='/PurchaseHistory/:UserEmail' element={<PurchaseHistory />} />
