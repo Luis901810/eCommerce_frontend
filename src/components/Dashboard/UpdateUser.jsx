@@ -35,9 +35,7 @@ const UpdateUser = () => {
         const { data: status } = await axios(API_URL + '/user-status')
 
         setUser(user)
-        user.profilePicture
-          ? setPhoto(user.profilePicture)
-          : null
+        user.profilePicture ? setPhoto(user.profilePicture) : null
         setGenders(genders)
         setRoles(roles)
         setStatus(status)
@@ -78,96 +76,126 @@ const UpdateUser = () => {
 
   return user.gender ? (
     <Box
-      component='form'
       sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch' },
         display: 'flex',
-        flexDirection: 'column',
-        justifyItems: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
+        
       }}
-      noValidate
-      autoComplete='off'
     >
-      <IconButton
-        color='secondary'
-        onClick={() => {
-          navigate('/Admin')
-        }}
-      >
-        <CloseIcon />
-      </IconButton>
-      <TextFieldForm
-        required
-        id='outlined-required'
+      <Box
+        component='form'
         sx={{
-          '& .MuiInputBase-input': {
-            color: '#A0AAB4',
-          },
+          '& .MuiTextField-root': { m: 1, width: '25ch' },
+          display: 'flex',
+          position: 'relative',
+          justifyItems: 'center',
+          alignItems: 'center',
+          backgroundColor:'#E2E8F0',
+          padding: 5,
+          borderRadius: 2,
         }}
-        name='name'
-        label='Nombre'
-        value={userUpdate.name ? userUpdate.name : user.name}
-        onChange={handleChange}
-      />
-
-      <PhotoUpload photo={photo} setPhoto={setPhoto} />
-
-      <TextFieldForm
-        disabled
-        id='outlined-required'
-        name='email'
-        label='Email'
-        value={user.email}
-      />
-      <TextFieldForm
-        id='outlined-select-currency'
-        select
-        name='genderId'
-        label='Género'
-        value={userUpdate.genderId ? userUpdate.genderId : user.genderId}
-        onChange={handleChange}
+        noValidate
+        autoComplete='off'
       >
-        {genders.map(option => (
-          <MenuItem key={option.id} value={option.id}>
-            {option.gender}
-          </MenuItem>
-        ))}
-      </TextFieldForm>
-      <TextFieldForm
-        id='outlined-select-currency'
-        select
-        name='roleId'
-        label='Rol'
-        value={userUpdate.roleId ? userUpdate.roleId : user.roleId}
-        onChange={handleChange}
-      >
-        {roles.map(option => (
-          <MenuItem key={option.id} value={option.id}>
-            {option.rol}
-          </MenuItem>
-        ))}
-      </TextFieldForm>
-      {!isEmptyObjectObj(userUpdate)? (
+        <IconButton
+          color='secondary'
+          onClick={() => {
+            navigate('/Admin')
+          }}
+          sx={{
+            position: 'absolute',
+            top:2,
+            right: 2
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <Box
+        sx={{
+          '& .MuiTextField-root': { m: 1, width: '25ch' },
+          display: 'flex',
+          position: 'relative',
+          justifyItems: 'center',
+          alignItems: 'center',
+          flexDirection: 'column'
+        }}>
+        <TextFieldForm
+          required
+          id='outlined-required'
+          sx={{
+            flexGrow: 1
+            
+          }}
+          name='name'
+          label='Nombre'
+          value={userUpdate.name ? userUpdate.name : (user.name?user.name:'')}
+          onChange={handleChange}
+        />
+
+        
+
+        <TextFieldForm
+          disabled
+          id='outlined-required'
+          name='email'
+          label='Email'
+          width='100%'
+          value={user.email}
+        />
         <Box>
-          <Button
-            variant='outlined'
-            size='medium'
-            onClick={() => {
-              setUserUpdate({})
-              user.profilePicture
-                ? setPhoto(user.profilePicture)
-                : setPhoto(
-                    'https://objetivoligar.com/wp-content/uploads/2017/03/blank-profile-picture-973460_1280.jpg'
-                  )
-            }}
-          >
-            Descartar Cambios
-          </Button>
-          <Button variant='outlined' size='medium' onClick={handleUpdate}>
-            Guardar Cambios
-          </Button>
+        <TextFieldForm
+          id='outlined-select-currency'
+          select
+          name='genderId'
+          label='Género'
+          value={userUpdate.genderId ? userUpdate.genderId : user.genderId}
+          onChange={handleChange}
+        >
+          {genders.map(option => (
+            <MenuItem key={option.id} value={option.id}>
+              {option.gender}
+            </MenuItem>
+          ))}
+        </TextFieldForm>
+        <TextFieldForm
+          id='outlined-select-currency'
+          select
+          name='roleId'
+          label='Rol'
+          value={userUpdate.roleId ? userUpdate.roleId : user.roleId}
+          onChange={handleChange}
+        >
+          {roles.map(option => (
+            <MenuItem key={option.id} value={option.id}>
+              {option.rol}
+            </MenuItem>
+          ))}
+        </TextFieldForm>
         </Box>
-      ) : null}
+        {!isEmptyObjectObj(userUpdate) ? (
+          <Box>
+            <Button
+              variant='outlined'
+              size='medium'
+              onClick={() => {
+                setUserUpdate({})
+                user.profilePicture
+                  ? setPhoto(user.profilePicture)
+                  : null
+              }}
+            >
+              Descartar Cambios
+            </Button>
+            <Button variant='outlined' size='medium' onClick={handleUpdate}>
+              Guardar Cambios
+            </Button>
+          </Box>
+        ) : null}
+        </Box>
+        <PhotoUpload photo={photo} setPhoto={setPhoto} />
+      </Box>
     </Box>
   ) : null
 }
