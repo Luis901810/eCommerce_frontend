@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { showErrorAlert } from '../../../alerts/alerts';
 import { Typography, Button, List, ListItem, ListItemText, ListItemAvatar, Avatar, Container, Box } from '@mui/material';
 
-const ID_REJECTED = "8e7651c2-88b7-47d9-96fe-f2b575fcf0ab";
+const ID_REJECTED = "0b3d7ed1-3418-44db-8980-e382a3cecee3";
 
 const Failures = () => {
   const [purchaseDetails, setPurchaseDetails] = useState(null);
