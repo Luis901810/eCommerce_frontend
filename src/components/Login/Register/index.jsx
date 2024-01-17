@@ -42,12 +42,6 @@ const Register = () => {
     event.preventDefault()
     try {
       await createWithEmailAndPassword(email, password)
-      const data = await createUser({
-        email,
-        password,
-        requiredUserName: false,
-        requiredPhoneNumber: false,
-      })
       navigate('/')
     } catch (error) {
       console.log(error)
