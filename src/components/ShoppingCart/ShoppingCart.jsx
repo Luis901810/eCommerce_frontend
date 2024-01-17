@@ -41,11 +41,11 @@ const ShoppingCart = () => {
     shoppingCart = LocalStorageShoppingCart //Quiero pushear lo que hay en este array
   } 
   
-  const initialCartState = shoppingCart.map(product => ({//!Asigna quantity a los productos
+  const initialCartState = shoppingCart ? shoppingCart.map(product => ({//!Asigna quantity a los productos
     ...product,
     quantity: product.quantity || 1,
-  }))
-
+  })): []
+  
   const consolidatedCart = initialCartState.reduce((accumulator, product) => {//! Agrupa productos del mismo Id
     const existingProduct = accumulator.find(item => item.id === product.id) //accumulator Corre los productos del carrito y compara con el ID de cada producto
 

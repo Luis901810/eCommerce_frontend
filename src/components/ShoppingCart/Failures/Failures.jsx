@@ -79,7 +79,7 @@ const Failures = () => {
     {purchaseDetails && (
       <div>
         <Typography variant="body1" paragraph>
-          Total Amount: ${purchaseDetails.totalAmount}
+          Valor Total: ${purchaseDetails.totalAmount}
         </Typography>
         <Typography variant="h6" paragraph>
           No se lograron Comprar los siguientes artículos:
@@ -92,15 +92,15 @@ const Failures = () => {
                 <Avatar src={getNameShoeById(item.shoeId).image} alt={getNameShoeById(item.shoeId).name} />
               </ListItemAvatar>
               <ListItemText
-                primary={<span style={{ color: 'white' }}>{`Shoe: ${getNameShoeById(item.shoeId).name}`}</span>}
+                primary={<span style={{ color: 'white' }}>{`Zapato: ${getNameShoeById(item.shoeId).name}`}</span>}
                 secondary={
                   <>
                     <Typography component="span" variant="body2" style={{ color: 'white' }}>
-                      Quantity: {item.quantity}
+                      Cantidad: {item.quantity}
                     </Typography>
                     <br />
                     <Typography component="span" variant="body2" style={{ color: 'white' }}>
-                      Unit Price: ${item.unitPrice}
+                      Precio: ${item.unitPrice}
                     </Typography>
                   </>
                 }
