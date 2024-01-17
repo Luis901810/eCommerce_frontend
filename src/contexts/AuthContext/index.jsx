@@ -31,20 +31,37 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   const createWithEmailAndPassword = async (email, password) => {
-    const result = await createUserWithEmailAndPassword(auth, email, password)
     try {
-      await createUser({
-        email,
-        password,
-        firebaseUid: result.user.uid,
-        requiredUserName: false,
-        requiredPhoneNumber: false,
-      })
-    } catch (error) {}
+      // Validar usuario existente
+      await findOneUser({ userEmail: email, findType: 'email' })
+      return { error: 'El usuario ya existe' }
+    } catch (error) {
+      try {
+        // Crear usuario
+        const result = await createUserWithEmailAndPassword(auth, email, password)
+        await createUser({
+          email,
+          password,
+          firebaseUid: result.user.uid,
+          requiredUserName: false,
+          requiredPhoneNumber: false,
+        })
+        return { error: false }
+      } catch (error) {
+        return { error: 'No puede crearse un usuario con ese correo' }
+      }
+    }
   }
 
-  const loginWithEmailAndPassword = async (email, password) =>
-    await signInWithEmailAndPassword(auth, email, password)
+  const loginWithEmailAndPassword = async (email, password) => {
+    try {
+      // Validar usuario existente
+      await findOneUser({ userEmail: email, findType: 'email' })
+      await signInWithEmailAndPassword(auth, email, password)
+    } catch (error) {
+      throw new Error('El usuario no existe')
+    }
+  }
 
   const logout = async () => signOut(auth)
 
@@ -60,7 +77,7 @@ export function AuthProvider({ children }) {
         requiredPhoneNumber: false,
         requiredUserPassword: false,
       })
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const deleteUser = async () => {
@@ -75,7 +92,7 @@ export function AuthProvider({ children }) {
     }
   }
 
-  const adminDeleteUser = async userToDelete => {
+  const adminDeleteUser = async (userToDelete, adminPassword) => {
     if (!user) throw new Error('El admin debe estar logeado')
     // ! Crear la credencial de usuario administrador
     let adminCredential
@@ -84,22 +101,22 @@ export function AuthProvider({ children }) {
       // Si el administrador inició sesión con Google, utiliza GoogleAuthProvider
       adminCredential = GoogleAuthProvider.credentialFromResult(user)
     } else if (providers.includes(EmailAuthProvider.PROVIDER_ID)) {
-      return console.log('EMAIL AND PASSWORD')
       // Si el administrador inició sesión con correo y contraseña, utiliza EmailAuthProvider
-      adminCredential = EmailAuthProvider.credential(user.email, user.password)
+      console.log(user.email, adminPassword);
+      adminCredential = EmailAuthProvider.credential(user.email, adminPassword)
     }
-    // Reautenticar al administrador con el token personalizado
-    return console.log({ adminCredential })
-    await reauthenticateWithCredential(user, adminCredential)
+    try {
+      // Reautenticar al administrador con el token personalizado
+      await reauthenticateWithCredential(user, adminCredential)
+      // Eliminar al usuario especificado por su UID
+      await auth.deleteUser(userToDelete.firebaseUid)
+      // await deleteFirebaseUser(auth, userToDelete.firebaseUid)
+      // await deleteUserBack({ id: userToDelete.id, hardDelete: true })
+      console.log({ adminCredential });
+    } catch (error) {
+      console.error(error)
+    }
 
-    // Eliminar al usuario especificado por su UID
-    await deleteFirebaseUser(auth, userToDelete.firebaseUid)
-    await deleteUserBack({ id: userToDelete.id, hardDelete: true })
-  }
-
-  const delete2 = async userToDelete => {
-    const userToDeleteRef = auth.getUser(userToDelete.firebaseUid)
-    console.log({ userToDeleteRef })
   }
 
   useEffect(() => {
@@ -119,7 +136,6 @@ export function AuthProvider({ children }) {
         logout,
         loginWithGoogle,
         deleteUser,
-        // adminDeleteUser: delete2,
       }}
     >
       {!loading && children}
