@@ -15,24 +15,32 @@ export default function UserReviews() {
 
   const getReviews = async () => {
     try {
-      const response = await axios.get(`${API_URL}/user-review`, )
+      const response = await axios.get(`${API_URL}/user-review`, )//! recibo un array de objetos o un array vacio
 
       const { data } = response
-      if (data) setReviews(data)
-      return
+      
+      return data.reviews
     } catch (error) {
       window.alert(`No se encontraron las reviews: ${error.message}`)
     }
   }
 
   useEffect(() => {
-    getReviews()
-  }, [])
+    const fetchReviews = async () => {
+      const allReviews = await getReviews();
+      const filteredReviews = allReviews.filter((review) => review.userId === idUser);
+      setReviews(filteredReviews)
+    };
+
+    fetchReviews();
+  }, []);
 
   useEffect(() => {
-    console.log('***************', reviews);
+
     
-  }, [reviews])
+    
+    
+  }, [idUser])
 
   return (
     <Box
@@ -46,16 +54,33 @@ export default function UserReviews() {
       }}
     >
       <UserOptions />
-      <Box
-        sx={{
-          backgroundColor: '#303030',
-          padding: 10,
-          border: '1px solid #42e268',
-          borderRadius: 5,
-        }}
-      >
-        <Rating disabled={true} max={10}></Rating>
-      </Box>
+      {reviews.length !== 0 && (
+        reviews.map((review, index) => (
+        <Box
+          key={index}
+          sx={{
+            backgroundColor: '#303030',
+            color: '#ffffff',
+            padding: 5,
+            border: '1px solid #42e268',
+            borderRadius: 5,
+            mt: 2,
+            height: '280px', 
+            width: '400px', 
+            
+          }}
+        >
+          <Typography variant="h6">{review.OrderLine.Shoe.name}</Typography>
+          <Typography variant="body1" sx={{ color: '#42e268' }} >{`Comentario: ${review.comment}`}</Typography>
+          <Typography variant="body1">{`Cantidad: ${review.OrderLine.quantity}`}</Typography>
+          <Typography variant="body1">{`Precio Unitario: $${review.OrderLine.unitPrice}`}</Typography>
+          <Typography variant="body1">{`Valoracion:`}</Typography>
+          <Rating disabled={false} max={10} value={review.rating}></Rating>
+          <Typography variant="body1">{`Fecha de Reseña: ${new Date(review.reviewDate).toLocaleDateString()}`}</Typography>
+        </Box>
+        ))
+      )}
+
     </Box>
   )
 }

@@ -17,7 +17,7 @@ import { API_URL } from '../../redux/actions-type';
 import { useAuth } from '../../contexts/AuthContext';
 import { showErrorAlert } from '../../alerts/alerts';
 
-const ID_PENDING = "4d17fad4-36a7-4225-8d0e-4f27a1a76b91";
+const ID_PENDING = "c3b43af5-6bd2-49d7-a09a-a1122e52f438";
 
 const ShoppingCart = () => {
 
@@ -41,11 +41,11 @@ const ShoppingCart = () => {
     shoppingCart = LocalStorageShoppingCart //Quiero pushear lo que hay en este array
   } 
   
-  const initialCartState = shoppingCart.map(product => ({//!Asigna quantity a los productos
+  const initialCartState = shoppingCart ? shoppingCart.map(product => ({//!Asigna quantity a los productos
     ...product,
     quantity: product.quantity || 1,
-  }))
-
+  })): []
+  
   const consolidatedCart = initialCartState.reduce((accumulator, product) => {//! Agrupa productos del mismo Id
     const existingProduct = accumulator.find(item => item.id === product.id) //accumulator Corre los productos del carrito y compara con el ID de cada producto
 

@@ -23,7 +23,6 @@ const UserProfile = () => {
     name: '',
     email: '',
     phoneNumber: '',
-    birthDate: '',
     profilePicture: '',
     createdAt: '',
   })
@@ -78,9 +77,7 @@ const UserProfile = () => {
         <Typography variant='h5' style={textStyle}>
           Número de Teléfono: {usuario.phoneNumber}
         </Typography>
-        <Typography variant='h5' style={textStyle}>
-          Fecha de Nacimiento: {usuario.birthDate}
-        </Typography>
+
         <Typography variant='h5' style={textStyle}>
           Fecha de Creación: {usuario.createdAt}
         </Typography>

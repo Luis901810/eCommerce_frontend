@@ -17,7 +17,7 @@ import Pages from './Pages'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentUser } from '../../redux/actions'
 import { cleanUserData } from '../../redux/actions'
 import logo from './digishoeslogo.png'
@@ -37,6 +37,8 @@ const NavBar = ({currentUser, setCurrentUser}) => {
     },
     }
   const { user, logout, loading } = useAuth()
+
+  const profilePic = useSelector((state) => state.User.profilePicture)
 
   const adminId = 'Administrador'
   const navigate = useNavigate()
@@ -222,7 +224,7 @@ const NavBar = ({currentUser, setCurrentUser}) => {
             <Tooltip title='Open settings'>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 {user ? (
-                  <Avatar alt='User Avatar' src={user.photoURL} />
+                  <Avatar alt='User Avatar' src={profilePic ? profilePic : user.photoURL} />
                 ) : (
                   <Avatar
                     alt='Remy Sharp'
