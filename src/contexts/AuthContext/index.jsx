@@ -17,6 +17,8 @@ import createUser from '../../services/User/createUser.jsx'
 import updateUser from '../../services/User/updateUser.jsx'
 import findOneUser from '../../services/User/findOne.js'
 import deleteUserBack from '../../services/User/deleteUser.jsx'
+import { API_URL } from '../../redux/actions-type.js'
+import axios from 'axios'
 
 const authContext = createContext()
 
@@ -37,18 +39,22 @@ export function AuthProvider({ children }) {
       return { error: 'El usuario ya existe' }
     } catch (error) {
       try {
-        // Crear usuario
+        // Crear usuario en Firebase
         const result = await createUserWithEmailAndPassword(auth, email, password)
+        // Crear usuario en el Backend
+        const { data: roles } = await axios(API_URL + '/user-rol')
+        const clientRol = roles.find(rol => rol.rol === 'Cliente')
         await createUser({
           email,
           password,
           firebaseUid: result.user.uid,
           requiredUserName: false,
           requiredPhoneNumber: false,
+          roleId: clientRol.id
         })
         return { error: false }
       } catch (error) {
-        return { error: 'No puede crearse un usuario con ese correo' }
+        return { error: 'Error al crear usuario' }
       }
     }
   }
@@ -69,6 +75,8 @@ export function AuthProvider({ children }) {
     const googleProvider = new GoogleAuthProvider()
     const result = await signInWithPopup(auth, googleProvider)
     // * Crear o actualizar usuario en el backend
+    const { data: roles } = await axios(API_URL + '/user-rol')
+    const clientRol = roles.find(rol => rol.rol === 'Cliente')
     try {
       await createUser({
         email: result.user.email,
@@ -76,6 +84,7 @@ export function AuthProvider({ children }) {
         requiredUserName: false,
         requiredPhoneNumber: false,
         requiredUserPassword: false,
+        roleId: clientRol.id
       })
     } catch (error) { }
   }
