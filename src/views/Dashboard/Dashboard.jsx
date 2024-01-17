@@ -71,7 +71,7 @@ function Dashboard() {
               setSelectedIndex(1)
             }}
           >
-            <ListItemText primary='Usarios' />
+            <ListItemText primary='Usuarios' />
           </DashBoardListItem>
         
       
