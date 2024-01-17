@@ -28,18 +28,20 @@ import { useState } from 'react'
 function App() {
   // const  user = useSelector(state => state.currentUser)
   const{user} = useAuth()
-  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser'))
+  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser'))!== null
     ? JSON.parse(localStorage.getItem('currentUser'))
     : {
       UserRol: {
         rol: "Invitado"
       }
       })
+  
   const adminId = 'Administrador'
   const excludedRoutes = ['UpdateUser',"UpdateShoe", "CreateShoe", 'UpdateOrder', 'CreateUser']
 
   useEffect(()=>{
-    setCurrentUser(JSON.parse(localStorage.getItem('currentUser')))
+    if(JSON.parse(localStorage.getItem('currentUser'))!==null){
+    setCurrentUser(JSON.parse(localStorage.getItem('currentUser')))}
   },[user])
   const currentPath = window.location.pathname.split("/")
 
