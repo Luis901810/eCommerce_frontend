@@ -27,7 +27,7 @@ import axios from 'axios'
 
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
-const NavBar = () => {
+const NavBar = ({currentUser, setCurrentUser}) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const [error, setError] = useState('')
@@ -37,9 +37,7 @@ const NavBar = () => {
     },
     }
   const { user, logout, loading } = useAuth()
-  const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('currentUser'))
-    ? JSON.parse(localStorage.getItem('currentUser'))
-    : initialUser)
+
   const adminId = 'Administrador'
   const navigate = useNavigate()
   const dispatch = useDispatch()

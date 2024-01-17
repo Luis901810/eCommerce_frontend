@@ -47,7 +47,7 @@ function App() {
 
   return (
     <div className='App'>
-      {renderNavbar? <NavBar />:null}
+      {renderNavbar? <NavBar currentUser={currentUser} setCurrentUser={setCurrentUser}/>:null}
       <Routes>
         <Route path='/' element={<Landing />} />
         <Route path='/Catalogue' element={<Catalogue />} />
