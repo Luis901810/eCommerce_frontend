@@ -86,7 +86,10 @@ const NavBar = () => {
           const { data } = await axios(
             `${API_URL}/user/${user.email}?findType=email`
           )
-          
+          data.UserRol?null:data.UserRol = {
+            rol: "Invitado"
+          }
+          console.log(data)
           localStorage.setItem('currentUser', JSON.stringify(data))
         }
       } catch (error) {
