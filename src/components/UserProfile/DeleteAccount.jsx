@@ -25,9 +25,5 @@ export default function DeleteAccount() {
       console.error('No hay usuario logueado')
     }
   }
-  return (
-    <Button variant='contained' color='secondary' onClick={handleDelete}>
-      Eliminar cuenta
-    </Button>
-  )
+
 }

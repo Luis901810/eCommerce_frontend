@@ -3,7 +3,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { useSelector, useDispatch } from 'react-redux';
 import { filter } from '../../redux/actions';
 import { useNavigate } from 'react-router';
-
+import {Typography} from '@mui/material';
+import CardTravelIcon from '@mui/icons-material/CardTravel';
 
 export default function Pages() {
   const genders = useSelector((state) => state.genders);
@@ -39,7 +40,8 @@ export default function Pages() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
       <MenuItem onClick={() => handleClick()} >
-      Catalogo
+      <CardTravelIcon sx={{ color: '#42e268' }}></CardTravelIcon>
+      <Typography variant='h5' color={'white'} >Catalogo</Typography>
       </MenuItem>
       {/* {genders.map((page, i) => (
         <Box key={i}>
