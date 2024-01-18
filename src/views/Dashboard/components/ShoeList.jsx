@@ -376,6 +376,9 @@ function ShoeList() {
             width: '100%',
             maxWidth: '200px',
             marginBottom: '10px',
+            '& .MuiInputBase-input':{
+              color: "#9CA38F"
+            }
           }}
         />
         <Box>

@@ -169,13 +169,14 @@ function FormShoe() {
 
   const formStyle = {
     marginTop: '100px',
-    backgroundColor: '#414141',
+    backgroundColor: '#E2E8F0',
     display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'column',
     width: '90vw',
     alignItems: 'center',
     marginLeft: '50px',
+    borderRadius: '20px',
   }
 
   const textStyle = {
@@ -271,6 +272,7 @@ function FormShoe() {
           onClick={() => {
             navigate('/Admin')
           }}
+          
         >
           <CloseIcon />
         </IconButton>
