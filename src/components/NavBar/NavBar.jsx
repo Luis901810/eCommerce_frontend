@@ -24,21 +24,23 @@ import logo from './digishoeslogo.png'
 import { Button } from '@mui/material'
 import { API_URL } from '../../utils/constants'
 import axios from 'axios'
+import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
+
 
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
-const NavBar = ({currentUser, setCurrentUser}) => {
+const NavBar = ({ currentUser, setCurrentUser }) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const [error, setError] = useState('')
   const initialUser = {
     UserRol: {
-      rol: "Invitado"
+      rol: 'Invitado',
     },
-    }
+  }
   const { user, logout, loading } = useAuth()
 
-  const profilePic = useSelector((state) => state.User.profilePicture)
+  const profilePic = useSelector(state => state.User.profilePicture)
 
   const adminId = 'Administrador'
   const navigate = useNavigate()
@@ -64,7 +66,7 @@ const NavBar = ({currentUser, setCurrentUser}) => {
       dispatch(cleanUserData())
       await logout()
       localStorage.setItem('currentUser', JSON.stringify(initialUser))
-        setCurrentUser(initialUser)
+      setCurrentUser(initialUser)
       navigate('/')
     } catch (error) {
       setError(error.message)
@@ -82,15 +84,16 @@ const NavBar = ({currentUser, setCurrentUser}) => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      
       try {
         if (user) {
           const { data } = await axios(
             `${API_URL}/user/${user.email}?findType=email`
           )
-          data.UserRol?null:data.UserRol = {
-            rol: "Invitado"
-          }
+          data.UserRol
+            ? null
+            : (data.UserRol = {
+                rol: 'Invitado',
+              })
           console.log(data)
           localStorage.setItem('currentUser', JSON.stringify(data))
           setCurrentUser(data)
@@ -104,9 +107,7 @@ const NavBar = ({currentUser, setCurrentUser}) => {
     }
   }, [user])
 
-  React.useEffect(() => {
-    
-  }, [currentUser])
+  React.useEffect(() => {}, [currentUser])
 
   return (
     <>
@@ -196,35 +197,40 @@ const NavBar = ({currentUser, setCurrentUser}) => {
             sx={{
               flexGrow: 1,
               display: { xs: 'none', md: 'flex' },
-              justifyContent: 'space-evenly',
+              justifyContent: 'center',
             }}
           >
             <Pages />
-            <Search />
-
             {currentUser.UserRol.rol === adminId ? (
-              <Button
+              <MenuItem
                 onClick={() => {
                   navigate('/Admin')
                 }}
               >
-                Dashboard
-              </Button>
+                <LaptopChromebookIcon sx={{ color: '#42e268' }}></LaptopChromebookIcon>
+                <Typography variant='h5' color={'white'} >Dashboard</Typography>
+              </MenuItem>
             ) : null}
-
-            <IconButton
+            <MenuItem
               aria-label='cart'
               onClick={() => navigate('/ShoppingCart')}
             >
-              <ShoppingCartOutlinedIcon sx={{ color: 'white' }} />
-            </IconButton>
+              <ShoppingCartOutlinedIcon sx={{ color: '#42e268' }} />
+              <Typography variant='h5' color={'white'} >Carrito</Typography>
+            </MenuItem>
+            
           </Box>
-
+          <Box width={600} sx={{display: 'flex', justifyContent: 'center'}} >
+          <Search />
+          </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title='Open settings'>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 {user ? (
-                  <Avatar alt='User Avatar' src={profilePic ? profilePic : user.photoURL} />
+                  <Avatar
+                    alt='User Avatar'
+                    src={profilePic ? profilePic : user.photoURL}
+                  />
                 ) : (
                   <Avatar
                     alt='Remy Sharp'
