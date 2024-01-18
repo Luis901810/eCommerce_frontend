@@ -5,7 +5,6 @@ import { Typography, MenuItem } from '@mui/material/'
 import { useNavigate } from 'react-router-dom'
 import { getShoeById } from '../../redux/actions'
 
-
 export default function Results({ shoeName, setShoeName }) {
   const shoes = useSelector(state => state.Shoes)
   const dispatch = useDispatch()
@@ -39,7 +38,7 @@ export default function Results({ shoeName, setShoeName }) {
         display: 'flex',
         flexDirection: 'column',
         overflowY: 'auto',
-        width: '250px',
+        width: '350px',
         maxHeight: '200px',
         backgroundColor: '#303030',
       }}
@@ -49,20 +48,28 @@ export default function Results({ shoeName, setShoeName }) {
       ) : null}
       {results.length > 0
         ? results.map((shoe, i) => (
-            <Typography
-              variant='h6'
+            <Box
               onClick={() => handleClick(shoe.id)}
               sx={{
                 border: '1px solid #42e268',
                 borderRadius: 1,
-                maxHeight: '60px',
-                maxWidth: '300px',
-                cursor: 'zoom-in'
+                maxWidth: '350px',
+                cursor: 'zoom-in',
+                display: 'flex',
+                alignItems: 'center',
+                paddingLeft: 2,
               }}
               key={i}
             >
-              {shoe.name && shoe.name}
-            </Typography>
+              <img
+                src={shoe.image}
+                style={{ width: 50, height: 50, borderRadius: 100, marginLeft: 5 }}
+              ></img>
+              <Box sx={{display: 'flex', flexDirection: 'column', mr: 2, width: '100%'}} >
+              <Typography color='#42e268'  variant='h6'>{shoe.name && shoe.name}</Typography>
+              <Typography variant='h6'>${shoe.price && shoe.price}</Typography>
+              </Box>
+            </Box>
           ))
         : null}
     </Box>

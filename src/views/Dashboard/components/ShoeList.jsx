@@ -14,11 +14,8 @@ import {
   Avatar,
 } from '@mui/material'
 import theme from '../../../theme'
-import {
-  LinkNoDeco,
-} from '../../../styles/ComponentStyles'
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { API_URL } from '../../../utils/constants'
 import axios from 'axios'
@@ -26,6 +23,14 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import { getShoes } from '../../../services/Dashboard'
+import ShoeFilters from '../../../components/Dashboard/ShoeFilters'
+import { isEmptyObject } from '../../../utils/tools'
+import { TextFieldForm, TableRowHover } from '../../../styles/ComponentStyles'
+import {
+  confirmDeleteAlert,
+  errorDashboardAlert,
+  successDashboardAlert,
+} from '../../../alerts/alerts'
 
 function ShoeList() {
   const [shoes, setShoes] = useState([])
@@ -35,8 +40,9 @@ function ShoeList() {
     key: null,
     direction: 'ascending',
   })
-  //!Quitar esto y hacerlo con Css
-  const [hoveredRow, setHoveredRow] = useState(null)
+
+  const [filters, setFilters] = useState({})
+  const [searchTerm, setSearchTerm] = useState('')
 
   const genders = useSelector(state => state.genders)
   const colors = useSelector(state => state.colors)
@@ -45,6 +51,41 @@ function ShoeList() {
 
   const navigate = useNavigate()
 
+  //* Filtrado de datos
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getShoes(filters)
+        const dataCleaned = data.map(element => ({
+          ...element,
+          gender: genders.find(item => item.id === element.genderId).gender,
+          color: colors.find(item => item.id === element.colorId).color,
+          size: sizes.find(item => item.id === element.sizeId).size,
+          brand: brands.find(item => item.id === element.brandId).brand,
+        }))
+
+        setShoes(dataCleaned)
+        setShoesToShow(sortedArray(dataCleaned))
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchData()
+  }, [filters])
+
+  //* Barra de busqueda
+  const handleSearchTermChange = event => {
+    setSearchTerm(event.target.value)
+    if (!event.target.value) {
+      setShoesToShow(sortedArray(shoes))
+    } else {
+      const results = shoes.filter(element =>
+        element.name.toLowerCase().includes(event.target.value.toLowerCase())
+      )
+      setShoesToShow(sortedArray(results))
+    }
+  }
   //* Ordenamiento de zapatos
   const handleSort = key => {
     let direction = 'ascending'
@@ -74,10 +115,11 @@ function ShoeList() {
   }
 
   //*Borrado de zapato
-  const handleDelete = async(ID)=>{
-    try{
-        
-        const {data:shoe} = await axios.delete(`${API_URL}/shoe/${ID}`)
+  const handleDelete = async ID => {
+    const isConfirmed = await confirmDeleteAlert('producto')
+    try {
+      if (isConfirmed == true) {
+        const { data: shoe } = await axios.delete(`${API_URL}/shoe/${ID}`)
         const data = await getShoes()
         const dataCleaned = data.map(element => ({
           ...element,
@@ -88,11 +130,9 @@ function ShoeList() {
         }))
         setShoes(dataCleaned)
         setShoesToShow(sortedArray(dataCleaned))
-        // setSelectedRole('all')
-        // setSearchTerm("")
-        window.alert(`El producto: ${shoe.name} fue eliminado`)
-    } catch(error){
-        window.alert(error.message);
+      }
+    } catch (error) {
+      errorDashboardAlert(error.message)
     }
   }
   useEffect(() => {
@@ -115,9 +155,7 @@ function ShoeList() {
     fetchData()
   }, [])
 
-  useEffect(() => {
-
-  }, [shoes])
+  useEffect(() => {}, [shoes])
 
   const renderTableHeader = () => (
     <TableHead>
@@ -132,7 +170,7 @@ function ShoeList() {
             textAlign: 'start',
           }}
         ></TableCell>
-        
+
         <SortableTableCell
           onClick={() => handleSort('name')}
           label='Producto'
@@ -151,6 +189,13 @@ function ShoeList() {
           onClick={() => handleSort('brand')}
           label='Marca'
           sorted={sortConfig.key === 'brand'}
+          direction={sortConfig.direction}
+          maxWidth={70}
+        />
+        <SortableTableCell
+          onClick={() => handleSort('size')}
+          label='Género'
+          sorted={sortConfig.key === 'gender'}
           direction={sortConfig.direction}
           maxWidth={70}
         />
@@ -205,89 +250,98 @@ function ShoeList() {
   )
 
   const renderTableData = () => {
-    return (
+    return !shoesToShow.length ? (
+      <h3>No se encontraron resultados</h3>
+    ) : (
       <TableBody>
-        {!shoesToShow.length ? (
-          <h3>No se encontraron resultados</h3>
-        ) : (
-          shoesToShow.map((shoe, index) => (
-            <TableRow
-              key={shoe.id}
+        {shoesToShow.map((shoe, index) => (
+          <TableRowHover key={shoe.id}>
+            <TableCell>
+              <Avatar alt={shoe.name} src={shoe.image} />
+            </TableCell>
+            <TableCell
               sx={{
-                backgroundColor: index === hoveredRow ? '#333333' : '#131313',
+                fontSize: 14,
                 color: 'white',
+                maxWidth: 100,
               }}
-              onMouseEnter={() => setHoveredRow(index)}
-              onMouseLeave={() => setHoveredRow(null)}
             >
-              <TableCell>
-                <Avatar alt={shoe.name} src={shoe.image} />
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 14,
-                  color: 'white',
-                  maxWidth: 100,
-                }}
-              >
-                {shoe.name}
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 14,
-                  color: 'white',
-                  maxWidth: 100,
-                }}
-              >
-                ${shoe.price}
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 14,
-                  color: 'white',
-                  maxWidth: 100,
-                }}
-              >
-                {shoe.brand}
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 14,
-                  color: 'white',
-                  maxWidth: 100,
-                }}
-              >
-                {shoe.size}
-              </TableCell>
-              <TableCell
-                sx={{
-                  fontSize: 14,
-                  color: 'white',
-                  maxWidth: 100,
-                }}
-              >
-                {shoe.color}
-              </TableCell>
-              <TableCell
-                sx={{
-                  display: 'flex',
-                  gap: '8px',
-                  minWidth: 150,
-                  minHeight: 50,
+              {shoe.name}
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 14,
+                color: 'white',
+                maxWidth: 100,
+              }}
+            >
+              ${shoe.price}
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 14,
+                color: 'white',
+                maxWidth: 100,
+              }}
+            >
+              {shoe.brand}
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 14,
+                color: 'white',
+                maxWidth: 100,
+              }}
+            >
+              {shoe.gender}
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 14,
+                color: 'white',
+                maxWidth: 100,
+              }}
+            >
+              {shoe.size}
+            </TableCell>
+            <TableCell
+              sx={{
+                fontSize: 14,
+                color: 'white',
+                maxWidth: 100,
+              }}
+            >
+              {shoe.color}
+            </TableCell>
+            <TableCell
+              sx={{
+                display: 'flex',
+                gap: '8px',
+                minWidth: 150,
+                minHeight: 50,
 
-                  justifyContent: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <IconButton
+                sx={{
+                  color: '#3085d6',
                 }}
+                onClick={() => navigate(`/UpdateShoe/${shoe.id}`)}
               >
-                <IconButton onClick={() => navigate(`/UpdateShoe/${shoe.id}`)}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton onClick={() => handleDelete(shoe.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))
-        )}
+                <EditIcon />
+              </IconButton>
+              <IconButton
+                sx={{
+                  color: '#d33',
+                }}
+                onClick={() => handleDelete(shoe.id)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </TableCell>
+          </TableRowHover>
+        ))}
       </TableBody>
     )
   }
@@ -308,14 +362,46 @@ function ShoeList() {
       >
         <Box
           sx={{
-            color: '#f3a143',
+            color: '#22C55E',
             fontSize: '40px',
           }}
         >
           LISTA DE PRODUCTOS
         </Box>
+        <TextFieldForm
+          label='Buscar Producto'
+          value={searchTerm}
+          onChange={handleSearchTermChange}
+          sx={{
+            width: '100%',
+            maxWidth: '200px',
+            marginBottom: '10px',
+            backgroundColor: '#303030',
+            '& .MuiInputBase-input': {
+              color: 'white', 
+            },
+          }}
+        />
         <Box>
-          <Button variant='outlined' startIcon={<AddIcon />} onClick={()=>navigate('/CreateShoe')}>
+          {isEmptyObject(filters) ? null : (
+            <Button
+              onClick={() => {
+                setFilters({})
+                setSearchTerm('')
+              }}
+            >
+              Limpiar Filtros
+            </Button>
+          )}
+
+          <ShoeFilters filters={filters} setFilters={setFilters} />
+        </Box>
+        <Box>
+          <Button
+            variant='outlined'
+            startIcon={<AddIcon />}
+            onClick={() => navigate('/CreateShoe')}
+          >
             Agregar Producto
           </Button>
         </Box>
@@ -334,38 +420,7 @@ function ShoeList() {
               justifyItems: 'center',
               marginBottom: '5px',
             }}
-          >
-            {/* <TextFieldForm
-          label="Search"
-          value={searchTerm}
-          onChange={handleSearchTermChange}
-          sx={{
-            width: "100%",
-            maxWidth: "100px",
-            marginBottom: "10px",
-          }}
-        /> */}
-
-            {/* <StyledSelect
-          value={selectedRole}
-          onChange={handleRoleChange}
-          sx={{
-            width: "100%",
-            maxWidth: "200px",
-            marginBottom: "10px",
-          }}
-          MenuProps={{
-            PaperProps: {
-              sx: {
-                backgroundColor: "black",
-              },
-            },
-          }}
-        >
-          <StyledMenuItemSelect value="all">Todos los Roles</StyledMenuItemSelect>
-          {roles.length && roles.map(role=><StyledMenuItemSelect value={role.rol}>{role.rol}</StyledMenuItemSelect>)}
-        </StyledSelect> */}
-          </Box>
+          ></Box>
           <TableContainer component={Paper}>
             <Table>
               {renderTableHeader()}

@@ -12,6 +12,7 @@ import {
   SET_SHOPPING_CART,
   CREATE_PURCHASE_TICKET,
   UPDATE_PURCHASE_TICKET,
+  SET_CURRENT_USER,
   GET_USER_BY_EMAIL,
   CLEAN_USER_DATA,
 } from './actions-type'
@@ -99,7 +100,7 @@ export const updateUser = async (idUser, updatedUserData) => {
 }
 
 export const getUserByEmail = (email) => {
-  console.log(GET_USER_BY_EMAIL,"************************")
+  console.log(GET_USER_BY_EMAIL,"busca USUARIO POR CORREO")
   return async (dispatch) => {
     try {
       const response = await axios.get(`${API_URL}/user/${email}`, 
@@ -238,6 +239,28 @@ export const updatePurchaseTicket = async (idOrder, idStatusTicket) => {
   }
 
 }
+
+export const saveStateToLocalStorage = () => {
+  return (getState) => {
+    try {
+      const state = getState();
+      const serializedState = JSON.stringify(state);
+      localStorage.setItem("appState", serializedState);
+    } catch (error) {
+      console.error("Error saving state to localStorage:", error);
+    }
+  };
+};
+//! Crear get Orders
+
+export const setCurrentUser = (data) => {
+  
+  return {
+          type: SET_CURRENT_USER,
+          payload: data,
+        }
+}
+
 // export const saveStateToLocalStorage = () => {
 //   return (getState) => {
 //     try {
@@ -250,3 +273,19 @@ export const updatePurchaseTicket = async (idOrder, idStatusTicket) => {
 //   };
 // };
 
+export const Notifiactions = (id,status) => {
+ const data = { statusId: status,
+  userId: id}
+  console.log('Información a Crear', data)
+  return async dispatch => {
+    try {
+      const response = await axios.post(`${API_URL}/order`, data)
+      console.log('Respuesta del servidor:', response.data)
+      alert('Notificación exitosa')
+      return response.data
+    } catch (error) {
+      console.log(error.response.data.error)
+      alert(error.message)
+    }
+  }
+}

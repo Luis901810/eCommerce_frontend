@@ -41,16 +41,11 @@ const Register = () => {
   const handleSubmit = async event => {
     event.preventDefault()
     try {
-      await createWithEmailAndPassword(email, password)
-      const data = await createUser({
-        email,
-        password,
-        requiredUserName: false,
-        requiredPhoneNumber: false,
-      })
+      const { error } = await createWithEmailAndPassword(email, password)
+      if (error) throw new Error(error)
       navigate('/')
     } catch (error) {
-      console.log(error)
+      console.error(error)
       alert(error.message)
     }
   }

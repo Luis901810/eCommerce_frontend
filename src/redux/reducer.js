@@ -10,6 +10,7 @@ import {
   SET_SHOPPING_CART,
   CREATE_PURCHASE_TICKET,
   UPDATE_PURCHASE_TICKET,
+  SET_CURRENT_USER,
   GET_USER_BY_EMAIL,
   CLEAN_USER_DATA,
 } from './actions-type'
@@ -133,6 +134,8 @@ const reducer = (state = initialState, action) => {
 
 
       case ADD_TO_SHOPPING_CART:
+        const updatedCart = [...state.shoppingCart, action.payload.product];
+        localStorage.setItem('shoppingCart', JSON.stringify(updatedCart));//! Guardar en localStorage
         return {
           ...state,
           shoppingCart: [...state.shoppingCart, action.payload.product]
@@ -154,6 +157,11 @@ const reducer = (state = initialState, action) => {
           ...state,
           PurchaseTicket: action.payload,
         };
+        case SET_CURRENT_USER:
+          return {
+           ...state,
+           currentUser: action.payload
+          }
       case GET_USER_BY_EMAIL:
         return {
           ...state,

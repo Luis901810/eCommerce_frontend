@@ -17,16 +17,32 @@ import Pages from './Pages'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { setCurrentUser } from '../../redux/actions'
 import { cleanUserData } from '../../redux/actions'
-import { useDispatch } from 'react-redux'
+import logo from './digishoeslogo.png'
+import { Button } from '@mui/material'
+import { API_URL } from '../../utils/constants'
+import axios from 'axios'
+import LaptopChromebookIcon from '@mui/icons-material/LaptopChromebook';
+
 
 // const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
-const NavBar = () => {
+const NavBar = ({ currentUser, setCurrentUser }) => {
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
   const [error, setError] = useState('')
+  const initialUser = {
+    UserRol: {
+      rol: 'Invitado',
+    },
+  }
   const { user, logout, loading } = useAuth()
+
+  const profilePic = useSelector(state => state.User.profilePicture)
+
+  const adminId = 'Administrador'
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -49,6 +65,8 @@ const NavBar = () => {
     try {
       dispatch(cleanUserData())
       await logout()
+      localStorage.setItem('currentUser', JSON.stringify(initialUser))
+      setCurrentUser(initialUser)
       navigate('/')
     } catch (error) {
       setError(error.message)
@@ -58,6 +76,38 @@ const NavBar = () => {
   if (loading) {
     return <h1>Cerrando seccion....</h1>
   }
+
+  const logoStyle = {
+    width: '80px',
+    height: '50px',
+  }
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (user) {
+          const { data } = await axios(
+            `${API_URL}/user/${user.email}?findType=email`
+          )
+          data.UserRol
+            ? null
+            : (data.UserRol = {
+                rol: 'Invitado',
+              })
+          console.log(data)
+          localStorage.setItem('currentUser', JSON.stringify(data))
+          setCurrentUser(data)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    if (user) {
+      fetchData()
+    }
+  }, [user])
+
+  React.useEffect(() => {}, [currentUser])
 
   return (
     <>
@@ -73,7 +123,7 @@ const NavBar = () => {
         }}
       >
         <Toolbar disableGutters sx={{ paddingLeft: 2, paddingRight: 2 }}>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <img src={logo} style={logoStyle} />
           <Typography
             variant='h6'
             noWrap
@@ -85,11 +135,11 @@ const NavBar = () => {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: '#42e268',
               textDecoration: 'none',
             }}
           >
-            LOGO
+            DIGISHOES
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -141,29 +191,51 @@ const NavBar = () => {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            DIGISHOES
           </Typography>
           <Box
             sx={{
               flexGrow: 1,
               display: { xs: 'none', md: 'flex' },
-              justifyContent: 'space-evenly',
+              justifyContent: 'center',
             }}
           >
             <Pages />
-            <Search />
-            <IconButton aria-label='cart' onClick={() => navigate('/ShoppingCart')} >
-              <ShoppingCartOutlinedIcon sx={{ color: 'white' }} />
-            </IconButton>
+            {currentUser.UserRol.rol === adminId ? (
+              <MenuItem
+                onClick={() => {
+                  navigate('/Admin')
+                }}
+              >
+                <LaptopChromebookIcon sx={{ color: '#42e268' }}></LaptopChromebookIcon>
+                <Typography variant='h5' color={'white'} >Dashboard</Typography>
+              </MenuItem>
+            ) : null}
+            <MenuItem
+              aria-label='cart'
+              onClick={() => navigate('/ShoppingCart')}
+            >
+              <ShoppingCartOutlinedIcon sx={{ color: '#42e268' }} />
+              <Typography variant='h5' color={'white'} >Carrito</Typography>
+            </MenuItem>
+            
           </Box>
-
+          <Box width={600} sx={{display: 'flex', justifyContent: 'center'}} >
+          <Search />
+          </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title='Open settings'>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 {user ? (
-                  <Avatar alt='User Avatar' src={user.photoURL} />
+                  <Avatar
+                    alt='User Avatar'
+                    src={profilePic ? profilePic : user.photoURL}
+                  />
                 ) : (
-                  <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
+                  <Avatar
+                    alt='Remy Sharp'
+                    src='https://lippianfamilydentistry.net/wp-content/uploads/2015/11/user-default-300x300.png'
+                  />
                 )}
               </IconButton>
             </Tooltip>
@@ -185,7 +257,9 @@ const NavBar = () => {
             >
               {user ? (
                 <>
-                  <MenuItem onClick={() => navigate(`/UserProfile/${user.email}`)}>
+                  <MenuItem
+                    onClick={() => navigate(`/UserProfile/${user.email}`)}
+                  >
                     <Typography textAlign='center'>Perfil</Typography>
                   </MenuItem>
                   <MenuItem key='logout' onClick={handleLogout}>

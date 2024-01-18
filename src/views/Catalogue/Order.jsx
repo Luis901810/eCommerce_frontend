@@ -69,7 +69,15 @@ export default function Order() {
         }}
       >
         {orderType !== 'none' ? (
-          <Button variant='outlined' onClick={handleButtonClick}>
+          <Button
+            variant='filled'
+            sx={{
+              color: 'white',
+              backgroundColor: '#303030',
+              border: '1px solid #42e268',
+            }}
+            onClick={handleButtonClick}
+          >
             <SortIcon sx={{ color: 'white' }} />
             {direction.icon}
           </Button>
@@ -80,7 +88,8 @@ export default function Order() {
           label='Orden'
           sx={{
             color: 'white',
-            border: '1px solid white',
+            backgroundColor: '#303030',
+            border: '1px solid #42e268',
             width: 1 / 3,
             marginLeft: 3,
           }}
