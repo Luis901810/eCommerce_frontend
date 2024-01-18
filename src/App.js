@@ -37,19 +37,15 @@ function App() {
       })
   
   const adminId = 'Administrador'
-  const excludedRoutes = ['UpdateUser',"UpdateShoe", "CreateShoe", 'UpdateOrder', 'CreateUser']
 
   useEffect(()=>{
     if(JSON.parse(localStorage.getItem('currentUser'))!==null){
     setCurrentUser(JSON.parse(localStorage.getItem('currentUser')))}
   },[user])
-  const currentPath = window.location.pathname.split("/")
-
-  const renderNavbar = !excludedRoutes.includes(currentPath[1])
 
   return (
     <div className='App'>
-      {renderNavbar? <NavBar currentUser={currentUser} setCurrentUser={setCurrentUser}/>:null}
+      <NavBar currentUser={currentUser} setCurrentUser={setCurrentUser}/>
       <Routes>
         <Route path='/' element={<Landing />} />
         <Route path='/Catalogue' element={<Catalogue />} />

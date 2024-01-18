@@ -378,7 +378,7 @@ function ShoeList() {
             marginBottom: '10px',
             backgroundColor: '#303030',
             '& .MuiInputBase-input': {
-              color: 'white', 
+              color: 'white',
             },
           }}
         />

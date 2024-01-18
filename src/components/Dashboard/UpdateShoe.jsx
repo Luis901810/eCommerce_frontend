@@ -11,6 +11,10 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
+  ListItemButton,
+  List,
+  ListItemText,
+  Collapse,
 } from '@mui/material'
 import { TextFieldForm } from '../../styles/ComponentStyles'
 import axios from 'axios'
@@ -23,7 +27,12 @@ import { getShoeById } from '../../services/Dashboard'
 import PhotoUpload from '../PhotoUpload/PhotoUpload'
 import { updateUserSchema } from './Schemas'
 import { isEmptyObject, isEmptyObjectObj } from '../../utils/tools'
-import { dashboardAlert, errorDashboardAlert, successDashboardAlert } from '../../alerts/alerts'
+import {
+  dashboardAlert,
+  errorDashboardAlert,
+  successDashboardAlert,
+} from '../../alerts/alerts'
+import { ExpandLess, ExpandMore } from '@mui/icons-material'
 
 export default function UpdateShoe() {
   const { id } = useParams()
@@ -39,6 +48,9 @@ export default function UpdateShoe() {
   const categories = useSelector(state => state.categories)
 
   const navigate = useNavigate()
+
+  //*categories
+  const [open, setOpen] = useState(false)
 
   //*Validacion de datos
   const [errors, setErrors] = useState({})
@@ -105,9 +117,8 @@ export default function UpdateShoe() {
   useEffect(() => {
     const validateCategories = async () => {
       const name = 'categoryIds'
-        const value = shoeUpdate.categoryIds
+      const value = shoeUpdate.categoryIds
       try {
-        
         await updateUserSchema.validateAt(name, { [name]: value })
         setErrors({
           ...errors,
@@ -154,201 +165,323 @@ export default function UpdateShoe() {
 
   return shoe.name ? (
     <Box
-      component='form'
       sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch' },
         display: 'flex',
-        flexDirection: 'column',
-        justifyItems: 'center',
-        marginTop:10
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
       }}
-      noValidate
-      autoComplete='off'
     >
-      <IconButton
-        color='secondary'
-        onClick={() => {
-          navigate('/Admin')
-        }}
-      >
-        <CloseIcon />
-      </IconButton>
-      <TextFieldForm
-        required
-        id='outlined-required'
+      <Box
+        component='form'
         sx={{
-          '& .MuiInputBase-input': {
-            color: '#A0AAB4',
-          },
+          '& .MuiTextField-root': { m: 1, width: '25ch' },
+          display: 'flex',
+          position: 'relative',
+          justifyItems: 'center',
+          alignItems: 'center',
+          backgroundColor: '#E2E8F0',
+          flexDirection: 'column',
+          padding: 5,
+          borderRadius: 2,
         }}
-        name='name'
-        label='Producto'
-        value={shoeUpdate.name ? shoeUpdate.name : shoe.name}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={Boolean(errors.name)}
-        helperText={errors.name}
-      />
-
-      <PhotoUpload photo={photo} setPhoto={setPhoto} />
-      <TextFieldForm
-        required
-        id='outlined-required'
-        sx={{
-          '& .MuiInputBase-input': {
-            color: '#A0AAB4',
-          },
-        }}
-        name='price'
-        label='Precio'
-        value={shoeUpdate.price ? shoeUpdate.price : shoe.price}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={Boolean(errors.price)}
-        helperText={errors.price}
-      />
-      <TextFieldForm
-        required
-        id='outlined-required'
-        sx={{
-          '& .MuiInputBase-input': {
-            color: '#A0AAB4',
-          },
-        }}
-        name='stock'
-        label='Stock'
-        value={shoeUpdate.stock ? shoeUpdate.stock : shoe.stock}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={Boolean(errors.stock)}
-        helperText={errors.stock}
-      />
-
-      <TextFieldForm
-        id='outlined-select-currency'
-        select
-        name='brandId'
-        label='Marca'
-        value={shoeUpdate.brandId ? shoeUpdate.brandId : shoe.brandId}
-        onChange={handleChange}
+        noValidate
+        autoComplete='off'
       >
-        {brands.map(option => (
-          <MenuItem key={option.id} value={option.id}>
-            {option.brand}
-          </MenuItem>
-        ))}
-      </TextFieldForm>
-
-      <TextFieldForm
-        id='outlined-select-currency'
-        select
-        name='genderId'
-        label='Género'
-        value={shoeUpdate.genderId ? shoeUpdate.genderId : shoe.genderId}
-        onChange={handleChange}
-      >
-        {genders.map(option => (
-          <MenuItem key={option.id} value={option.id}>
-            {option.gender}
-          </MenuItem>
-        ))}
-      </TextFieldForm>
-
-      <TextFieldForm
-        id='outlined-select-currency'
-        select
-        name='materialId'
-        label='Material'
-        value={shoeUpdate.materialId ? shoeUpdate.materialId : shoe.materialId}
-        onChange={handleChange}
-      >
-        {materials.map(option => (
-          <MenuItem key={option.id} value={option.id}>
-            {option.material}
-          </MenuItem>
-        ))}
-      </TextFieldForm>
-
-      <TextFieldForm
-        id='outlined-select-currency'
-        select
-        name='sizeId'
-        label='Talla'
-        value={shoeUpdate.sizeId ? shoeUpdate.sizeId : shoe.sizeId}
-        onChange={handleChange}
-      >
-        {sizes.map(option => (
-          <MenuItem key={option.id} value={option.id}>
-            {option.size}
-          </MenuItem>
-        ))}
-      </TextFieldForm>
-
-      <TextFieldForm
-        id='outlined-select-currency'
-        select
-        name='colorId'
-        label='Color'
-        value={shoeUpdate.colorId ? shoeUpdate.colorId : shoe.colorId}
-        onChange={handleChange}
-      >
-        {colors.map(option => (
-          <MenuItem key={option.id} value={option.id}>
-            {option.color}
-          </MenuItem>
-        ))}
-      </TextFieldForm>
-
-      <FormControl error={Boolean(errors.categoryIds)}>
-        <FormLabel>Categorias</FormLabel>
-        <FormGroup label='Categorias'>
-          {categories.map((category, i) => (
-            <FormControlLabel
-              key={i}
-              control={
-                <Checkbox
-                  sx={{ marginLeft: 2, color: '#42e268' }}
-                  checked={
-                    shoeUpdate['categoryIds']
-                      ? shoeUpdate['categoryIds'].includes(category.id)
-                      : shoe['ShoeCategories']
-                          .map(element => element.id)
-                          .includes(category.id)
-                  }
-                  onChange={() => handleCheckboxChange(category.id)}
-                />
-              }
-              label={category.category}
-              id={category.id}
-              style={{ color: 'white' }}
-              sx={{
-                backgroundColor: '#303030',
-                width: '275px',
-                alignSelf: 'center',
-                marginLeft: 2,
-              }}
-            />
-          ))}
-        </FormGroup>
-        <FormHelperText>{errors.categoryIds}</FormHelperText>
-      </FormControl>
-
-      {isEmptyObjectObj(shoeUpdate) ? null : (
-        <Box>
-          <Button
-            variant='outlined'
-            size='medium'
-            onClick={() => {
-              setShoeUpdate({})
+        <IconButton
+          color='secondary'
+          onClick={() => {
+            navigate('/Admin')
+          }}
+          sx={{
+            position: 'absolute',
+            top: 2,
+            right: 2,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <Box
+          sx={{
+            '& .MuiTextField-root': { m: 1, width: '25ch' },
+            display: 'flex',
+            position: 'relative',
+            justifyItems: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Box
+            sx={{
+              '& .MuiTextField-root': { m: 1, width: '25ch' },
+              display: 'flex',
+              position: 'relative',
+              justifyItems: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
             }}
           >
-            Descartar Cambios
-          </Button>
-          <Button variant='outlined' size='medium' onClick={handleUpdate}>
-            Guardar Cambios
-          </Button>
+            <Box
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+                display: 'flex',
+                position: 'relative',
+                justifyItems: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <TextFieldForm
+                required
+                id='outlined-required'
+                sx={{
+                  '& .MuiInputBase-input': {
+                    color: '#A0AAB4',
+                  },
+                }}
+                name='name'
+                label='Producto'
+                value={shoeUpdate.name ? shoeUpdate.name : shoe.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={Boolean(errors.name)}
+                helperText={errors.name}
+              />
+            </Box>
+            <Box
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+                display: 'flex',
+                position: 'relative',
+                justifyItems: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <TextFieldForm
+                required
+                id='outlined-required'
+                sx={{
+                  '& .MuiInputBase-input': {
+                    color: '#A0AAB4',
+                  },
+                }}
+                name='price'
+                label='Precio'
+                value={shoeUpdate.price ? shoeUpdate.price : shoe.price}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={Boolean(errors.price)}
+                helperText={errors.price}
+              />
+              <TextFieldForm
+                required
+                id='outlined-required'
+                sx={{
+                  '& .MuiInputBase-input': {
+                    color: '#A0AAB4',
+                  },
+                }}
+                name='stock'
+                label='Stock'
+                value={shoeUpdate.stock ? shoeUpdate.stock : shoe.stock}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={Boolean(errors.stock)}
+                helperText={errors.stock}
+              />
+            </Box>
+
+            <Box
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+                display: 'flex',
+                position: 'relative',
+                justifyItems: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <TextFieldForm
+                id='outlined-select-currency'
+                select
+                name='brandId'
+                label='Marca'
+                value={shoeUpdate.brandId ? shoeUpdate.brandId : shoe.brandId}
+                onChange={handleChange}
+              >
+                {brands.map(option => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.brand}
+                  </MenuItem>
+                ))}
+              </TextFieldForm>
+
+              <TextFieldForm
+                id='outlined-select-currency'
+                select
+                name='colorId'
+                label='Color'
+                value={shoeUpdate.colorId ? shoeUpdate.colorId : shoe.colorId}
+                onChange={handleChange}
+              >
+                {colors.map(option => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.color}
+                  </MenuItem>
+                ))}
+              </TextFieldForm>
+            </Box>
+            <Box
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+                display: 'flex',
+                position: 'relative',
+                justifyItems: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <TextFieldForm
+                id='outlined-select-currency'
+                select
+                name='sizeId'
+                label='Talla'
+                value={shoeUpdate.sizeId ? shoeUpdate.sizeId : shoe.sizeId}
+                onChange={handleChange}
+              >
+                {sizes.map(option => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.size}
+                  </MenuItem>
+                ))}
+              </TextFieldForm>
+
+              <TextFieldForm
+                id='outlined-select-currency'
+                select
+                name='materialId'
+                label='Material'
+                value={
+                  shoeUpdate.materialId
+                    ? shoeUpdate.materialId
+                    : shoe.materialId
+                }
+                onChange={handleChange}
+              >
+                {materials.map(option => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.material}
+                  </MenuItem>
+                ))}
+              </TextFieldForm>
+            </Box>
+            <Box
+              sx={{
+                '& .MuiTextField-root': { m: 1, width: '25ch' },
+                display: 'flex',
+                position: 'relative',
+                justifyItems: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <TextFieldForm
+                id='outlined-select-currency'
+                select
+                fullWidth
+                name='genderId'
+                label='Género'
+                value={
+                  shoeUpdate.genderId ? shoeUpdate.genderId : shoe.genderId
+                }
+                onChange={handleChange}
+              >
+                {genders.map(option => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.gender}
+                  </MenuItem>
+                ))}
+              </TextFieldForm>
+
+              <ListItemButton
+                onClick={() => setOpen(!open)}
+                
+                sx={{
+                  backgroundColor: '#6c6b6a',
+                  borderRadius: 2,
+                  width: '100%'
+                }}
+              >
+                <ListItemText
+                  primary='Categorias'
+                  sx={{ color: open ? 'white' : 'black' }}
+                ></ListItemText>
+                {open ? (
+                  <ExpandLess sx={{ color: 'white' }}></ExpandLess>
+                ) : (
+                  <ExpandMore sx={{ color: 'black' }}></ExpandMore>
+                )}
+                <FormHelperText error={Boolean(errors.categoryIds)}>
+                  {errors.categoryIds}
+                </FormHelperText>
+              </ListItemButton>
+              <Collapse in={open} timeout='auto' unmountOnExit>
+                <FormGroup label='Categorias'>
+                  {categories.map((category, i) => (
+                    <FormControlLabel
+                      key={i}
+                      control={
+                        <Checkbox
+                          sx={{ marginLeft: 2, color: '#42e268' }}
+                          checked={
+                            shoeUpdate['categoryIds']
+                              ? shoeUpdate['categoryIds'].includes(category.id)
+                              : shoe['ShoeCategories']
+                                  .map(element => element.id)
+                                  .includes(category.id)
+                          }
+                          onChange={() => handleCheckboxChange(category.id)}
+                        />
+                      }
+                      label={category.category}
+                      id={category.id}
+                      style={{ color: 'white' }}
+                      sx={{
+                        backgroundColor: '#303030',
+                        width: '275px',
+                        alignSelf: 'center',
+                        marginLeft: 2,
+                      }}
+                    />
+                  ))}
+                </FormGroup>
+              </Collapse>
+            </Box>
+          </Box>
+          <Box>
+            <PhotoUpload photo={photo} setPhoto={setPhoto} />
+          </Box>
         </Box>
-      )}
+
+        {isEmptyObjectObj(shoeUpdate) ? null : (
+          <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 2,
+          }}>
+            <Button
+              variant='outlined'
+              size='medium'
+              onClick={() => {
+                setShoeUpdate({})
+                setErrors({})
+              }}
+            >
+              Descartar Cambios
+            </Button>
+            <Button variant='outlined' size='medium' onClick={handleUpdate}>
+              Guardar Cambios
+            </Button>
+          </Box>
+        )}
+      </Box>
     </Box>
   ) : null
 }

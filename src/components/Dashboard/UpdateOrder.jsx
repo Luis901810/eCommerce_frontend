@@ -64,9 +64,7 @@ export default function UpdateOrder() {
     fetchData()
   }, [id])
 
-  useEffect(() => {
-    
-  }, [orderUpdate])
+  useEffect(() => {}, [orderUpdate])
 
   // Updata info
   const handleUpdate = async () => {
@@ -85,13 +83,13 @@ export default function UpdateOrder() {
   // Renderizado de tabla
   const renderTableHeader = () => (
     <TableHead>
-      <TableRow sx={{ backgroundColor: '#414141' }}>
+      <TableRow sx={{ backgroundColor: '#22C55E' }}>
         <TableCell
           sx={{
             fontSize: 18,
             color: 'white',
             width: 150,
-            backgroundColor: '#414141',
+            backgroundColor: '#22C55E',
 
             textAlign: 'start',
           }}
@@ -103,7 +101,7 @@ export default function UpdateOrder() {
             fontSize: 18,
             color: 'white',
             width: 50,
-            backgroundColor: '#414141',
+            backgroundColor: '#22C55E',
 
             textAlign: 'start',
           }}
@@ -116,7 +114,7 @@ export default function UpdateOrder() {
             fontSize: 18,
             color: 'white',
             width: 50,
-            backgroundColor: '#414141',
+            backgroundColor: '#22C55E',
 
             textAlign: 'start',
           }}
@@ -129,7 +127,7 @@ export default function UpdateOrder() {
             fontSize: 18,
             color: 'white',
             width: 50,
-            backgroundColor: '#414141',
+            backgroundColor: '#22C55E',
 
             textAlign: 'start',
           }}
@@ -144,11 +142,17 @@ export default function UpdateOrder() {
     return (
       <TableBody>
         {order.OrderLines.map((order, index) => (
-          <TableRowHover key={order.id}>
+          <TableRow
+            key={order.id}
+            sx={{
+              backgroundColor: '#E2E8F0',
+              color: 'black',
+            }}
+          >
             <TableCell
               sx={{
                 fontSize: 14,
-                color: 'white',
+                color: 'black',
                 maxWidth: 100,
               }}
             >
@@ -157,7 +161,7 @@ export default function UpdateOrder() {
             <TableCell
               sx={{
                 fontSize: 14,
-                color: 'white',
+                color: 'black',
                 maxWidth: 70,
               }}
             >
@@ -166,9 +170,10 @@ export default function UpdateOrder() {
             <TableCell
               sx={{
                 fontSize: 14,
-                color: 'white',
+                color: 'black',
                 maxWidth: 150,
                 overflowWrap: 'break-word',
+                textAlign: 'center'
               }}
             >
               {order.quantity}
@@ -176,151 +181,193 @@ export default function UpdateOrder() {
             <TableCell
               sx={{
                 fontSize: 14,
-                color: 'white',
+                color: 'black',
                 maxWidth: 70,
               }}
             >
               {order.unitPrice}
             </TableCell>
-          </TableRowHover>
+          </TableRow>
         ))}
-        <TableRowHover key={order.id}>
-            <TableCell
-              sx={{
-                fontSize: 14,
-                color: 'white',
-                maxWidth: 100,
-              }}
-            >
-             
-            </TableCell>
-            <TableCell
-              sx={{
-                fontSize: 14,
-                color: 'white',
-                maxWidth: 70,
-              }}
-            >
-              
-            </TableCell>
-            <TableCell
-              sx={{
-                fontSize: 14,
-                color: 'white',
-                maxWidth: 150,
-                overflowWrap: 'break-word',
-              }}
-            >
-              
-            </TableCell>
-            <TableCell
-              sx={{
-                fontSize: 14,
-                color: 'white',
-                maxWidth: 70,
-              }}
-            >
-              {order.totalAmount}
-            </TableCell>
-          </TableRowHover>
+        <TableRow
+          key={order.id}
+          sx={{
+            backgroundColor: '#E2E8F0',
+            color: 'black',
+          }}
+        >
+          <TableCell
+            sx={{
+              fontSize: 14,
+              color: 'black',
+              maxWidth: 100,
+            }}
+          ></TableCell>
+          <TableCell
+            sx={{
+              fontSize: 14,
+              color: 'black',
+              maxWidth: 70,
+            }}
+          ></TableCell>
+          <TableCell
+            sx={{
+              fontSize: 14,
+              color: 'black',
+              maxWidth: 150,
+              overflowWrap: 'break-word',
+            }}
+          ></TableCell>
+          <TableCell
+            sx={{
+              fontSize: 14,
+              color: 'black',
+              maxWidth: 70,
+            }}
+          >
+            {order.totalAmount}
+          </TableCell>
+        </TableRow>
       </TableBody>
     )
   }
 
   return order.id ? (
     <Box
-      component='form'
       sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch' },
         display: 'flex',
-        flexDirection: 'column',
-        justifyItems: 'center',
-        marginTop:10
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
       }}
-      noValidate
-      autoComplete='off'
     >
-      <IconButton
-        color='secondary'
-        onClick={() => {
-          navigate('/Admin')
+      <Box
+        component='form'
+        sx={{
+          '& .MuiTextField-root': { m: 1, width: '25ch' },
+          display: 'flex',
+          position: 'relative',
+          justifyItems: 'center',
+          alignItems: 'center',
+          backgroundColor: '#E2E8F0',
+          flexDirection: 'column',
+          padding: 5,
+          borderRadius: 2,
         }}
+        noValidate
+        autoComplete='off'
       >
-        <CloseIcon />
-      </IconButton>
+        <IconButton
+          color='secondary'
+          onClick={() => {
+            navigate('/Admin')
+          }}
+          sx={{
+            position: 'absolute',
+            top: 2,
+            right: 2,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
 
-      <TextFieldForm
-        disabled
-        id='outlined-required'
-        label='Codigo de compra'
-        value={order.id}
-      />
+        <TextFieldForm
+          disabled
+          id='outlined-required'
+          label='Codigo de compra'
+          value={order.id}
+        />
+        <Box
+          sx={{
+            '& .MuiTextField-root': { m: 1, width: '25ch' },
+            display: 'flex',
+            position: 'relative',
+            justifyItems: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <TextFieldForm
+            disabled
+            id='outlined-required'
+            label='Usuario'
+            value={order.User.name}
+          />
+          <TextFieldForm
+            disabled
+            id='outlined-required'
+            label='Email'
+            value={order.User.email}
+          />
+        </Box>
 
-      <TextFieldForm
-        disabled
-        id='outlined-required'
-        label='Usuario'
-        value={order.User.name}
-      />
-      <TextFieldForm
-        disabled
-        id='outlined-required'
-        label='Email'
-        value={order.User.email}
-      />
-      <TextFieldForm
-        id='outlined-select-currency'
-        select
-        name='statusId'
-        label='Estado'
-        value={orderUpdate.statusId ? orderUpdate.statusId : order.statusId}
-        onChange={handleChange}
-      >
-        {status.map(option => (
-          <MenuItem key={option.id} value={option.id}>
-            {option.status}
-          </MenuItem>
-        ))}
-      </TextFieldForm>
+        <Box
+          sx={{
+            '& .MuiTextField-root': { m: 1, width: '25ch' },
+            display: 'flex',
+            position: 'relative',
+            justifyItems: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <TextFieldForm
+            disabled
+            id='outlined-required'
+            label='Fecha de Creación'
+            value={dayjs(order.createdAt).format('DD/MM/YYYY')}
+          />
+          <TextFieldForm
+            disabled
+            id='outlined-required'
+            label='Fecha de Actualización'
+            value={dayjs(order.updatedAt).format('DD/MM/YYYY')}
+          />
+        </Box>
+        <TextFieldForm
+          id='outlined-select-currency'
+          select
+          name='statusId'
+          label='Estado'
+          value={orderUpdate.statusId ? orderUpdate.statusId : order.statusId}
+          onChange={handleChange}
+        >
+          {status.map(option => (
+            <MenuItem key={option.id} value={option.id}>
+              {option.status}
+            </MenuItem>
+          ))}
+        </TextFieldForm>
 
-      <TextFieldForm
-        disabled
-        id='outlined-required'
-        label='Fecha de Creación'
-        value={dayjs(order.createdAt).format('DD/MM/YYYY')}
-      />
-      <TextFieldForm
-        disabled
-        id='outlined-required'
-        label='Fecha de Actualización'
-        value={dayjs(order.updatedAt).format('DD/MM/YYYY')}
-      />
-      
-          <TableContainer component={Paper}>
-            <Table>
-              {renderTableHeader()}
-              {renderTableData()}
-            </Table>
-          </TableContainer>
+        <TableContainer component={Paper}>
+          <Table>
+            {renderTableHeader()}
+            {renderTableData()}
+          </Table>
+        </TableContainer>
 
-          {Object.keys(orderUpdate).length ? (
-        <Box>
-          <Button
-            variant='outlined'
-            size='medium'
-            onClick={() => {
-              setOrderUpdate({})
+        {Object.keys(orderUpdate).length ? (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 2,
             }}
           >
-            Descartar Cambios
-          </Button>
-          <Button variant='outlined' size='medium' onClick={handleUpdate}>
-            Guardar Cambios
-          </Button>
-        </Box>
-      ) : null}
-        
-    
+            <Button
+              variant='outlined'
+              size='medium'
+              onClick={() => {
+                setOrderUpdate({})
+              }}
+            >
+              Descartar Cambios
+            </Button>
+            <Button variant='outlined' size='medium' onClick={handleUpdate}>
+              Guardar Cambios
+            </Button>
+          </Box>
+        ) : null}
+      </Box>
     </Box>
   ) : null
 }
