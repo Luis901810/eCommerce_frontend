@@ -67,7 +67,7 @@ export default function Results({ shoeName, setShoeName }) {
               ></img>
               <Box sx={{display: 'flex', flexDirection: 'column', mr: 2, width: '100%'}} >
               <Typography color='#42e268'  variant='h6'>{shoe.name && shoe.name}</Typography>
-              <Typography variant='h6'>{shoe.price && shoe.price}</Typography>
+              <Typography variant='h6'>${shoe.price && shoe.price}</Typography>
               </Box>
             </Box>
           ))
