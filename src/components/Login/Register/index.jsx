@@ -72,9 +72,18 @@ const Register = () => {
     >
       <Paper
         elevation={10}
-        style={{ padding: '20px', width: 360, height: 500 }}
+        style={{
+          padding: '20px',
+          width: 360,
+          height: 500,
+          backgroundColor: '#303030',
+        }}
       >
-        <Grid style={{ padding: '10px' }}>Registrate en EcommerceZapatos</Grid>
+        <Grid style={{ padding: '10px' }}>
+          <Typography variant='h7' color='white'>
+            Registrate en DIGISHOES
+          </Typography>
+        </Grid>
         <Box
           style={{
             display: 'flex',
@@ -88,27 +97,36 @@ const Register = () => {
             disableElevation
             style={{
               margin: '10px 0',
-              backgroundColor: 'transparent',
-              border: '1px solid #42e268',
+              backgroundColor: '#42e268',
               width: 300,
+              '&:hover': {
+                backgroundColor: '#00ff3d',
+              },
             }}
             startIcon={<Google />}
             onClick={handleGoogleSingUp}
           >
-            Google
+            Registrarse con Google
           </Button>
           <Divider style={{ width: 300, margin: '20px 0' }} />
           <Grid
             item
             style={{ color: 'rgba(0, 0, 0, 0.5)', fontSize: '0.8rem' }}
           >
-            Usar email y contraseña
+            <Typography variant='h7' color='white'>
+              O usa tu email y contraseña
+            </Typography>
           </Grid>
           <FormControl sx={{ marginTop: '20px' }}>
             <InputLabel style={{ paddingRight: '10px' }} htmlFor='email-input'>
               Email
             </InputLabel>
             <Input
+              sx={{
+                '& .MuiInputBase-input': {
+                  color: '#A0AAB4',
+                },
+              }}
               id='email-input'
               style={{ width: 300 }}
               type='email'
@@ -123,6 +141,11 @@ const Register = () => {
           <FormControl sx={{ margin: '20px 0' }}>
             <InputLabel
               style={{ paddingRight: '10px' }}
+              sx={{
+                '& .MuiInputBase-input': {
+                  color: '#A0AAB4',
+                },
+              }}
               htmlFor='password-input'
             >
               Contraseña
